@@ -5,7 +5,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 @Composable
-fun SettingsComponent(modifier: Modifier = Modifier)
-{
-    Text(modifier = modifier,text = "TODO: SettingsComponent")
+fun SettingsComponent(modifier: Modifier = Modifier) {
+    Text(modifier = modifier, text = "TODO: SettingsComponent")
 }
