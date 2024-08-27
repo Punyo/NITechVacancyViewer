@@ -1,6 +1,14 @@
 <resources>
     <string name="app_name">NITechRoomVacancyViewer</string>
-    <string name="UI_NAVIGATIONBARITEM_LABEL_VACANCY">空き状況</string>
-    <string name="UI_NAVIGATIONBARITEM_LABEL_HOME">ホーム</string>
-    <string name="UI_NAVIGATIONBARITEM_LABEL_SETTINGS">設定</string>
+    <string name="UI_NAVIGATIONBARITEM_TEXT_VACANCY">空室状況</string>
+    <string name="UI_NAVIGATIONBARITEM_TEXT_HOME">ホーム</string>
+    <string name="UI_NAVIGATIONBARITEM_TEXT_SETTINGS">設定</string>
+    <string name="UI_CARD_TEXT_VACANTANDMAXROOMS">空室：%d/%d[部屋]</string>
+    <string name="BUILDING_1">1号館</string>
+    <string name="BUILDING_2">2号館</string>
+    <string name="BUILDING_12">12号館</string>
+    <string name="BUILDING_23">23号館</string>
+    <string name="BUILDING_51">51号館</string>
+    <string name="BUILDING_52">52号館</string>
+    <string name="BUILDING_NITECHHALL">NITech Hall</string>
 </resources>
