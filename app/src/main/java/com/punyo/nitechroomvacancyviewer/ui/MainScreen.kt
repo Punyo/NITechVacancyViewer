@@ -20,17 +20,19 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.punyo.nitechroomvacancyviewer.R
 import com.punyo.nitechroomvacancyviewer.ui.model.MainScreenViewModel
+import com.punyo.nitechroomvacancyviewer.ui.theme.AppTheme
 
 @Composable
 fun MainScreen(modifier: Modifier = Modifier, mainviewmodel: MainScreenViewModel = viewModel()) {
     val currentState by mainviewmodel.uiState.collectAsState()
     val navbarLabels = listOf(
-        stringResource(id = R.string.UI_NAVIGATIONBARITEM_LABEL_HOME),
-        stringResource(id = R.string.UI_NAVIGATIONBARITEM_LABEL_VACANCY),
-        stringResource(id = R.string.UI_NAVIGATIONBARITEM_LABEL_SETTINGS)
+        stringResource(id = R.string.UI_NAVIGATIONBARITEM_TEXT_HOME),
+        stringResource(id = R.string.UI_NAVIGATIONBARITEM_TEXT_VACANCY),
+        stringResource(id = R.string.UI_NAVIGATIONBARITEM_TEXT_SETTINGS)
     )
     val navbarIcons = listOf(
         Icons.Default.Home,
@@ -57,7 +59,7 @@ fun MainScreen(modifier: Modifier = Modifier, mainviewmodel: MainScreenViewModel
     ) { innerPadding ->
         when (currentState.currentNavIndex) {
             0 -> HomeComponent(modifier.padding(innerPadding))
-            1 -> VacancyComponent(modifier.padding(innerPadding))
+            1 -> VacancyComponent(modifier.padding(innerPadding), arrayOf())
             2 -> SettingsComponent(modifier.padding(innerPadding))
         }
     }
@@ -74,4 +76,20 @@ fun MainScreenAppBar(modifier: Modifier = Modifier, currentNavTitle: String) {
             titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
         )
     )
+}
+
+@Preview(showBackground = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_NO)
+@Composable
+fun LightModePreview() {
+    AppTheme {
+        MainScreen()
+    }
+}
+
+@Preview(showBackground = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun DarkModePreview() {
+    AppTheme {
+        MainScreen()
+    }
 }
