@@ -61,6 +61,13 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.accompanist.flowlayout)
     implementation(libs.kotlinx.serialization.json)
+    implementation ("com.microsoft.identity.client:msal:5.+")
+    {
+        exclude(group = "io.opentelemetry")
+        exclude (group="com.microsoft.device.display")
+    }
+
+    implementation(libs.microsoft.graph.v5800)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

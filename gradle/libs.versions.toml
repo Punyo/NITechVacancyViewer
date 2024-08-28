@@ -10,6 +10,9 @@ kotlinxSerializationJson = "1.5.1"
 lifecycleRuntimeKtx = "2.8.4"
 activityCompose = "1.9.1"
 composeBom = "2024.04.01"
+microsoftGraph = "5.0.0"
+microsoftGraphVersion = "5.80.0"
+msal = "2.0.12"
 
 [libraries]
 accompanist-flowlayout = { module = "com.google.accompanist:accompanist-flowlayout", version = "0.34.0" }
@@ -29,6 +32,9 @@ androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-man
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+microsoft-graph = { module = "com.microsoft.graph:microsoft-graph", version.ref = "microsoftGraph" }
+microsoft-graph-v5800 = { module = "com.microsoft.graph:microsoft-graph", version.ref = "microsoftGraphVersion" }
+msal = { module = "com.microsoft.identity.client:msal", version.ref = "msal" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -1,0 +1,16 @@
+{
+  "client_id" : "50538e0f-344f-4401-a230-63ceb963d5f5",
+  "authorization_user_agent" : "DEFAULT",
+  "redirect_uri" : "msauth://com.punyo.nitechroomvacancyviewer/lLhS0xby%2FZmrhB8HuNW%2FU6qqhco%3D",
+  "account_mode" : "SINGLE",
+  "broker_redirect_uri_registered": true,
+  "authorities" : [
+    {
+      "type": "AAD",
+      "audience": {
+        "type": "AzureADMultipleOrgs",
+        "tenant_id": "common"
+      }
+    }
+  ]
+}
