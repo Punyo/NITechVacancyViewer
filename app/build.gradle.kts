@@ -67,7 +67,7 @@ dependencies {
         exclude (group="com.microsoft.device.display")
     }
 
-    implementation(libs.microsoft.graph.v5800)
+    implementation(libs.microsoft.graph)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
