@@ -16,11 +16,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.punyo.nitechroomvacancyviewer.R
 import com.punyo.nitechroomvacancyviewer.ui.model.MainScreenViewModel
@@ -28,7 +28,7 @@ import com.punyo.nitechroomvacancyviewer.ui.theme.AppTheme
 
 @Composable
 fun MainScreen(modifier: Modifier = Modifier, mainviewmodel: MainScreenViewModel = viewModel()) {
-    val currentState by mainviewmodel.uiState.collectAsState()
+    val currentState by mainviewmodel.uiState.collectAsStateWithLifecycle()
     val navbarLabels = listOf(
         stringResource(id = R.string.UI_NAVIGATIONBARITEM_TEXT_HOME),
         stringResource(id = R.string.UI_NAVIGATIONBARITEM_TEXT_VACANCY),
