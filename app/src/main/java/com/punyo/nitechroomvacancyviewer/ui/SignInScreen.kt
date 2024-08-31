@@ -1,5 +1,6 @@
 package com.punyo.nitechroomvacancyviewer.ui
 
+import android.app.Activity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,23 +13,51 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.punyo.nitechroomvacancyviewer.R
+import com.punyo.nitechroomvacancyviewer.data.MSGraphRepository
+import com.punyo.nitechroomvacancyviewer.ui.model.SignInScreenViewModel
 import com.punyo.nitechroomvacancyviewer.ui.theme.AppTheme
 
 @Composable
-fun LoginScreen() {
-    Scaffold(modifier = Modifier.fillMaxSize(), containerColor = MaterialTheme.colorScheme.primaryContainer)
+fun SignInScreen(
+    onSignInSuccess: () -> Unit = {},
+    isInitializeFailed: Boolean = false,
+    signInScreenViewModel: SignInScreenViewModel = SignInScreenViewModel(
+        MSGraphRepository()
+    )
+) {
+    val activity = LocalContext.current as Activity
+    val currentState by signInScreenViewModel.uiState.collectAsStateWithLifecycle()
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    LaunchedEffect(key1 = currentState.signInResultStatus) {
+        if (currentState.signInResultStatus != MSGraphRepository.MSALOperationResultStatus.SUCCESS && currentState.signInResultStatus != null) {
+            snackbarHostState.showSnackbar(
+                message = "仮置き",
+                duration = SnackbarDuration.Short
+            )
+        }
+    }
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        containerColor = MaterialTheme.colorScheme.primaryContainer
+    )
     { innerPadding ->
         Column(
             modifier = Modifier
@@ -38,7 +67,9 @@ fun LoginScreen() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp).size(200.dp),
+                modifier = Modifier
+                    .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp)
+                    .size(200.dp),
                 painter = painterResource(id = R.drawable.ic_launcher_foreground),
                 contentDescription = stringResource(id = R.string.app_name)
             )
@@ -54,7 +85,11 @@ fun LoginScreen() {
                     .fillMaxWidth()
                     .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp)
                     .height(40.dp),
-                onClick = { /*TODO*/ }) {
+                onClick = {
+                    signInScreenViewModel.onSignInButtonClicked(
+                        activity = activity, onSignInSuccess = onSignInSuccess
+                    )
+                }) {
                 Text(stringResource(id = R.string.UI_TEXT_LOGIN))
             }
         }
@@ -67,13 +102,14 @@ fun LoginScreen() {
             )
         }
     }
+
 }
 
 @Preview(showBackground = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_NO)
 @Composable
 fun LoginScreenLightPreview() {
     AppTheme {
-        LoginScreen()
+        SignInScreen()
     }
 }
 
@@ -81,6 +117,6 @@ fun LoginScreenLightPreview() {
 @Composable
 fun LoginScreenDarkPreview() {
     AppTheme {
-        LoginScreen()
+        SignInScreen()
     }
 }
