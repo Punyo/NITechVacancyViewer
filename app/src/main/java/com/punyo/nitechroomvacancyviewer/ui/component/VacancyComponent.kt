@@ -1,4 +1,4 @@
-package com.punyo.nitechroomvacancyviewer.ui
+package com.punyo.nitechroomvacancyviewer.ui.component
 
 import android.annotation.SuppressLint
 import androidx.annotation.DrawableRes

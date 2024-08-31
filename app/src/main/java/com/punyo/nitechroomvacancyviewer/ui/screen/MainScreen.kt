@@ -1,4 +1,4 @@
-package com.punyo.nitechroomvacancyviewer.ui
+package com.punyo.nitechroomvacancyviewer.ui.screen
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -23,6 +23,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.punyo.nitechroomvacancyviewer.R
+import com.punyo.nitechroomvacancyviewer.ui.component.HomeComponent
+import com.punyo.nitechroomvacancyviewer.ui.component.SettingsComponent
+import com.punyo.nitechroomvacancyviewer.ui.component.VacancyComponent
 import com.punyo.nitechroomvacancyviewer.ui.model.MainScreenViewModel
 import com.punyo.nitechroomvacancyviewer.ui.theme.AppTheme
 
