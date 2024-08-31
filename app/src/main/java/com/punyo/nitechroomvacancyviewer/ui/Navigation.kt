@@ -7,6 +7,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.punyo.nitechroomvacancyviewer.ui.screen.InitializeScreen
+import com.punyo.nitechroomvacancyviewer.ui.screen.MainScreen
+import com.punyo.nitechroomvacancyviewer.ui.screen.SignInScreen
 
 @Composable
 fun MainNavigation(navController: NavHostController = rememberNavController()) {

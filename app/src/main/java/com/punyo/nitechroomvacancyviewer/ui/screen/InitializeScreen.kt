@@ -1,4 +1,4 @@
-package com.punyo.nitechroomvacancyviewer.ui
+package com.punyo.nitechroomvacancyviewer.ui.screen
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext

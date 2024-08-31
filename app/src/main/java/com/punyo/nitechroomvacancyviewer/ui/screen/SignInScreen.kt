@@ -1,4 +1,4 @@
-package com.punyo.nitechroomvacancyviewer.ui
+package com.punyo.nitechroomvacancyviewer.ui.screen
 
 import android.app.Activity
 import androidx.compose.foundation.Image
