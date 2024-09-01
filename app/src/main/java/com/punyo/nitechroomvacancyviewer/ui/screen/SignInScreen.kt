@@ -55,7 +55,6 @@ fun SignInScreen(
         snackbarHost = { SnackbarHost(snackbarHostState) }
     )
     { innerPadding ->
-
         LaunchedEffect(key1 = currentState.signInResultStatus, key2 = currentState.isInitSuccess) {
             currentState.signInResultStatus?.let {
                 var failReason: String = context.getString(R.string.ERROR_PREFIX_SIGN_IN_FAILED)

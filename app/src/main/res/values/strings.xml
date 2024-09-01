@@ -13,8 +13,8 @@
     <string name="BUILDING_52">52号館</string>
     <string name="BUILDING_NITECHHALL">NITech Hall</string>
     <string name="ERROR_CANCELLED">キャンセルされました。</string>
-    <string name="ERROR_NETWORK_ERROR">お使いの端末がインターネットに接続されていることを確認してください。</string>
+    <string name="ERROR_NETWORK_ERROR">インターネット接続を確認してください。</string>
     <string name="ERROR_PREFIX_SIGN_IN_FAILED">ログインに失敗しました。\n</string>
     <string name="ERROR_NEED_RE_SIGN_IN">再ログインしてください。</string>
-    <string name="ERROR_INTERNAL_ERROR">再度お試しください。繰り返し発生する場合は管理者に連絡してください。</string>
+    <string name="ERROR_INTERNAL_ERROR">エラーが頻発する場合は管理者に連絡してください。</string>
 </resources>
