@@ -12,15 +12,21 @@ class SignInScreenViewModel(private val msGraphRepository: MSGraphRepository) : 
     val uiState: StateFlow<SignInScreenUiState> = state.asStateFlow()
 
     fun onSignInButtonClicked(activity: Activity, onSignInSuccess: () -> Unit) {
+        state.value = state.value.copy(signInResultStatus = null)
         msGraphRepository.signIn(activity = activity) { status ->
-            state.value = SignInScreenUiState(signInResultStatus = status)
+            state.value = state.value.copy(signInResultStatus = status)
             if (status == MSGraphRepository.MSALOperationResultStatus.SUCCESS) {
                 onSignInSuccess()
             }
         }
     }
+
+    fun setInitSuccess(isInitSuccess: Boolean) {
+        state.value = state.value.copy(isInitSuccess = isInitSuccess)
+    }
 }
 
 data class SignInScreenUiState(
     val signInResultStatus: MSGraphRepository.MSALOperationResultStatus? = null,
+    val isInitSuccess: Boolean? = null
 )

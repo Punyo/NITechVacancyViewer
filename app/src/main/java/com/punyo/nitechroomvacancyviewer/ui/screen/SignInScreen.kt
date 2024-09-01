@@ -14,12 +14,14 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -37,28 +39,61 @@ import com.punyo.nitechroomvacancyviewer.ui.theme.AppTheme
 @Composable
 fun SignInScreen(
     onSignInSuccess: () -> Unit = {},
-    isInitializeFailed: Boolean = false,
+    isInitializeSuccess: Boolean = true,
     signInScreenViewModel: SignInScreenViewModel = SignInScreenViewModel(
         MSGraphRepository()
     )
 ) {
-    val activity = LocalContext.current as Activity
+    val context = LocalContext.current
+    val activity = context as Activity
     val currentState by signInScreenViewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
-
-    LaunchedEffect(key1 = currentState.signInResultStatus) {
-        if (currentState.signInResultStatus != MSGraphRepository.MSALOperationResultStatus.SUCCESS && currentState.signInResultStatus != null) {
-            snackbarHostState.showSnackbar(
-                message = "仮置き",
-                duration = SnackbarDuration.Short
-            )
-        }
-    }
+    signInScreenViewModel.setInitSuccess(isInitializeSuccess)
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        containerColor = MaterialTheme.colorScheme.primaryContainer
+        containerColor = MaterialTheme.colorScheme.primaryContainer,
+        snackbarHost = { SnackbarHost(snackbarHostState) }
     )
     { innerPadding ->
+
+        LaunchedEffect(key1 = currentState.signInResultStatus, key2 = currentState.isInitSuccess) {
+            currentState.signInResultStatus?.let {
+                var failReason: String = context.getString(R.string.ERROR_PREFIX_SIGN_IN_FAILED)
+                when (it) {
+                    MSGraphRepository.MSALOperationResultStatus.SUCCESS -> {
+                        onSignInSuccess()
+                    }
+
+                    MSGraphRepository.MSALOperationResultStatus.NEED_RE_SIGN_IN -> failReason += context.getString(
+                        R.string.ERROR_NEED_RE_SIGN_IN
+                    )
+
+                    MSGraphRepository.MSALOperationResultStatus.CANCELLED -> failReason += context.getString(
+                        R.string.ERROR_CANCELLED
+                    )
+
+                    MSGraphRepository.MSALOperationResultStatus.NETWORK_ERROR -> failReason += context.getString(
+                        R.string.ERROR_NETWORK_ERROR
+                    )
+
+                    MSGraphRepository.MSALOperationResultStatus.INTERNAL_ERROR -> failReason += context.getString(
+                        R.string.ERROR_INTERNAL_ERROR
+                    )
+                }
+                if (currentState.signInResultStatus != MSGraphRepository.MSALOperationResultStatus.SUCCESS) {
+                    snackbarHostState.showSnackbar(
+                        message = failReason,
+                        duration = SnackbarDuration.Short
+                    )
+                }
+            }
+            if (currentState.isInitSuccess == false) {
+                snackbarHostState.showSnackbar(
+                    message = "このアプリの内部に興味がありますか？\n私と一緒に開発しましょう！",
+                    duration = SnackbarDuration.Short
+                )
+            }
+        }
         Column(
             modifier = Modifier
                 .padding(innerPadding)
@@ -86,9 +121,11 @@ fun SignInScreen(
                     .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp)
                     .height(40.dp),
                 onClick = {
-                    signInScreenViewModel.onSignInButtonClicked(
-                        activity = activity, onSignInSuccess = onSignInSuccess
-                    )
+                    if (isInitializeSuccess) {
+                        signInScreenViewModel.onSignInButtonClicked(
+                            activity = activity, onSignInSuccess = onSignInSuccess
+                        )
+                    }
                 }) {
                 Text(stringResource(id = R.string.UI_TEXT_LOGIN))
             }
