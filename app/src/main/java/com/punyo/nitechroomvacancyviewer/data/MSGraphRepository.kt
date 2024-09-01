@@ -37,7 +37,11 @@ class MSGraphRepository {
             if (exception != null) {
                 onSignInEnded(handleMsalException(exception))
             } else {
-                onSignInEnded(MSALOperationResultStatus.SUCCESS)
+                if (MSGraphNetworkDatasource.isSignedIn) {
+                    onSignInEnded(MSALOperationResultStatus.SUCCESS)
+                } else {
+                    onSignInEnded(MSALOperationResultStatus.CANCELLED)
+                }
             }
         })
     }
@@ -47,7 +51,7 @@ class MSGraphRepository {
             MSALOperationResultStatus.NEED_RE_SIGN_IN
         } else if (exception is MsalUserCancelException) {
             MSALOperationResultStatus.CANCELLED
-        } else if(exception !is MsalServiceException && (exception !is MsalDeclinedScopeException)) {
+        } else if (exception !is MsalServiceException && (exception !is MsalDeclinedScopeException)) {
             MSALOperationResultStatus.NETWORK_ERROR
         } else {
             MSALOperationResultStatus.INTERNAL_ERROR
