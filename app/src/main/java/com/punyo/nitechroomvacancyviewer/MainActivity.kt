@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.punyo.nitechroomvacancyviewer.ui.MainScreen
+import com.punyo.nitechroomvacancyviewer.ui.MainNavigation
 import com.punyo.nitechroomvacancyviewer.ui.theme.AppTheme
 
 class MainActivity : ComponentActivity() {
@@ -13,7 +13,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             AppTheme {
-                MainScreen()
+                MainNavigation()
             }
         }
     }

@@ -23,6 +23,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.microsoft.identity.client.BrowserTabActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:host="com.punyo.nitechroomvacancyviewer"
+                    android:path="/LF4WsXqlSKGm4Db/+uDic1wZXv0="
+                    android:scheme="msauth"/>
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
