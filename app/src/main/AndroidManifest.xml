@@ -32,7 +32,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data
                     android:host="com.punyo.nitechroomvacancyviewer"
-                    android:path="/lLhS0xby/ZmrhB8HuNW/U6qqhco="
+                    android:path="/LF4WsXqlSKGm4Db/+uDic1wZXv0="
                     android:scheme="msauth"/>
             </intent-filter>
         </activity>

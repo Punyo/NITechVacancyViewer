@@ -57,7 +57,7 @@ object MSGraphNetworkDatasource {
             .withLoginHint(LOGIN_HINT)
             .withCallback(authCallback(onSignInEnded))
             .build()
-        singleApp!!.signIn(signInParameters)
+         singleApp!!.signIn(signInParameters)
     }
 
     private fun authCallback(onAuthEnded: (MsalException?) -> Unit): AuthenticationCallback {
