@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.microsoft.identity.client.exception.MsalException
 import com.punyo.nitechroomvacancyviewer.data.msgraph.MSGraphRepository
+import com.punyo.nitechroomvacancyviewer.ui.component.LoadingProgressIndicatorComponent
 import com.punyo.nitechroomvacancyviewer.ui.model.InitializeScreenViewModel
 import com.punyo.nitechroomvacancyviewer.ui.theme.AppTheme
 
@@ -30,18 +31,7 @@ fun InitializeScreen(
     val currentState = initializeScreenViewModel.uiState.collectAsStateWithLifecycle().value
     initializeScreenViewModel.initMSAL(LocalContext.current)
     if (currentState.alreadySignedIn == null && currentState.thrownException == null) {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            CircularProgressIndicator(
-                modifier = Modifier
-                    .width(48.dp)
-                    .height(48.dp),
-                color = MaterialTheme.colorScheme.primary,
-                trackColor = MaterialTheme.colorScheme.secondaryContainer
-            )
-        }
+        LoadingProgressIndicatorComponent()
     } else {
         if (currentState.thrownException != null) {
             onInitializeFailed(currentState.thrownException)
@@ -53,6 +43,7 @@ fun InitializeScreen(
         }
     }
 }
+
 
 @Preview(showBackground = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_NO)
 @Composable
