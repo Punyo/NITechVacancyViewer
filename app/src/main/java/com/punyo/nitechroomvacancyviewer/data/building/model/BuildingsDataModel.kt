@@ -1,7 +1,7 @@
-package com.punyo.nitechroomvacancyviewer.data
+package com.punyo.nitechroomvacancyviewer.data.building.model
 
 data class BuildingsDataModel(
-    val buildingsData: Array<BuildingData>
+    val buildingsData: Array<Building>
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -18,7 +18,7 @@ data class BuildingsDataModel(
 
 }
 
-data class BuildingData(
+data class Building(
     val buildingNameResourceName: String,
     val buildingImageResourceName: String,
     val buildingRoomPrincipalNames: Array<String>,
@@ -27,7 +27,7 @@ data class BuildingData(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as BuildingData
+        other as Building
 
         if (buildingNameResourceName != other.buildingNameResourceName) return false
         if (!buildingRoomPrincipalNames.contentEquals(other.buildingRoomPrincipalNames)) return false

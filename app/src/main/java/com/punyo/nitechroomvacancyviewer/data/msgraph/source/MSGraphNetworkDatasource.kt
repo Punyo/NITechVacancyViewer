@@ -1,4 +1,4 @@
-package com.punyo.nitechroomvacancyviewer.data.source.network
+package com.punyo.nitechroomvacancyviewer.data.msgraph.source
 
 import android.app.Activity
 import android.content.Context

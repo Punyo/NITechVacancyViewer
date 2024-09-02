@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.microsoft.identity.client.exception.MsalException
-import com.punyo.nitechroomvacancyviewer.data.MSGraphRepository
+import com.punyo.nitechroomvacancyviewer.data.msgraph.MSGraphRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
