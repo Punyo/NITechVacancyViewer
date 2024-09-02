@@ -1,5 +1,8 @@
 package com.punyo.nitechroomvacancyviewer.data.building.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class BuildingsDataModel(
     val buildingsData: Array<Building>
 ) {
@@ -18,6 +21,7 @@ data class BuildingsDataModel(
 
 }
 
+@Serializable
 data class Building(
     val buildingNameResourceName: String,
     val buildingImageResourceName: String,

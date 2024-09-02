@@ -1,4 +1,4 @@
-package com.punyo.nitechroomvacancyviewer.data.room.model
+package com.punyo.nitechroomvacancyviewer.data.place.model
 
 import java.util.Calendar
 
