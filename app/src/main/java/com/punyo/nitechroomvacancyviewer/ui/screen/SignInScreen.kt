@@ -125,7 +125,7 @@ fun SignInScreen(
                         )
                     }
                 }) {
-                Text(stringResource(id = R.string.UI_TEXT_LOGIN))
+                Text(stringResource(id = R.string.UI_BUTTON_TEXT_LOGIN))
             }
         }
         Box(modifier = Modifier.fillMaxSize()) {

@@ -1,4 +1,4 @@
-package com.punyo.nitechroomvacancyviewer.data.place
+package com.punyo.nitechroomvacancyviewer.data.room
 
 import com.punyo.nitechroomvacancyviewer.data.building.model.Building
 

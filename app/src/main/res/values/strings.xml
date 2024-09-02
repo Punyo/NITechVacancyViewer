@@ -1,10 +1,5 @@
 <resources>
     <string name="app_name">NITechRoomVacancyViewer</string>
-    <string name="UI_NAVIGATIONBARITEM_TEXT_VACANCY">空室状況</string>
-    <string name="UI_NAVIGATIONBARITEM_TEXT_HOME">ホーム</string>
-    <string name="UI_NAVIGATIONBARITEM_TEXT_SETTINGS">設定</string>
-    <string name="UI_CARD_TEXT_VACANTANDMAXROOMS">空室：%d/%d[部屋]</string>
-    <string name="UI_TEXT_LOGIN">基盤IDでログイン</string>
     <string name="BUILDING_1">1号館</string>
     <string name="BUILDING_2">2号館</string>
     <string name="BUILDING_12">12号館</string>
@@ -17,4 +12,14 @@
     <string name="ERROR_PREFIX_SIGN_IN_FAILED">ログインに失敗しました。\n</string>
     <string name="ERROR_NEED_RE_SIGN_IN">再ログインしてください。</string>
     <string name="ERROR_INTERNAL_ERROR">エラーが頻発する場合は管理者に連絡してください。</string>
+    <string name="UI_NAVIGATIONBARITEM_TEXT_VACANCY">空室状況</string>
+    <string name="UI_NAVIGATIONBARITEM_TEXT_HOME">ホーム</string>
+    <string name="UI_NAVIGATIONBARITEM_TEXT_SETTINGS">設定</string>
+    <string name="UI_CARD_TEXT_VACANTANDMAXROOMS">空室：%d/%d[部屋]</string>
+    <string name="UI_BUTTON_TEXT_LOGIN">基盤IDでログイン</string>
+    <string name="UI_LISTITEM_TEXT_VACANT">空室</string>
+    <string name="UI_LISTITEM_TEXT_OCCUPY">使用中</string>
+    <string name="UI_NAVHOST_COMPOSABLE_ROOMVACANCYSCREEN">RoomVacancyScreen/{buildingName}/{roomsVacancy}</string>
+    <string name="UI_NAVHOST_COMPOSABLE_ROOMVACANCYSCREEN_PARAMETER1">buildingName</string>
+    <string name="UI_NAVHOST_COMPOSABLE_ROOMVACANCYSCREEN_PARAMETER2">roomsVacancy</string>
 </resources>
