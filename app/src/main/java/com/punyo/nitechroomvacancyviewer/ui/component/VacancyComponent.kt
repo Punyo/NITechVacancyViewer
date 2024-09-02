@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -12,6 +14,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -20,14 +23,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.punyo.nitechroomvacancyviewer.R
-import com.punyo.nitechroomvacancyviewer.data.BuildingData
+import com.punyo.nitechroomvacancyviewer.data.building.model.Building
 import com.punyo.nitechroomvacancyviewer.ui.model.VacancyComponentViewModel
 
 @SuppressLint("DiscouragedApi")
 @Composable
 fun VacancyComponent(
     modifier: Modifier = Modifier,
-    buildingsData: Array<BuildingData>,
+    buildingsData: Array<Building>,
     viewModel: VacancyComponentViewModel = viewModel()
 ) {
     val context = LocalContext.current
@@ -65,8 +68,9 @@ fun BuildingsCard(
 ) {
     Card(modifier = modifier) {
         Image(
+            modifier = Modifier.fillMaxWidth().height(100.dp).clip(MaterialTheme.shapes.medium),
             painter = painterResource(id = buildingImage),
-            contentScale = ContentScale.FillHeight,
+            contentScale = ContentScale.Crop,
             contentDescription = stringResource(id = buildingName)
         )
         Text(
@@ -93,24 +97,44 @@ fun BuildingsCard(
 fun CardPreview() {
     VacancyComponent(
         buildingsData = arrayOf(
-            BuildingData(
+            Building(
                 buildingNameResourceName = "BUILDING_1",
-                buildingImageResourceName = "ic_launcher_foreground",
+                buildingImageResourceName = "thunbnail_building52_test",
                 buildingRoomPrincipalNames = arrayOf("Room A1", "Room A2", "Room A3")
             ),
-            BuildingData(
+            Building(
                 buildingNameResourceName = "BUILDING_2",
-                buildingImageResourceName = "ic_launcher_foreground",
+                buildingImageResourceName = "thunbnail_building52_test",
                 buildingRoomPrincipalNames = arrayOf("Room B1", "Room B2", "Room B3")
             ),
-            BuildingData(
+            Building(
                 buildingNameResourceName = "BUILDING_1",
-                buildingImageResourceName = "ic_launcher_foreground",
+                buildingImageResourceName = "thunbnail_building52_test",
                 buildingRoomPrincipalNames = arrayOf("Room A1", "Room A2", "Room A3")
             ),
-            BuildingData(
+            Building(
                 buildingNameResourceName = "BUILDING_2",
-                buildingImageResourceName = "ic_launcher_foreground",
+                buildingImageResourceName = "thunbnail_building52_test",
+                buildingRoomPrincipalNames = arrayOf("Room B1", "Room B2", "Room B3")
+            ),
+            Building(
+                buildingNameResourceName = "BUILDING_1",
+                buildingImageResourceName = "thunbnail_building52_test",
+                buildingRoomPrincipalNames = arrayOf("Room A1", "Room A2", "Room A3")
+            ),
+            Building(
+                buildingNameResourceName = "BUILDING_2",
+                buildingImageResourceName = "thunbnail_building52_test",
+                buildingRoomPrincipalNames = arrayOf("Room B1", "Room B2", "Room B3")
+            ),
+            Building(
+                buildingNameResourceName = "BUILDING_1",
+                buildingImageResourceName = "thunbnail_building52_test",
+                buildingRoomPrincipalNames = arrayOf("Room A1", "Room A2", "Room A3")
+            ),
+            Building(
+                buildingNameResourceName = "BUILDING_2",
+                buildingImageResourceName = "thunbnail_building52_test",
                 buildingRoomPrincipalNames = arrayOf("Room B1", "Room B2", "Room B3")
             )
         )

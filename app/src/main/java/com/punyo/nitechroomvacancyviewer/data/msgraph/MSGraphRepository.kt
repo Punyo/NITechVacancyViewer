@@ -1,4 +1,4 @@
-package com.punyo.nitechroomvacancyviewer.data
+package com.punyo.nitechroomvacancyviewer.data.msgraph
 
 import android.app.Activity
 import android.content.Context
@@ -7,7 +7,7 @@ import com.microsoft.identity.client.exception.MsalException
 import com.microsoft.identity.client.exception.MsalServiceException
 import com.microsoft.identity.client.exception.MsalUiRequiredException
 import com.microsoft.identity.client.exception.MsalUserCancelException
-import com.punyo.nitechroomvacancyviewer.data.source.network.MSGraphNetworkDatasource
+import com.punyo.nitechroomvacancyviewer.data.msgraph.source.MSGraphNetworkDatasource
 import kotlinx.coroutines.CompletableDeferred
 
 class MSGraphRepository {
