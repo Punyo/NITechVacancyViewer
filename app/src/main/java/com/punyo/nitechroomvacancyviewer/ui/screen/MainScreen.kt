@@ -18,10 +18,12 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.punyo.nitechroomvacancyviewer.R
 import com.punyo.nitechroomvacancyviewer.ui.component.HomeComponent
 import com.punyo.nitechroomvacancyviewer.ui.component.SettingsComponent
@@ -30,7 +32,11 @@ import com.punyo.nitechroomvacancyviewer.ui.model.MainScreenViewModel
 import com.punyo.nitechroomvacancyviewer.ui.theme.AppTheme
 
 @Composable
-fun MainScreen(modifier: Modifier = Modifier, mainviewmodel: MainScreenViewModel = viewModel()) {
+fun MainScreen(
+    modifier: Modifier = Modifier,
+    navHostController: NavHostController,
+    mainviewmodel: MainScreenViewModel = viewModel()
+) {
     val currentState by mainviewmodel.uiState.collectAsStateWithLifecycle()
     val navbarLabels = listOf(
         stringResource(id = R.string.UI_NAVIGATIONBARITEM_TEXT_HOME),
@@ -62,7 +68,7 @@ fun MainScreen(modifier: Modifier = Modifier, mainviewmodel: MainScreenViewModel
     ) { innerPadding ->
         when (currentState.currentNavIndex) {
             0 -> HomeComponent(modifier.padding(innerPadding))
-            1 -> VacancyComponent(modifier.padding(innerPadding))
+            1 -> VacancyComponent(modifier.padding(innerPadding), navHostController)
             2 -> SettingsComponent(modifier.padding(innerPadding))
         }
     }
@@ -85,7 +91,7 @@ fun MainScreenAppBar(modifier: Modifier = Modifier, currentNavTitle: String) {
 @Composable
 fun LightModePreview() {
     AppTheme {
-        MainScreen()
+        MainScreen(navHostController = NavHostController(LocalContext.current))
     }
 }
 
@@ -93,6 +99,6 @@ fun LightModePreview() {
 @Composable
 fun DarkModePreview() {
     AppTheme {
-        MainScreen()
+        MainScreen(navHostController = NavHostController(LocalContext.current))
     }
 }
