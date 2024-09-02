@@ -62,7 +62,7 @@ fun MainScreen(modifier: Modifier = Modifier, mainviewmodel: MainScreenViewModel
     ) { innerPadding ->
         when (currentState.currentNavIndex) {
             0 -> HomeComponent(modifier.padding(innerPadding))
-            1 -> VacancyComponent(modifier.padding(innerPadding), stringResource(id = R.raw.buildings) )
+            1 -> VacancyComponent(modifier.padding(innerPadding))
             2 -> SettingsComponent(modifier.padding(innerPadding))
         }
     }

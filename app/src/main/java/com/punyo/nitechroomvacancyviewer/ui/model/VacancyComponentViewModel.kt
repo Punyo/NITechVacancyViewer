@@ -1,11 +1,15 @@
 package com.punyo.nitechroomvacancyviewer.ui.model
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.punyo.nitechroomvacancyviewer.data.building.BuildingRepository
 import com.punyo.nitechroomvacancyviewer.data.building.model.Building
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.InputStream
 
@@ -24,13 +28,19 @@ class VacancyComponentViewModel(private val buildingRepository: BuildingReposito
         return numberOfVacantRoom
     }
 
-    fun getBuildings(inputStream: InputStream): Array<Building> {
-        return BufferedReader(inputStream.reader()).use { reader ->
-            buildingRepository.getBuildings(reader.readText())
+    fun loadBuildings(inputStream: InputStream) {
+        viewModelScope.launch {
+            val buildings = buildingRepository.getBuildings(inputStream)
+            setBuildings(buildings)
         }
+    }
+
+    fun setBuildings(buildings: Array<Building>) {
+        state.value = state.value.copy(buildings = buildings)
     }
 }
 
 data class VacancyComponentUiState(
-    val selectedBuildingIndex: Int = 0
+    val selectedBuildingIndex: Int? = null,
+    val buildings: Array<Building>? = null
 )
