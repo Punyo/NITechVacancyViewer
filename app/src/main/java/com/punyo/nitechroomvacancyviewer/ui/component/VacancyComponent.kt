@@ -23,17 +23,24 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.punyo.nitechroomvacancyviewer.R
+import com.punyo.nitechroomvacancyviewer.data.building.BuildingRepository
 import com.punyo.nitechroomvacancyviewer.data.building.model.Building
+import com.punyo.nitechroomvacancyviewer.data.building.source.BuildingLocalDatasource
 import com.punyo.nitechroomvacancyviewer.ui.model.VacancyComponentViewModel
 
 @SuppressLint("DiscouragedApi")
 @Composable
 fun VacancyComponent(
     modifier: Modifier = Modifier,
-    buildingsData: Array<Building>,
-    viewModel: VacancyComponentViewModel = viewModel()
+    buildingsJsonString: String,
+    viewModel: VacancyComponentViewModel = VacancyComponentViewModel(
+        BuildingRepository(
+            BuildingLocalDatasource()
+        )
+    )
 ) {
     val context = LocalContext.current
+    val buildingsData = viewModel.getBuildings(context.resources.openRawResource(R.raw.buildings))
     LazyVerticalGrid(modifier = modifier.padding(8.dp), columns = GridCells.Fixed(2)) {
         items(buildingsData.size) { index ->
             val buildingData = buildingsData[index]
@@ -68,7 +75,10 @@ fun BuildingsCard(
 ) {
     Card(modifier = modifier) {
         Image(
-            modifier = Modifier.fillMaxWidth().height(100.dp).clip(MaterialTheme.shapes.medium),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(100.dp)
+                .clip(MaterialTheme.shapes.medium),
             painter = painterResource(id = buildingImage),
             contentScale = ContentScale.Crop,
             contentDescription = stringResource(id = buildingName)
@@ -95,48 +105,4 @@ fun BuildingsCard(
 @Preview(showBackground = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_NO)
 @Composable
 fun CardPreview() {
-    VacancyComponent(
-        buildingsData = arrayOf(
-            Building(
-                buildingNameResourceName = "BUILDING_1",
-                buildingImageResourceName = "thunbnail_building52_test",
-                buildingRoomPrincipalNames = arrayOf("Room A1", "Room A2", "Room A3")
-            ),
-            Building(
-                buildingNameResourceName = "BUILDING_2",
-                buildingImageResourceName = "thunbnail_building52_test",
-                buildingRoomPrincipalNames = arrayOf("Room B1", "Room B2", "Room B3")
-            ),
-            Building(
-                buildingNameResourceName = "BUILDING_1",
-                buildingImageResourceName = "thunbnail_building52_test",
-                buildingRoomPrincipalNames = arrayOf("Room A1", "Room A2", "Room A3")
-            ),
-            Building(
-                buildingNameResourceName = "BUILDING_2",
-                buildingImageResourceName = "thunbnail_building52_test",
-                buildingRoomPrincipalNames = arrayOf("Room B1", "Room B2", "Room B3")
-            ),
-            Building(
-                buildingNameResourceName = "BUILDING_1",
-                buildingImageResourceName = "thunbnail_building52_test",
-                buildingRoomPrincipalNames = arrayOf("Room A1", "Room A2", "Room A3")
-            ),
-            Building(
-                buildingNameResourceName = "BUILDING_2",
-                buildingImageResourceName = "thunbnail_building52_test",
-                buildingRoomPrincipalNames = arrayOf("Room B1", "Room B2", "Room B3")
-            ),
-            Building(
-                buildingNameResourceName = "BUILDING_1",
-                buildingImageResourceName = "thunbnail_building52_test",
-                buildingRoomPrincipalNames = arrayOf("Room A1", "Room A2", "Room A3")
-            ),
-            Building(
-                buildingNameResourceName = "BUILDING_2",
-                buildingImageResourceName = "thunbnail_building52_test",
-                buildingRoomPrincipalNames = arrayOf("Room B1", "Room B2", "Room B3")
-            )
-        )
-    )
 }

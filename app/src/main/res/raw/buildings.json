@@ -1,0 +1,91 @@
+{
+  "buildingsData": [
+    {
+      "buildingNameResourceName": "BUILDING_1",
+      "buildingImageResourceName": "thumbnail_building1",
+      "buildingRoomPrincipalNames": [
+        "c0010101@ict.nitech.ac.jp",
+        "c0010102@ict.nitech.ac.jp",
+        "c0010103@ict.nitech.ac.jp"
+      ]
+    },
+    {
+      "buildingNameResourceName": "BUILDING_2",
+      "buildingImageResourceName": "thumbnail_building2",
+      "buildingRoomPrincipalNames": [
+        "c0020101@ict.nitech.ac.jp",
+        "c0020102@ict.nitech.ac.jp",
+        "c0020201@ict.nitech.ac.jp",
+        "c0020202@ict.nitech.ac.jp",
+        "c0020203@ict.nitech.ac.jp",
+        "c0020301@ict.nitech.ac.jp",
+        "c0020302@ict.nitech.ac.jp",
+        "c0020303@ict.nitech.ac.jp"
+      ]
+    },
+    {
+      "buildingNameResourceName": "BUILDING_12",
+      "buildingImageResourceName": "thumbnail_building12",
+      "buildingRoomPrincipalNames": [
+        "c0120201@ict.nitech.ac.jp",
+        "c0120202@ict.nitech.ac.jp"
+      ]
+    },
+    {
+      "buildingNameResourceName": "BUILDING_23",
+      "buildingImageResourceName": "thumbnail_building23",
+      "buildingRoomPrincipalNames": [
+        "c0230101@ict.nitech.ac.jp",
+        "c0230102@ict.nitech.ac.jp",
+        "c0230201@ict.nitech.ac.jp",
+        "c0230203@ict.nitech.ac.jp",
+        "c0230301@ict.nitech.ac.jp",
+        "c0230302@ict.nitech.ac.jp",
+        "c0230401@ict.nitech.ac.jp",
+        "c0230402@ict.nitech.ac.jp"
+      ]
+    },
+    {
+      "buildingNameResourceName": "BUILDING_51",
+      "buildingImageResourceName": "thumbnail_building51",
+      "buildingRoomPrincipalNames": [
+        "c0510101@ict.nitech.ac.jp"
+      ]
+    },
+    {
+      "buildingNameResourceName": "BUILDING_52",
+      "buildingImageResourceName": "thumbnail_building52",
+      "buildingRoomPrincipalNames": [
+        "c0520101@ict.nitech.ac.jp",
+        "c0520102@ict.nitech.ac.jp",
+        "c0520104@ict.nitech.ac.jp",
+        "c0520105@ict.nitech.ac.jp",
+        "c0520106@ict.nitech.ac.jp",
+        "c0520107@ict.nitech.ac.jp",
+        "c0520201@ict.nitech.ac.jp",
+        "c0520202@ict.nitech.ac.jp",
+        "c0520203@ict.nitech.ac.jp",
+        "c0520204@ict.nitech.ac.jp",
+        "c0520205@ict.nitech.ac.jp",
+        "c0520206@ict.nitech.ac.jp",
+        "c0520207@ict.nitech.ac.jp",
+        "c0520208@ict.nitech.ac.jp",
+        "c0520301@ict.nitech.ac.jp",
+        "c0520302@ict.nitech.ac.jp",
+        "c0520303@ict.nitech.ac.jp",
+        "c0520304@ict.nitech.ac.jp",
+        "c0520305@ict.nitech.ac.jp",
+        "c0520306@ict.nitech.ac.jp",
+        "c0520307@ict.nitech.ac.jp",
+        "c0520308@ict.nitech.ac.jp"
+      ]
+    },
+    {
+      "buildingNameResourceName": "BUILDING_NITECHHALL",
+      "buildingImageResourceName": "thumbnail_nitechhall",
+      "buildingRoomPrincipalNames": [
+        "c0900201@ict.nitech.ac.jp"
+      ]
+    }
+  ]
+}

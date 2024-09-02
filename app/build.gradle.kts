@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.8.10"
 }
 
 android {
@@ -60,13 +61,13 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.accompanist.flowlayout)
-    implementation(libs.kotlinx.serialization.json)
     implementation(libs.msal){
         exclude(group = "io.opentelemetry")
         exclude("com.microsoft.device.display")
     }
     implementation("io.opentelemetry:opentelemetry-api:1.18.0")
     implementation("io.opentelemetry:opentelemetry-context:1.18.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
     implementation(libs.androidx.lifecycle.runtime.compose.android)
     implementation(libs.androidx.navigation.compose)
     testImplementation(libs.junit)
