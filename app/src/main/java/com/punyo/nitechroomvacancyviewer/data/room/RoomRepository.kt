@@ -3,7 +3,14 @@ package com.punyo.nitechroomvacancyviewer.data.room
 import com.punyo.nitechroomvacancyviewer.data.building.model.Building
 
 class RoomRepository {
-    fun getBuildings(jsonString: String) :Array<Building> {
-        return emptyArray()
+    private val principalNameAndDisplayName = mutableMapOf<String, String>()
+
+    suspend fun getDisplayName(principalName: String): String {
+        if (principalNameAndDisplayName.contains(principalName)) {
+            return principalNameAndDisplayName[principalName]!!
+        }else{
+
+        }
+        return ""
     }
 }
