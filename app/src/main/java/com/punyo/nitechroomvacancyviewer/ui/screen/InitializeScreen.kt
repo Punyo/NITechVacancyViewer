@@ -14,7 +14,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.microsoft.identity.client.exception.MsalException
-import com.punyo.nitechroomvacancyviewer.data.msgraph.MSGraphRepository
 import com.punyo.nitechroomvacancyviewer.ui.component.LoadingProgressIndicatorComponent
 import com.punyo.nitechroomvacancyviewer.ui.model.InitializeScreenViewModel
 import com.punyo.nitechroomvacancyviewer.ui.theme.AppTheme
