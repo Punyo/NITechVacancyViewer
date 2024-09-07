@@ -1,7 +1,6 @@
 package com.punyo.nitechroomvacancyviewer.ui.component
 
 import android.annotation.SuppressLint
-import android.os.Parcelable
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
@@ -27,14 +26,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
-import androidx.versionedparcelable.ParcelField
+import com.punyo.nitechroomvacancyviewer.GsonInstance
 import com.punyo.nitechroomvacancyviewer.R
 import com.punyo.nitechroomvacancyviewer.data.building.BuildingRepository
 import com.punyo.nitechroomvacancyviewer.data.building.source.BuildingLocalDatasource
 import com.punyo.nitechroomvacancyviewer.ui.model.VacancyComponentViewModel
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 
 @SuppressLint("DiscouragedApi")
 @Composable
@@ -97,7 +93,7 @@ fun VacancyComponent(
                                 context.getString(buildingNameIdentifier)
                             ).replace(
                                 "{${navigationRoteParam2}}",
-                                Json.encodeToString(roomsVacancy)
+                                GsonInstance.gson.toJson(roomsVacancy)
                             )
                         )
                     }
@@ -149,13 +145,11 @@ fun BuildingsCard(
     }
 }
 
-@Serializable
 data class RoomVacancy(
     val roomName: String,
     val vacancyStatus: RoomVacancyStatus
 )
 
-@Serializable
 enum class RoomVacancyStatus {
     VACANT,
     OCCUPY
