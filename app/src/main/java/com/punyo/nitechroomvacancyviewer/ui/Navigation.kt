@@ -27,7 +27,7 @@ fun MainNavigation(navController: NavHostController = rememberNavController()) {
     ) {
         composable(ScreenDestinations.Initialize.name) {
             InitializeScreen(
-                onAlreadySignedIn = {
+                onSignedInWithSavedCredentials = {
                     navigateOneSide(
                         navController,
                         ScreenDestinations.Initialize,
@@ -40,26 +40,16 @@ fun MainNavigation(navController: NavHostController = rememberNavController()) {
                         ScreenDestinations.Initialize,
                         ScreenDestinations.SignIn
                     )
-                },
-                onInitializeFailed = {
-                    navigateOneSide(
-                        navController,
-                        ScreenDestinations.Initialize,
-                        ScreenDestinations.SignInInitializeFailed
-                    )
                 }
             )
         }
         composable(ScreenDestinations.SignIn.name) {
-            SignInScreen(isInitializeSuccess = true, onSignInSuccess = {
+            SignInScreen(onSignInSuccess = {
                 navigateOneSide(navController, ScreenDestinations.SignIn, ScreenDestinations.Main)
             })
         }
         composable(ScreenDestinations.Main.name) {
             MainScreen(navHostController = navController)
-        }
-        composable(ScreenDestinations.SignInInitializeFailed.name) {
-            SignInScreen(isInitializeSuccess = false)
         }
         composable(
             route = context.getString(R.string.UI_NAVHOST_COMPOSABLE_ROOMVACANCYSCREEN),
@@ -100,6 +90,5 @@ private fun navigateOneSide(
 enum class ScreenDestinations {
     Initialize,
     SignIn,
-    SignInInitializeFailed,
     Main
 }

@@ -1,6 +1,6 @@
 package com.punyo.nitechroomvacancyviewer.ui.screen
 
-import android.app.Activity
+import android.app.Application
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -10,13 +10,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -26,69 +27,66 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.punyo.nitechroomvacancyviewer.R
+import com.punyo.nitechroomvacancyviewer.data.auth.AuthRepository
 import com.punyo.nitechroomvacancyviewer.ui.model.SignInScreenViewModel
 import com.punyo.nitechroomvacancyviewer.ui.theme.AppTheme
 
 @Composable
 fun SignInScreen(
     onSignInSuccess: () -> Unit = {},
-    isInitializeSuccess: Boolean = true,
-    signInScreenViewModel: SignInScreenViewModel = SignInScreenViewModel()
+    signInScreenViewModel: SignInScreenViewModel = viewModel(
+        factory = SignInScreenViewModel.Factory(
+            LocalContext.current.applicationContext as Application
+        )
+    )
 ) {
-    val context = LocalContext.current
-    val activity = context as Activity
     val currentState by signInScreenViewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
-    signInScreenViewModel.setInitSuccess(isInitializeSuccess)
+    val context = LocalContext.current
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         containerColor = MaterialTheme.colorScheme.primaryContainer,
         snackbarHost = { SnackbarHost(snackbarHostState) }
     )
     { innerPadding ->
-//        LaunchedEffect(key1 = currentState.signInResultStatus, key2 = currentState.isInitSuccess) {
-//            currentState.signInResultStatus?.let {
-//                var failReason: String = context.getString(R.string.ERROR_PREFIX_SIGN_IN_FAILED)
-//                when (it) {
-//                    MSGraphRepository.MSALOperationResultStatus.SUCCESS -> {
-//                        onSignInSuccess()
-//                    }
-//
-//                    MSGraphRepository.MSALOperationResultStatus.NEED_RE_SIGN_IN -> failReason += context.getString(
-//                        R.string.ERROR_NEED_RE_SIGN_IN
-//                    )
-//
-//                    MSGraphRepository.MSALOperationResultStatus.CANCELLED -> failReason += context.getString(
-//                        R.string.ERROR_CANCELLED
-//                    )
-//
-//                    MSGraphRepository.MSALOperationResultStatus.NETWORK_ERROR -> failReason += context.getString(
-//                        R.string.ERROR_NETWORK_ERROR
-//                    )
-//
-//                    MSGraphRepository.MSALOperationResultStatus.INTERNAL_ERROR -> failReason += context.getString(
-//                        R.string.ERROR_INTERNAL_ERROR
-//                    )
-//                }
-//                if (currentState.signInResultStatus != MSGraphRepository.MSALOperationResultStatus.SUCCESS) {
-//                    snackbarHostState.showSnackbar(
-//                        message = failReason,
-//                        duration = SnackbarDuration.Short
-//                    )
-//                }
-         //   }
-//            if (currentState.isInitSuccess == false) {
-//                snackbarHostState.showSnackbar(
-//                    message = "このアプリの内部に興味がありますか？\n私と一緒に開発しましょう！",
-//                    duration = SnackbarDuration.Short
-//                )
-//            }
-//        }
+        LaunchedEffect(key1 = currentState.signInResult) {
+            currentState.signInResult?.let {
+                var failReason = context.getString(R.string.ERROR_PREFIX_SIGN_IN_FAILED)
+                when (it) {
+                    AuthRepository.AuthResultStatus.SUCCESS -> {
+                        onSignInSuccess()
+                    }
+
+                    AuthRepository.AuthResultStatus.NETWORK_ERROR -> {
+                        failReason += (context.getString(R.string.ERROR_NETWORK_ERROR))
+                    }
+
+                    AuthRepository.AuthResultStatus.INVALID_CREDENTIALS -> {
+                        failReason += (context.getString(R.string.ERROR_INVALID_CREDENTIALS))
+                    }
+
+                    AuthRepository.AuthResultStatus.UNKNOWN_ERROR -> {
+                        failReason += (context.getString(R.string.ERROR_UNKNOWN_ERROR))
+                    }
+
+                    AuthRepository.AuthResultStatus.CREDENTIALS_NOT_FOUND -> {
+                    }
+                }
+                if (it != AuthRepository.AuthResultStatus.SUCCESS) {
+                    snackbarHostState.showSnackbar(failReason)
+                }
+                signInScreenViewModel.setSignInButtonEnabled(true)
+            }
+        }
         Column(
             modifier = Modifier
                 .padding(innerPadding)
@@ -101,31 +99,72 @@ fun SignInScreen(
                     .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp)
                     .size(200.dp),
                 painter = painterResource(id = R.drawable.ic_launcher_foreground),
-                contentDescription = stringResource(id = R.string.app_name)
+                contentDescription = stringResource(id = R.string.APP_NAME)
             )
             Text(
                 modifier = Modifier.fillMaxWidth(),
-                text = stringResource(id = R.string.app_name),
+                text = stringResource(id = R.string.APP_NAME),
                 textAlign = TextAlign.Center,
                 fontSize = MaterialTheme.typography.titleLarge.fontSize,
                 color = MaterialTheme.colorScheme.onPrimaryContainer
             )
+            TextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp),
+                value = currentState.userName,
+                label = { Text(text = stringResource(id = R.string.UI_TEXTFIELD_TEXT_USERNAME)) },
+                singleLine = true,
+                isError = currentState.isErrorUserName,
+                supportingText = {
+                    if (currentState.isErrorUserName) {
+                        Text(stringResource(id = R.string.UI_TEXTFIELD_SUPPORTINGTEXT_EMPTY))
+                    }
+                },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Uri,
+                    imeAction = ImeAction.Next,
+                ),
+                placeholder = { Text(text = stringResource(id = R.string.UI_TEXTFIELD_TEXT_USERNAME_HINT)) },
+                onValueChange = { signInScreenViewModel.setUserName(it) })
+            TextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp),
+                value = currentState.password,
+                label = { Text(stringResource(id = R.string.UI_TEXTFIELD_TEXT_PASSWORD)) },
+                singleLine = true,
+                visualTransformation = PasswordVisualTransformation(),
+                isError = currentState.isErrorPassword,
+                supportingText = {
+                    if (currentState.isErrorPassword) {
+                        Text(stringResource(id = R.string.UI_TEXTFIELD_SUPPORTINGTEXT_EMPTY))
+                    }
+                },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Password,
+                    imeAction = ImeAction.Done,
+                ),
+                placeholder = { Text(stringResource(id = R.string.UI_TEXTFIELD_TEXT_PASSWORD_HINT)) },
+                onValueChange = { signInScreenViewModel.setPassword(it) })
             Button(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp)
                     .height(40.dp),
                 onClick = {
-                    if (isInitializeSuccess) {
-                        signInScreenViewModel.onSignInButtonClicked(
-                            activity = activity, onSignInSuccess = onSignInSuccess
-                        )
+                    if (currentState.isSignInButtonEnabled) {
+                        signInScreenViewModel.onSignInButtonClicked(onSignInSuccess)
                     }
                 }) {
                 Text(stringResource(id = R.string.UI_BUTTON_TEXT_LOGIN))
             }
         }
-        Box(modifier = Modifier.fillMaxSize()) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+        ) {
             Text(
                 text = "注意事項をここに挿入",
                 modifier = Modifier
@@ -141,7 +180,7 @@ fun SignInScreen(
 @Composable
 fun LoginScreenLightPreview() {
     AppTheme {
-        SignInScreen()
+        SignInScreen(signInScreenViewModel = SignInScreenViewModel(Application()))
     }
 }
 
@@ -149,6 +188,6 @@ fun LoginScreenLightPreview() {
 @Composable
 fun LoginScreenDarkPreview() {
     AppTheme {
-        SignInScreen()
+        SignInScreen(signInScreenViewModel = SignInScreenViewModel(Application()))
     }
 }
