@@ -61,7 +61,6 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.accompanist.flowlayout)
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.retrofit)
     implementation (libs.converter.gson)
