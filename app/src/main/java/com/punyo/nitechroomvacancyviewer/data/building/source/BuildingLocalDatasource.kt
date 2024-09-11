@@ -1,9 +1,9 @@
 package com.punyo.nitechroomvacancyviewer.data.building.source
 
+import com.punyo.nitechroomvacancyviewer.GsonInstance
 import com.punyo.nitechroomvacancyviewer.data.building.model.BuildingsDataModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.json.Json
 import java.io.BufferedReader
 import java.io.InputStream
 
@@ -12,7 +12,7 @@ class BuildingLocalDatasource {
         return withContext(Dispatchers.IO) {
             val bufferedReader = BufferedReader(inputStream.reader())
             val jsonString = bufferedReader.use { it.readText() }
-            Json.decodeFromString(jsonString)
+            GsonInstance.gson.fromJson(jsonString, BuildingsDataModel::class.java)
         }
     }
 }

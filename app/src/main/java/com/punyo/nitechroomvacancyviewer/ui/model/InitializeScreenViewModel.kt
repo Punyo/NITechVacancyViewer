@@ -15,7 +15,7 @@ class InitializeScreenViewModel(application: Application) : AndroidViewModel(app
     private val state = MutableStateFlow(InitializeScreenUiState())
     val uiState: StateFlow<InitializeScreenUiState> = state.asStateFlow()
 
-    fun signInWithSavedCredentials() {
+    fun tryToSignInWithSavedCredentials() {
         viewModelScope.launch {
             val result = AuthRepository.signInWithSavedCredentials(getApplication())
             if (result == AuthRepository.AuthResultStatus.SUCCESS) {

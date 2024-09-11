@@ -1,16 +1,19 @@
 package com.punyo.nitechroomvacancyviewer.data.auth.source
 
 import android.util.Log
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
 import java.security.AccessControlException
+import java.time.Duration
 import kotlin.jvm.Throws
 
 object AuthNetworkDataSource {
     private val retrofit = Retrofit.Builder()
         .baseUrl("https://slb4oam.ict.nitech.ac.jp/")
         .addConverterFactory(GsonConverterFactory.create())
+        .client(OkHttpClient.Builder().writeTimeout(Duration.ZERO).build())
         .build()
 
     private val authService = retrofit.create(NITechAuthService::class.java)
@@ -18,7 +21,6 @@ object AuthNetworkDataSource {
     @Throws(AccessControlException::class, IOException::class)
     suspend fun getToken(userName: String, password: String): String? {
         val call = authService.getToken(userName, password)
-        Log.d("AuthNetworkDataSource", call.raw().toString())
         if (call.isSuccessful && call.body() != null) {
             return call.body()!!.tokenId
         }

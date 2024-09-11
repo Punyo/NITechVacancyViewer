@@ -1,10 +1,12 @@
 package com.punyo.nitechroomvacancyviewer.ui.component
 
 import android.annotation.SuppressLint
+import android.app.Application
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -39,9 +41,8 @@ fun VacancyComponent(
     navHostController: NavHostController,
     viewModel: VacancyComponentViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
         factory = VacancyComponentViewModel.Factory(
-            BuildingRepository(
-                BuildingLocalDatasource()
-            )
+            LocalContext.current.applicationContext as Application,
+            BuildingRepository(BuildingLocalDatasource())
         )
     )
 ) {
@@ -54,6 +55,7 @@ fun VacancyComponent(
     val navigationRoteParam2 =
         stringResource(id = R.string.UI_NAVHOST_COMPOSABLE_ROOMVACANCYSCREEN_PARAMETER2)
     LaunchedEffect(true) {
+        viewModel.login()
         viewModel.loadBuildings(context.resources.openRawResource(R.raw.buildings))
     }
     if (currentState.buildings == null) {
@@ -101,7 +103,13 @@ fun VacancyComponent(
             }
         }
     }
-
+    Box(modifier = modifier) {
+        CampusSquareWebViewComponent(
+            onGetReservationTableHTML = { html ->
+                viewModel.onGetReservationTableHTML(html)
+            }
+        )
+    }
 }
 
 @Composable
