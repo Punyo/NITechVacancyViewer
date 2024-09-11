@@ -1,0 +1,91 @@
+{
+  "buildingsData": [
+    {
+      "buildingNameResourceName": "BUILDING_1",
+      "buildingImageResourceName": "thumbnail_building1",
+      "buildingRoomPrincipalNames": [
+        "C0010101",
+        "C0010102",
+        "C0010103"
+      ]
+    },
+    {
+      "buildingNameResourceName": "BUILDING_2",
+      "buildingImageResourceName": "thumbnail_building2",
+      "buildingRoomPrincipalNames": [
+        "C0020101",
+        "C0020102",
+        "C0020201",
+        "C0020202",
+        "C0020203",
+        "C0020301",
+        "C0020302",
+        "C0020303"
+      ]
+    },
+    {
+      "buildingNameResourceName": "BUILDING_12",
+      "buildingImageResourceName": "thumbnail_building12",
+      "buildingRoomPrincipalNames": [
+        "C0120201",
+        "C0120202"
+      ]
+    },
+    {
+      "buildingNameResourceName": "BUILDING_23",
+      "buildingImageResourceName": "thumbnail_building23",
+      "buildingRoomPrincipalNames": [
+        "C0230101",
+        "C0230102",
+        "C0230201",
+        "C0230203",
+        "C0230301",
+        "C0230302",
+        "C0230401",
+        "C0230402"
+      ]
+    },
+    {
+      "buildingNameResourceName": "BUILDING_51",
+      "buildingImageResourceName": "thumbnail_building51",
+      "buildingRoomPrincipalNames": [
+        "C0510101"
+      ]
+    },
+    {
+      "buildingNameResourceName": "BUILDING_52",
+      "buildingImageResourceName": "thumbnail_building52",
+      "buildingRoomPrincipalNames": [
+        "C0520101",
+        "C0520102",
+        "C0520104",
+        "C0520105",
+        "C0520106",
+        "C0520107",
+        "C0520201",
+        "C0520202",
+        "C0520203",
+        "C0520204",
+        "C0520205",
+        "C0520206",
+        "C0520207",
+        "C0520208",
+        "C0520301",
+        "C0520302",
+        "C0520303",
+        "C0520304",
+        "C0520305",
+        "C0520306",
+        "C0520307",
+        "C0520308"
+      ]
+    },
+    {
+      "buildingNameResourceName": "BUILDING_NITECHHALL",
+      "buildingImageResourceName": "thumbnail_nitechhall",
+      "buildingRoomPrincipalNames": [
+        "C0900201"
+      ]
+    }
+  ]
+}
