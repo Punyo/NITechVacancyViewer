@@ -46,7 +46,7 @@ class VacancyComponentViewModel(
     fun login() {
         viewModelScope.launch {
             withContext(Dispatchers.Main) {
-                RoomRepository.login(getApplication())
+//                RoomRepository.login(getApplication())
             }
         }
     }
