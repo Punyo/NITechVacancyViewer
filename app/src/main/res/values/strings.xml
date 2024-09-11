@@ -8,7 +8,7 @@
     <string name="BUILDING_52">52号館</string>
     <string name="BUILDING_NITECHHALL">NITech Hall</string>
     <string name="ERROR_CANCELLED">キャンセルされました。</string>
-    <string name="ERROR_NETWORK_ERROR">インターネット接続を確認してください。</string>
+    <string name="ERROR_NETWORK_ERROR">MAINS-Xへの接続またはVPN接続を確認してください。</string>
     <string name="ERROR_PREFIX_SIGN_IN_FAILED">ログインに失敗しました。\n</string>
     <string name="ERROR_INVALID_CREDENTIALS">基盤IDまたはパスワードが間違っています。</string>
     <string name="ERROR_UNKNOWN_ERROR">エラーが頻発する場合は管理者に連絡してください。</string>

@@ -61,6 +61,7 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.accompanist.flowlayout)
+    implementation(libs.jsoup)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.retrofit)
     implementation (libs.converter.gson)

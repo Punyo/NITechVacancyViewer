@@ -27,7 +27,9 @@ fun InitializeScreen(
     )
 ) {
     val currentState by initializeScreenViewModel.uiState.collectAsStateWithLifecycle()
-    initializeScreenViewModel.signInWithSavedCredentials()
+    LaunchedEffect(key1 = Unit) {
+        initializeScreenViewModel.tryToSignInWithSavedCredentials()
+    }
     LaunchedEffect(currentState.signedInWithSavedCredentials) {
         currentState.signedInWithSavedCredentials.let {
             if (it == true) {

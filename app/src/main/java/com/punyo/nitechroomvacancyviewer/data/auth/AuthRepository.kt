@@ -14,7 +14,8 @@ import kotlinx.coroutines.async
 object AuthRepository {
     private var currentUserName: String? = null
     private var currentPassword: String? = null
-    private var currentToken: String? = null
+    var currentToken: String? = null
+        private set
 
     private fun setCurrentUser(userName: String, password: String) {
         currentUserName = userName
@@ -41,7 +42,7 @@ object AuthRepository {
     private suspend fun acquireToken(userName: String, password: String): AuthResultStatus {
         try {
             val token =
-                CoroutineScope(Dispatchers.Main).async {
+                CoroutineScope(Dispatchers.IO).async {
                     AuthNetworkDataSource.getToken(
                         userName,
                         password
@@ -55,6 +56,7 @@ object AuthRepository {
                 return AuthResultStatus.SUCCESS
             }
         } catch (e: Exception) {
+            Log.e("AuthRepository", e.stackTraceToString())
             when (e) {
                 is AccessControlException -> return AuthResultStatus.INVALID_CREDENTIALS
                 is IOException -> return AuthResultStatus.NETWORK_ERROR
