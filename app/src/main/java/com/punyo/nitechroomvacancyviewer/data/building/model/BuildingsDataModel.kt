@@ -21,7 +21,7 @@ data class BuildingsDataModel(
 data class Building(
     val buildingNameResourceName: String,
     val buildingImageResourceName: String,
-    val buildingRoomPrincipalNames: Array<String>,
+    val buildingRoomDisplayNames: Array<String>,
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -30,7 +30,7 @@ data class Building(
         other as Building
 
         if (buildingNameResourceName != other.buildingNameResourceName) return false
-        if (!buildingRoomPrincipalNames.contentEquals(other.buildingRoomPrincipalNames)) return false
+        if (!buildingRoomDisplayNames.contentEquals(other.buildingRoomDisplayNames)) return false
         if (buildingImageResourceName != other.buildingImageResourceName) return false
 
         return true
@@ -38,7 +38,7 @@ data class Building(
 
     override fun hashCode(): Int {
         var result = buildingNameResourceName.hashCode()
-        result = 31 * result + buildingRoomPrincipalNames.contentHashCode()
+        result = 31 * result + buildingRoomDisplayNames.contentHashCode()
         result = 31 * result + buildingImageResourceName.hashCode()
         return result
     }

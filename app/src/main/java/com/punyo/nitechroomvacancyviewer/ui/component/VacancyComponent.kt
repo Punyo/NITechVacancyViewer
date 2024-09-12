@@ -66,13 +66,13 @@ fun VacancyComponent(
             items(buildings.size) { index ->
                 val buildingData = buildings[index]
                 val numberOfVacantRooms =
-                    viewModel.getNumberOfVacantRoom(buildingData.buildingRoomPrincipalNames)
+                    viewModel.getNumberOfVacantRoom(buildingData.buildingRoomDisplayNames)
                 val buildingNameIdentifier = context.resources.getIdentifier(
                     buildingData.buildingNameResourceName,
                     "string",
                     context.packageName
                 )
-                val roomsVacancy = buildingData.buildingRoomPrincipalNames.map {
+                val roomsVacancy = buildingData.buildingRoomDisplayNames.map {
                     RoomVacancy(
                         roomName = it,
                         vacancyStatus = RoomVacancyStatus.OCCUPY
@@ -87,7 +87,7 @@ fun VacancyComponent(
                         context.packageName
                     ),
                     numberOfVacantRooms = numberOfVacantRooms,
-                    numberOfRooms = buildingData.buildingRoomPrincipalNames.size.toUInt(),
+                    numberOfRooms = buildingData.buildingRoomDisplayNames.size.toUInt(),
                     onClick = {
                         navHostController.navigate(
                             navigationRoute.replace(

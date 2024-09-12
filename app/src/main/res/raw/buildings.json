@@ -3,88 +3,88 @@
     {
       "buildingNameResourceName": "BUILDING_1",
       "buildingImageResourceName": "thumbnail_building1",
-      "buildingRoomPrincipalNames": [
-        "C0010101",
-        "C0010102",
-        "C0010103"
+      "buildingRoomDisplayNames": [
+        "0111",
+        "0112",
+        "0113"
       ]
     },
     {
       "buildingNameResourceName": "BUILDING_2",
       "buildingImageResourceName": "thumbnail_building2",
-      "buildingRoomPrincipalNames": [
-        "C0020101",
-        "C0020102",
-        "C0020201",
-        "C0020202",
-        "C0020203",
-        "C0020301",
-        "C0020302",
-        "C0020303"
+      "buildingRoomDisplayNames": [
+        "0211",
+        "0212",
+        "0221",
+        "0222",
+        "0223",
+        "0231",
+        "0232",
+        "0233"
       ]
     },
     {
       "buildingNameResourceName": "BUILDING_12",
       "buildingImageResourceName": "thumbnail_building12",
-      "buildingRoomPrincipalNames": [
-        "C0120201",
-        "C0120202"
+      "buildingRoomDisplayNames": [
+        "1221",
+        "1222"
       ]
     },
     {
       "buildingNameResourceName": "BUILDING_23",
       "buildingImageResourceName": "thumbnail_building23",
-      "buildingRoomPrincipalNames": [
-        "C0230101",
-        "C0230102",
-        "C0230201",
-        "C0230203",
-        "C0230301",
-        "C0230302",
-        "C0230401",
-        "C0230402"
+      "buildingRoomDisplayNames": [
+        "2311",
+        "2312",
+        "2321",
+        "2323",
+        "2331",
+        "2332",
+        "2341",
+        "2342"
       ]
     },
     {
       "buildingNameResourceName": "BUILDING_51",
       "buildingImageResourceName": "thumbnail_building51",
-      "buildingRoomPrincipalNames": [
-        "C0510101"
+      "buildingRoomDisplayNames": [
+        "5111"
       ]
     },
     {
       "buildingNameResourceName": "BUILDING_52",
       "buildingImageResourceName": "thumbnail_building52",
-      "buildingRoomPrincipalNames": [
-        "C0520101",
-        "C0520102",
-        "C0520104",
-        "C0520105",
-        "C0520106",
-        "C0520107",
-        "C0520201",
-        "C0520202",
-        "C0520203",
-        "C0520204",
-        "C0520205",
-        "C0520206",
-        "C0520207",
-        "C0520208",
-        "C0520301",
-        "C0520302",
-        "C0520303",
-        "C0520304",
-        "C0520305",
-        "C0520306",
-        "C0520307",
-        "C0520308"
+      "buildingRoomDisplayNames": [
+        "5211",
+        "5212",
+        "5214",
+        "5215",
+        "5216",
+        "5217",
+        "5221",
+        "5222",
+        "5223",
+        "5224",
+        "5225",
+        "5226",
+        "5227",
+        "5228",
+        "5231",
+        "5232",
+        "5233",
+        "5234",
+        "5235",
+        "5236",
+        "5237",
+        "5238"
       ]
     },
     {
       "buildingNameResourceName": "BUILDING_NITECHHALL",
       "buildingImageResourceName": "thumbnail_nitechhall",
-      "buildingRoomPrincipalNames": [
-        "C0900201"
+      "buildingRoomDisplayNames": [
+        "9021(ラーニング・コモンズ)"
       ]
     }
   ]
