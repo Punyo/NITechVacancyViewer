@@ -22,6 +22,7 @@
     <string name="UI_TEXTFIELD_SUPPORTINGTEXT_EMPTY">入力してください</string>
     <string name="UI_CARD_TEXT_VACANTANDMAXROOMS">空室：%d/%d[部屋]</string>
     <string name="UI_BUTTON_TEXT_LOGIN">ログイン</string>
+    <string name="UI_LAZYVERTICALGRID_TEXT_LASTUPDATETIME">最終更新：%s</string>
     <string name="UI_LISTITEM_TEXT_VACANT">空室</string>
     <string name="UI_LISTITEM_TEXT_OCCUPY">使用中：%s</string>
     <string name="UI_NAVHOST_COMPOSABLE_ROOMVACANCYSCREEN">RoomVacancyScreen/{buildingName}/{roomsData}</string>

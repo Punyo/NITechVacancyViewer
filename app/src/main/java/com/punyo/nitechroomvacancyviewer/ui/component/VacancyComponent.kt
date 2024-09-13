@@ -35,6 +35,7 @@ import com.punyo.nitechroomvacancyviewer.data.building.BuildingRepository
 import com.punyo.nitechroomvacancyviewer.data.building.source.BuildingLocalDatasource
 import com.punyo.nitechroomvacancyviewer.data.room.RoomRepository
 import com.punyo.nitechroomvacancyviewer.ui.model.VacancyComponentViewModel
+import kotlinx.coroutines.delay
 import java.time.LocalDateTime
 
 @SuppressLint("DiscouragedApi")
@@ -60,14 +61,10 @@ fun VacancyComponent(
     LaunchedEffect(true) {
         viewModel.loadBuildings(context.resources.openRawResource(R.raw.buildings))
     }
-    if (currentState.roomsData == null && currentState.buildings != null) {
-        Box(modifier = modifier) {
-            CampusSquareWebViewComponent(
-                onGetReservationTableHTML = { html ->
-                    viewModel.loadRoomsDataFromHTML(html)
-                },
-                sso4cookie = viewModel.sso4cookie!!
-            )
+    LaunchedEffect(key1 = currentState.roomsData) {
+        while (true) {
+            viewModel.updateRoomVacancy()
+            delay(60000)
         }
     }
     if (isAllDataLoaded) {
@@ -77,7 +74,9 @@ fun VacancyComponent(
             item(span = { GridItemSpan(maxCurrentLineSpan) }) {
                 Text(
                     modifier = Modifier.padding(8.dp),
-                    text ="最終更新：",
+                    text = stringResource(id = R.string.UI_LAZYVERTICALGRID_TEXT_LASTUPDATETIME).format(
+                        viewModel.getLastUpdateTimeString()
+                    ),
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -119,8 +118,19 @@ fun VacancyComponent(
             }
         }
 
+
     } else {
         LoadingProgressIndicatorComponent()
+    }
+    if (currentState.roomsData == null && currentState.buildings != null) {
+        Box(modifier = modifier) {
+            CampusSquareWebViewComponent(
+                onGetReservationTableHTML = { html ->
+                    viewModel.loadRoomsDataFromHTML(html)
+                },
+                sso4cookie = viewModel.sso4cookie!!
+            )
+        }
     }
 }
 
