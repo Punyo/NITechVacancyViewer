@@ -12,7 +12,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.punyo.nitechroomvacancyviewer.GsonInstance
 import com.punyo.nitechroomvacancyviewer.R
-import com.punyo.nitechroomvacancyviewer.ui.component.RoomVacancy
+import com.punyo.nitechroomvacancyviewer.data.room.model.Room
 import com.punyo.nitechroomvacancyviewer.ui.screen.InitializeScreen
 import com.punyo.nitechroomvacancyviewer.ui.screen.MainScreen
 import com.punyo.nitechroomvacancyviewer.ui.screen.RoomVacancyScreen
@@ -72,7 +72,7 @@ fun MainNavigation(navController: NavHostController = rememberNavController()) {
             RoomVacancyScreen(
                 buildingName = buildingName,
                 onBackPressed = { navController.popBackStack() },
-                roomsVacancy = GsonInstance.gson.fromJson(roomVacancy, Array<RoomVacancy>::class.java)
+                rooms = GsonInstance.gson.fromJson(roomVacancy, Array<Room>::class.java)
             )
         }
     }
