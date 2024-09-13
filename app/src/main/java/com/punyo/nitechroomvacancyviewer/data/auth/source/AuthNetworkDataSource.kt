@@ -1,6 +1,5 @@
 package com.punyo.nitechroomvacancyviewer.data.auth.source
 
-import android.util.Log
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -13,7 +12,9 @@ object AuthNetworkDataSource {
     private val retrofit = Retrofit.Builder()
         .baseUrl("https://slb4oam.ict.nitech.ac.jp/")
         .addConverterFactory(GsonConverterFactory.create())
-        .client(OkHttpClient.Builder().writeTimeout(Duration.ZERO).build())
+        .client(
+            OkHttpClient.Builder().writeTimeout(Duration.ZERO).readTimeout(Duration.ZERO).build()
+        )
         .build()
 
     private val authService = retrofit.create(NITechAuthService::class.java)
