@@ -1,6 +1,6 @@
 package com.punyo.nitechroomvacancyviewer.data.room.model
 
-import java.util.Calendar
+import java.time.LocalDateTime
 
 data class RoomsDataModel(
     val rooms: Array<Room>
@@ -20,12 +20,12 @@ data class RoomsDataModel(
 }
 
 data class Room(
-    val roomPrincipalName: String,
     val roomDisplayName: String,
-    val eventTimesData: List<EventTime>
+    val eventTimesData: List<EventInfo>
 )
 
-data class EventTime(
-    val start: Calendar,
-    val end: Calendar
+data class EventInfo(
+    val start: LocalDateTime,
+    val end: LocalDateTime,
+    val eventDescription: String = ""
 )

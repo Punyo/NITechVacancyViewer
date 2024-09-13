@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
@@ -32,7 +33,9 @@ import com.punyo.nitechroomvacancyviewer.GsonInstance
 import com.punyo.nitechroomvacancyviewer.R
 import com.punyo.nitechroomvacancyviewer.data.building.BuildingRepository
 import com.punyo.nitechroomvacancyviewer.data.building.source.BuildingLocalDatasource
+import com.punyo.nitechroomvacancyviewer.data.room.RoomRepository
 import com.punyo.nitechroomvacancyviewer.ui.model.VacancyComponentViewModel
+import java.time.LocalDateTime
 
 @SuppressLint("DiscouragedApi")
 @Composable
@@ -42,42 +45,55 @@ fun VacancyComponent(
     viewModel: VacancyComponentViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
         factory = VacancyComponentViewModel.Factory(
             LocalContext.current.applicationContext as Application,
-            BuildingRepository(BuildingLocalDatasource())
+            BuildingRepository(BuildingLocalDatasource()), RoomRepository()
         )
     )
 ) {
     val context = LocalContext.current
     val currentState by viewModel.uiState.collectAsStateWithLifecycle()
-
+    val isAllDataLoaded = currentState.buildings != null && currentState.roomsData != null
     val navigationRoute = stringResource(id = R.string.UI_NAVHOST_COMPOSABLE_ROOMVACANCYSCREEN)
     val navigationRouteParam1 =
         stringResource(id = R.string.UI_NAVHOST_COMPOSABLE_ROOMVACANCYSCREEN_PARAMETER1)
     val navigationRoteParam2 =
         stringResource(id = R.string.UI_NAVHOST_COMPOSABLE_ROOMVACANCYSCREEN_PARAMETER2)
     LaunchedEffect(true) {
-        viewModel.login()
         viewModel.loadBuildings(context.resources.openRawResource(R.raw.buildings))
     }
-    if (currentState.buildings == null) {
-        LoadingProgressIndicatorComponent()
+    if (currentState.roomsData == null && currentState.buildings != null) {
+        Box(modifier = modifier) {
+            CampusSquareWebViewComponent(
+                onGetReservationTableHTML = { html ->
+                    viewModel.loadRoomsDataFromHTML(html)
+                },
+                sso4cookie = viewModel.sso4cookie!!
+            )
+        }
     }
-    currentState.buildings?.let { buildings ->
+    if (isAllDataLoaded) {
+        val buildings = currentState.buildings!!
+        val rooms = currentState.roomsData!!
         LazyVerticalGrid(modifier = modifier.padding(8.dp), columns = GridCells.Fixed(2)) {
+            item(span = { GridItemSpan(maxCurrentLineSpan) }) {
+                Text(
+                    modifier = Modifier.padding(8.dp),
+                    text ="最終更新：",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
             items(buildings.size) { index ->
                 val buildingData = buildings[index]
-                val numberOfVacantRooms =
-                    viewModel.getNumberOfVacantRoom(buildingData.buildingRoomDisplayNames)
                 val buildingNameIdentifier = context.resources.getIdentifier(
                     buildingData.buildingNameResourceName,
                     "string",
                     context.packageName
                 )
-                val roomsVacancy = buildingData.buildingRoomDisplayNames.map {
-                    RoomVacancy(
-                        roomName = it,
-                        vacancyStatus = RoomVacancyStatus.OCCUPY
-                    )
+                val roomsData = rooms.filter { room ->
+                    buildingData.buildingRoomDisplayNames.contains(room.roomDisplayName)
                 }.toTypedArray()
+                val numberOfVacantRooms =
+                    viewModel.getNumberOfVacantRoom(roomsData, LocalDateTime.now())
                 BuildingsCard(
                     modifier = Modifier.padding(8.dp),
                     buildingName = buildingNameIdentifier,
@@ -95,20 +111,16 @@ fun VacancyComponent(
                                 context.getString(buildingNameIdentifier)
                             ).replace(
                                 "{${navigationRoteParam2}}",
-                                GsonInstance.gson.toJson(roomsVacancy)
+                                GsonInstance.gson.toJson(roomsData)
                             )
                         )
                     }
                 )
             }
         }
-    }
-    Box(modifier = modifier) {
-        CampusSquareWebViewComponent(
-            onGetReservationTableHTML = { html ->
-                viewModel.onGetReservationTableHTML(html)
-            }
-        )
+
+    } else {
+        LoadingProgressIndicatorComponent()
     }
 }
 
@@ -151,14 +163,4 @@ fun BuildingsCard(
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
-}
-
-data class RoomVacancy(
-    val roomName: String,
-    val vacancyStatus: RoomVacancyStatus
-)
-
-enum class RoomVacancyStatus {
-    VACANT,
-    OCCUPY
 }

@@ -1,7 +1,5 @@
 package com.punyo.nitechroomvacancyviewer.ui.screen
 
-import androidx.compose.foundation.gestures.rememberScrollableState
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -18,17 +16,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.punyo.nitechroomvacancyviewer.R
-import com.punyo.nitechroomvacancyviewer.ui.component.RoomVacancy
-import com.punyo.nitechroomvacancyviewer.ui.component.RoomVacancyStatus
+import com.punyo.nitechroomvacancyviewer.data.room.model.EventInfo
+import com.punyo.nitechroomvacancyviewer.data.room.model.Room
 import com.punyo.nitechroomvacancyviewer.ui.component.TopAppBarWithBackArrowComponent
+import com.punyo.nitechroomvacancyviewer.ui.model.RoomVacancyScreenViewModel
+import com.punyo.nitechroomvacancyviewer.ui.model.RoomVacancyStatus
 import com.punyo.nitechroomvacancyviewer.ui.theme.AppTheme
+import java.time.LocalDateTime
 
 @Composable
 fun RoomVacancyScreen(
     buildingName: String,
     onBackPressed: () -> Unit = {},
-    roomsVacancy: Array<RoomVacancy>
+    rooms: Array<Room>,
+    roomVacancyScreenViewModel: RoomVacancyScreenViewModel = viewModel()
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -39,16 +42,18 @@ fun RoomVacancyScreen(
             )
         }) { innerPadding ->
         LazyColumn(modifier = Modifier.padding(innerPadding)) {
-            items(roomsVacancy.size) { index ->
-                val roomVacancy = roomsVacancy[index]
+            items(rooms.size) { index ->
+                val room = rooms[index]
+                val roomVacancyStatus =
+                    roomVacancyScreenViewModel.getRoomVacancy(room, LocalDateTime.now())
                 ListItem(
                     headlineContent = {
                         Text(
-                            text = roomVacancy.roomName,
+                            text = room.roomDisplayName,
                         )
                     },
                     leadingContent = {
-                        when (roomVacancy.vacancyStatus) {
+                        when (roomVacancyStatus) {
                             RoomVacancyStatus.VACANT -> {
                                 Icon(
                                     imageVector = Icons.Outlined.CheckCircle,
@@ -68,14 +73,19 @@ fun RoomVacancyScreen(
                     },
                     supportingContent = {
                         Text(
-                            text = when (roomVacancy.vacancyStatus) {
+                            text = when (roomVacancyStatus) {
                                 RoomVacancyStatus.VACANT -> stringResource(id = R.string.UI_LISTITEM_TEXT_VACANT)
-                                RoomVacancyStatus.OCCUPY -> stringResource(id = R.string.UI_LISTITEM_TEXT_OCCUPY)
+                                RoomVacancyStatus.OCCUPY -> stringResource(id = R.string.UI_LISTITEM_TEXT_OCCUPY).format(
+                                    roomVacancyScreenViewModel.getCurrentEvent(
+                                        room,
+                                        LocalDateTime.now()
+                                    )?.eventDescription ?: ""
+                                )
                             }
                         )
                     }
                 )
-                if (index != roomsVacancy.size - 1) HorizontalDivider()
+                if (index != rooms.size - 1) HorizontalDivider()
             }
             item { HorizontalDivider() }
         }
@@ -87,22 +97,24 @@ fun RoomVacancyScreen(
 fun RoomVacancyScreenLightModePreview() {
     AppTheme {
         RoomVacancyScreen(
-            "建物の名称", roomsVacancy = arrayOf(
-                RoomVacancy("部屋1", RoomVacancyStatus.VACANT),
-                RoomVacancy("部屋2", RoomVacancyStatus.OCCUPY)
-            )
-        )
-    }
-}
-
-@Preview(showBackground = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
-@Composable
-fun RoomVacancyScreenDarkModePreview() {
-    AppTheme {
-        RoomVacancyScreen(
-            "建物の名称", roomsVacancy = arrayOf(
-                RoomVacancy("部屋1", RoomVacancyStatus.VACANT),
-                RoomVacancy("部屋2", RoomVacancyStatus.OCCUPY)
+            "建物の名称", rooms = arrayOf(
+                Room(
+                    "部屋1", listOf(
+                        EventInfo(
+                            LocalDateTime.now().minusHours(1),
+                            LocalDateTime.now().plusHours(1), "数理情報概論"
+                        ),
+                    )
+                ),
+                Room(
+                    "部屋2", listOf(
+                        EventInfo(
+                            LocalDateTime.now().plusHours(1),
+                            LocalDateTime.now().plusHours(2),
+                            "イベント2"
+                        ),
+                    )
+                )
             )
         )
     }
