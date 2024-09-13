@@ -1,13 +1,13 @@
 package com.punyo.nitechroomvacancyviewer.ui.component
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.webkit.CookieManager
-import android.webkit.WebResourceRequest
-import android.webkit.WebResourceResponse
+import android.webkit.JavascriptInterface
 import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.viewinterop.AndroidView
-import com.punyo.nitechroomvacancyviewer.data.auth.AuthRepository
 import org.jsoup.Jsoup
 
 private const val BASE_URL = "https://rpxkyomu.ict.nitech.ac.jp"
@@ -16,7 +16,7 @@ private const val FLOWEXECUTIONKEY_URL =
 
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
-fun CampusSquareWebViewComponent(onGetReservationTableHTML: (String) -> Unit) {
+fun CampusSquareWebViewComponent(onGetReservationTableHTML: (String) -> Unit, sso4cookie: String) {
     AndroidView(
         factory = ::WebView,
         update = { webView ->
@@ -24,14 +24,14 @@ fun CampusSquareWebViewComponent(onGetReservationTableHTML: (String) -> Unit) {
             webView.settings.javaScriptEnabled = true
             webView.visibility = android.view.View.GONE
             webView.addJavascriptInterface(object {
-                @android.webkit.JavascriptInterface
+                @JavascriptInterface
                 fun callbackHTML(html: String) {
                     onGetReservationTableHTML(html)
                 }
             }, "callback")
             webView.addJavascriptInterface(
                 object {
-                    @android.webkit.JavascriptInterface
+                    @JavascriptInterface
                     fun reservationTableDayURLExtractor(html: String) {
                         val regex = """<a href=["']([^"']+)["']>週表示""".toRegex()
                         val matchResult = regex.find(html)
@@ -56,28 +56,28 @@ fun CampusSquareWebViewComponent(onGetReservationTableHTML: (String) -> Unit) {
             CookieManager.getInstance().setAcceptThirdPartyCookies(webView, true)
             CookieManager.getInstance().setCookie(
                 "https://rpxkyomu.ict.nitech.ac.jp/",
-                "sso4cookie=${AuthRepository.currentToken}"
+                "sso4cookie=${sso4cookie}"
             )
+            //authorizationErrorを回避するためにメインページを開く
+            webView.loadUrl(BASE_URL)
+            //日表示の「施設利用状況参照」ページを開く
             webView.loadUrl(FLOWEXECUTIONKEY_URL)
         }
     )
 }
 
 class CampusSquareWebViewClient(
-) : android.webkit.WebViewClient() {
+) : WebViewClient() {
 
     override fun onPageFinished(view: WebView?, url: String?) {
         super.onPageFinished(view, url)
-        //FlowExecutionKey取得用のページではなかった場合URLの抽出を試行
-        if (url != FLOWEXECUTIONKEY_URL) {
-            view?.loadUrl("javascript:window.Extractor.reservationTableDayURLExtractor(document.getElementsByTagName('html')[0].outerHTML);")
+        //URLにflowExecutionKeyが含まれている=日表示の「施設利用状況参照」ページが開かれている
+        //週表示の「施設利用状況参照」ページへのURLを抽出する
+        url?.let {
+            Log.d("CampusSquareWebViewClient", "$url loaded on CampusSquareWebViewComponent")
+            if (url.contains("flowExecutionKey")) {
+                view?.loadUrl("javascript:window.Extractor.reservationTableDayURLExtractor(document.getElementsByTagName('html')[0].outerHTML);")
+            }
         }
-    }
-
-    override fun shouldInterceptRequest(
-        view: WebView?,
-        request: WebResourceRequest?
-    ): WebResourceResponse? {
-        return super.shouldInterceptRequest(view, request)
     }
 }
