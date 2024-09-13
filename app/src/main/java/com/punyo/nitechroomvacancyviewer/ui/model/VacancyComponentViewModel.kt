@@ -14,12 +14,15 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import java.io.InputStream
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class VacancyComponentViewModel(
     application: Application,
     private val buildingRepository: BuildingRepository,
     private val roomRepository: RoomRepository
 ) : AndroidViewModel(application) {
+    private val dateTimeFormatter: DateTimeFormatter
+        get() = DateTimeFormatter.ofPattern("HH:mm")
     private val state = MutableStateFlow(VacancyComponentUiState())
     val uiState: StateFlow<VacancyComponentUiState> = state.asStateFlow()
     val sso4cookie = AuthRepository.currentToken
@@ -39,11 +42,15 @@ class VacancyComponentViewModel(
 
     suspend fun loadBuildings(inputStream: InputStream) {
         val buildings = buildingRepository.getBuildings(inputStream)
-        setBuildings(buildings)
+        state.value = state.value.copy(buildings = buildings)
     }
 
-    fun setBuildings(buildings: Array<Building>) {
-        state.value = state.value.copy(buildings = buildings)
+    fun updateRoomVacancy() {
+        state.value = state.value.copy(lastUpdateTime = LocalDateTime.now())
+    }
+
+    fun getLastUpdateTimeString(): String {
+        return state.value.lastUpdateTime?.format(dateTimeFormatter) ?: ""
     }
 
     class Factory(
@@ -68,7 +75,7 @@ class VacancyComponentViewModel(
 data class VacancyComponentUiState(
     val buildings: Array<Building>? = null,
     val roomsData: Array<Room>? = null,
-    val updateMinute: Int = 1
+    val lastUpdateTime: LocalDateTime? = null
 )
 
 enum class RoomVacancyStatus {
