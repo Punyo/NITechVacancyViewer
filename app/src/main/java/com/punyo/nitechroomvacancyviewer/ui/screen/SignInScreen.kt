@@ -152,12 +152,17 @@ fun SignInScreen(
                     .fillMaxWidth()
                     .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp)
                     .height(40.dp),
+                enabled = currentState.isSignInButtonEnabled,
                 onClick = {
-                    if (currentState.isSignInButtonEnabled) {
-                        signInScreenViewModel.onSignInButtonClicked(onSignInSuccess)
-                    }
+                    signInScreenViewModel.onSignInButtonClicked(onSignInSuccess)
                 }) {
-                Text(stringResource(id = R.string.UI_BUTTON_TEXT_LOGIN))
+                Text(
+                    text = if (currentState.isSignInButtonEnabled) {
+                        stringResource(id = R.string.UI_BUTTON_TEXT_LOGIN)
+                    } else {
+                        stringResource(id = R.string.UI_BUTTON_TEXT_LOGIN_ATTEMPTING)
+                    }
+                )
             }
         }
         Box(
