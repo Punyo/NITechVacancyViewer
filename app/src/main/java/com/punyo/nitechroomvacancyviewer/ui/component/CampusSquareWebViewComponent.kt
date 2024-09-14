@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.util.Log
 import android.webkit.CookieManager
 import android.webkit.JavascriptInterface
+import android.webkit.WebResourceRequest
+import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.compose.runtime.Composable
@@ -11,6 +13,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import org.jsoup.Jsoup
 
 private const val BASE_URL = "https://rpxkyomu.ict.nitech.ac.jp"
+private const val MAIN_MENU_URL = "https://rpxkyomu.ict.nitech.ac.jp/campusweb/campussmart.do?page=main"
 private const val FLOWEXECUTIONKEY_URL =
     "https://rpxkyomu.ict.nitech.ac.jp/campusweb/campussquare.do?_flowId=KHW0001300-flow"
 
@@ -59,9 +62,7 @@ fun CampusSquareWebViewComponent(onGetReservationTableHTML: (String) -> Unit, ss
                 "sso4cookie=${sso4cookie}"
             )
             //authorizationErrorを回避するためにメインページを開く
-            webView.loadUrl(BASE_URL)
-            //日表示の「施設利用状況参照」ページを開く
-            webView.loadUrl(FLOWEXECUTIONKEY_URL)
+            webView.loadUrl(MAIN_MENU_URL)
         }
     )
 }
@@ -75,9 +76,20 @@ class CampusSquareWebViewClient(
         //週表示の「施設利用状況参照」ページへのURLを抽出する
         url?.let {
             Log.d("CampusSquareWebViewClient", "$url loaded on CampusSquareWebViewComponent")
+            if(url==MAIN_MENU_URL){
+                view?.loadUrl(FLOWEXECUTIONKEY_URL)
+            }
             if (url.contains("flowExecutionKey")) {
                 view?.loadUrl("javascript:window.Extractor.reservationTableDayURLExtractor(document.getElementsByTagName('html')[0].outerHTML);")
             }
         }
+    }
+
+    override fun shouldInterceptRequest(
+        view: WebView?,
+        request: WebResourceRequest?
+    ): WebResourceResponse? {
+        Log.d("CampusSquareWebViewClient", "shouldInterceptRequest: ${request?.url}")
+        return super.shouldInterceptRequest(view, request)
     }
 }
