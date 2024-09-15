@@ -1,13 +1,15 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.8.10"
+    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.androidx.room)
+    id("com.google.devtools.ksp") version "2.0.20-1.0.25"
 }
 
 android {
+
     namespace = "com.punyo.nitechroomvacancyviewer"
     compileSdk = 34
-
     defaultConfig {
         applicationId = "com.punyo.nitechroomvacancyviewer"
         minSdk = 26
@@ -19,6 +21,7 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
     }
 
     buildTypes {
@@ -49,8 +52,16 @@ android {
         }
     }
 }
+ksp {
+    arg("room.generateKotlin", "true")
+}
 
+room {
+    schemaDirectory("$projectDir/schemas")
+}
 dependencies {
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -64,7 +75,7 @@ dependencies {
     implementation(libs.jsoup)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.retrofit)
-    implementation (libs.converter.gson)
+    implementation(libs.converter.gson)
     implementation(libs.androidx.lifecycle.runtime.compose.android)
     implementation(libs.androidx.navigation.compose)
     testImplementation(libs.junit)
