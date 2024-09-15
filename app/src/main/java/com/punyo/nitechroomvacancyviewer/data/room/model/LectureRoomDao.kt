@@ -7,14 +7,14 @@ import androidx.room.Query
 @Dao
 interface LectureRoomDao {
     @Insert
-    fun insert(lectureRoomEntity: LectureRoomEntity)
+    suspend fun insert(lectureRoomEntity: LectureRoomEntity)
 
     @Query("DELETE FROM lecture_room")
-    fun deleteAll()
+    suspend fun deleteAll()
 
     @Query("SELECT * FROM lecture_room WHERE date = :date")
-    fun getByDate(date: String): Array<LectureRoomEntity>
+    suspend fun getByDate(date: String): Array<LectureRoomEntity>
 
     @Query("SELECT EXISTS(SELECT * FROM lecture_room WHERE date = :date)")
-    fun isDataExistByDate(date: String): Int
+    suspend fun isDataExistByDate(date: String): Int
 }

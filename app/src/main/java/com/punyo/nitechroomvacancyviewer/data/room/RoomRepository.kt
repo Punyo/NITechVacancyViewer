@@ -9,13 +9,16 @@ class RoomRepository {
         RoomLocalDatasource.loadFromHTML(html)
     }
 
-    fun loadRoomsDataFromDB(application: Application, monthDay: MonthDay) {
+    suspend fun isRoomsDataExist(application: Application, monthDay: MonthDay) =
+        RoomLocalDatasource.isRoomsDataExist(application, monthDay)
+
+    suspend fun loadRoomsDataFromDB(application: Application, monthDay: MonthDay) {
         RoomLocalDatasource.loadFromDB(application, monthDay)
     }
 
-    fun saveToDBFromHTML(application: Application, html: String, monthDay: MonthDay) {
+    suspend fun saveToDBFromHTML(application: Application, html: String, monthDay: MonthDay) {
         RoomLocalDatasource.saveToDBFromHTML(application, html, monthDay)
     }
 
-    fun getRoomsData() = RoomLocalDatasource.loadedRoomsData?.rooms
+    fun getLoadedRoomsData() = RoomLocalDatasource.loadedRoomsData?.rooms
 }
