@@ -99,7 +99,7 @@ fun RoomVacancyScreenLightModePreview() {
         RoomVacancyScreen(
             "建物の名称", rooms = arrayOf(
                 Room(
-                    "部屋1", listOf(
+                    "部屋1", arrayOf(
                         EventInfo(
                             LocalDateTime.now().minusHours(1),
                             LocalDateTime.now().plusHours(1), "数理情報概論"
@@ -107,7 +107,7 @@ fun RoomVacancyScreenLightModePreview() {
                     )
                 ),
                 Room(
-                    "部屋2", listOf(
+                    "部屋2", arrayOf(
                         EventInfo(
                             LocalDateTime.now().plusHours(1),
                             LocalDateTime.now().plusHours(2),

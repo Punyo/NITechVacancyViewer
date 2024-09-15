@@ -21,7 +21,7 @@ data class RoomsDataModel(
 
 data class Room(
     val roomDisplayName: String,
-    val eventTimesData: List<EventInfo>
+    val eventsInfo: Array<EventInfo>
 )
 
 data class EventInfo(
