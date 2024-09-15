@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import java.io.InputStream
 import java.time.LocalDateTime
+import java.time.MonthDay
 import java.time.format.DateTimeFormatter
 
 class VacancyComponentViewModel(
@@ -29,7 +30,7 @@ class VacancyComponentViewModel(
 
     fun getNumberOfVacantRoom(roomsData: Array<Room>, time: LocalDateTime): UInt {
         return roomsData.filter { room ->
-            !room.eventTimesData.any { eventTime ->
+            !room.eventsInfo.any { eventTime ->
                 time.isAfter(eventTime.start) && time.isBefore(eventTime.end)
             }
         }.size.toUInt()

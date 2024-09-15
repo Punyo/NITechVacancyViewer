@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 
 class RoomVacancyScreenViewModel : ViewModel() {
     fun getRoomVacancy(room: Room, time: LocalDateTime): RoomVacancyStatus {
-        val isTimeWithinEvent = room.eventTimesData.any { eventTime ->
+        val isTimeWithinEvent = room.eventsInfo.any { eventTime ->
             time.isAfter(eventTime.start) && time.isBefore(eventTime.end)
         }
         return if (isTimeWithinEvent) {
@@ -18,7 +18,7 @@ class RoomVacancyScreenViewModel : ViewModel() {
     }
 
     fun getCurrentEvent(room: Room, time: LocalDateTime): EventInfo? {
-        return room.eventTimesData.find { eventTime ->
+        return room.eventsInfo.find { eventTime ->
             time.isAfter(eventTime.start) && time.isBefore(eventTime.end)
         }
     }
