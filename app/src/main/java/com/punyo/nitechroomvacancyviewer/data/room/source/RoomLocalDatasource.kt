@@ -24,7 +24,7 @@ object RoomLocalDatasource {
         loadedRoomsData = extractRoomsDataModelFromHTML(html)
     }
 
-    fun saveToDBFromHTML(application: Application, html: String, date: MonthDay) {
+    suspend fun saveToDBFromHTML(application: Application, html: String, date: MonthDay) {
         initializeDB(application)
         val roomsData = extractRoomsDataModelFromHTML(html)
         roomsData.rooms.forEach { room: Room ->
@@ -38,12 +38,12 @@ object RoomLocalDatasource {
         }
     }
 
-    fun isRoomsDataExist(application: Application, date: MonthDay): Boolean {
+    suspend fun isRoomsDataExist(application: Application, date: MonthDay): Boolean {
         initializeDB(application)
         return roomDao.isDataExistByDate(date.toString()) > 0
     }
 
-    fun loadFromDB(application: Application, date: MonthDay) {
+    suspend fun loadFromDB(application: Application, date: MonthDay) {
         initializeDB(application)
         val acquiredData = roomDao.getByDate(date.toString())
         if (acquiredData.isNotEmpty()) {
