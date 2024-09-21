@@ -57,14 +57,14 @@ fun VacancyComponent(
         stringResource(id = R.string.UI_NAVHOST_COMPOSABLE_ROOMVACANCYSCREEN_PARAMETER1)
     val navigationRoteParam2 =
         stringResource(id = R.string.UI_NAVHOST_COMPOSABLE_ROOMVACANCYSCREEN_PARAMETER2)
-    LaunchedEffect(true) {
+    LaunchedEffect(key1 = Unit) {
         viewModel.loadBuildings(context.resources.openRawResource(R.raw.buildings))
         viewModel.loadRoomsData()
     }
     LaunchedEffect(key1 = currentState.roomsData) {
         while (true) {
             viewModel.updateRoomVacancy()
-            delay(60000)
+            delay(30000)
         }
     }
     if (isAllDataLoaded) {
@@ -75,7 +75,7 @@ fun VacancyComponent(
                 Text(
                     modifier = Modifier.padding(8.dp),
                     text = stringResource(id = R.string.UI_LAZYVERTICALGRID_TEXT_LASTUPDATETIME).format(
-                        viewModel.getLastUpdateTimeString()
+                        currentState.lastUpdateTime?.let { viewModel.getLastUpdateTimeString(it) }
                     ),
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant

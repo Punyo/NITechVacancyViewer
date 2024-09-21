@@ -46,8 +46,8 @@ class VacancyComponentViewModel(
         state.value = state.value.copy(lastUpdateTime = LocalDateTime.now())
     }
 
-    fun getLastUpdateTimeString(): String {
-        return state.value.lastUpdateTime?.format(dateTimeFormatter) ?: ""
+    fun getLastUpdateTimeString(time: LocalDateTime): String {
+        return time.format(dateTimeFormatter)
     }
 
     class Factory(
