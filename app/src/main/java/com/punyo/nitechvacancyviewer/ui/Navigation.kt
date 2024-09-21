@@ -28,14 +28,14 @@ fun MainNavigation(navController: NavHostController = rememberNavController()) {
     ) {
         composable(ScreenDestinations.Initialize.name) {
             InitializeScreen(
-                onSignedInWithSavedCredentials = {
+                onLoadedRoomsData = {
                     navigateOneSide(
                         navController,
                         ScreenDestinations.Initialize,
                         ScreenDestinations.Main
                     )
                 },
-                onNotSignedIn = {
+                onFailedSignInWithSavedCredentials = {
                     navigateOneSide(
                         navController,
                         ScreenDestinations.Initialize,

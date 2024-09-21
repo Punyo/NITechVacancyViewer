@@ -4,7 +4,6 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.punyo.nitechvacancyviewer.data.auth.AuthRepository
 import com.punyo.nitechvacancyviewer.data.building.BuildingRepository
 import com.punyo.nitechvacancyviewer.data.building.model.Building
 import com.punyo.nitechvacancyviewer.data.room.RoomRepository
@@ -34,9 +33,8 @@ class VacancyComponentViewModel(
         }.size.toUInt()
     }
 
-    fun loadRoomsDataFromHTML(html: String) {
-        roomRepository.loadRoomsDataFromHTML(html)
-        state.value = state.value.copy(roomsData = roomRepository.getRoomsData())
+    fun loadRoomsData() {
+        state.value = state.value.copy(roomsData = roomRepository.getLoadedRoomsData())
     }
 
     suspend fun loadBuildings(inputStream: InputStream) {

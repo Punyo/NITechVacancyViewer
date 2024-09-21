@@ -67,11 +67,11 @@ fun SignInScreen(
                     }
 
                     AuthRepository.AuthResultStatus.NETWORK_ERROR -> {
-                        failReason += (context.getString(R.string.ERROR_NETWORK_ERROR))
+                        failReason += (context.getString(R.string.ERROR_NOT_CONNECTED_TO_NITECH_NETWORK))
                     }
 
                     AuthRepository.AuthResultStatus.INVALID_CREDENTIALS -> {
-                        failReason += (context.getString(R.string.ERROR_INVALID_CREDENTIALS))
+                        failReason += (context.getString(R.string.ERROR_SIGN_IN_DENIED_OR_INVALID_CREDENTIALS))
                     }
 
                     AuthRepository.AuthResultStatus.UNKNOWN_ERROR -> {
