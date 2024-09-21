@@ -46,7 +46,7 @@ fun MainNavigation(navController: NavHostController = rememberNavController()) {
         }
         composable(ScreenDestinations.SignIn.name) {
             SignInScreen(onSignInSuccess = {
-                navigateOneSide(navController, ScreenDestinations.SignIn, ScreenDestinations.Main)
+                navigateOneSide(navController, ScreenDestinations.SignIn, ScreenDestinations.Initialize)
             })
         }
         composable(ScreenDestinations.Main.name) {
