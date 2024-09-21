@@ -1,5 +1,5 @@
 [versions]
-agp = "8.6.1"
+agp = "8.5.2"
 converterGson = "2.9.0"
 datastorePreferences = "1.1.1"
 jsoup = "1.18.1"
@@ -24,7 +24,6 @@ androidx-datastore-preferences = { module = "androidx.datastore:datastore-prefer
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleRuntimeKtx" }
 androidx_room_runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 androidx_room_compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
-androidx_room_ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
 jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }

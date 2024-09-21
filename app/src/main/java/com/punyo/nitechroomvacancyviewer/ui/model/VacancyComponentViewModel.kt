@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import java.io.InputStream
 import java.time.LocalDateTime
+import java.time.MonthDay
 import java.time.format.DateTimeFormatter
 
 class VacancyComponentViewModel(
@@ -35,8 +36,9 @@ class VacancyComponentViewModel(
         }.size.toUInt()
     }
 
-    fun loadRoomsData() {
-        state.value = state.value.copy(roomsData = roomRepository.getLoadedRoomsData())
+    fun loadRoomsDataFromHTML(html: String) {
+        roomRepository.loadRoomsDataFromHTML(html)
+        state.value = state.value.copy(roomsData = roomRepository.getRoomsData())
     }
 
     suspend fun loadBuildings(inputStream: InputStream) {

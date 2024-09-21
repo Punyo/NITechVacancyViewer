@@ -10,7 +10,6 @@ import com.punyo.nitechroomvacancyviewer.data.room.model.Room
 import com.punyo.nitechroomvacancyviewer.data.room.model.RoomsDataModel
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.MonthDay
 
@@ -21,32 +20,30 @@ object RoomLocalDatasource {
     var loadedRoomsData: RoomsDataModel? = null
         private set
 
-    suspend fun saveOneWeekRoomsDataToDBFromHTML(
-        application: Application,
-        html: String,
-        date: LocalDate
-    ) {
+    fun loadFromHTML(html: String) {
+        loadedRoomsData = extractRoomsDataModelFromHTML(html)
+    }
+
+    suspend fun saveToDBFromHTML(application: Application, html: String, date: MonthDay) {
         initializeDB(application)
-        for (i in 0..6) {
-            val roomsData = extractRoomsDataModelFromHTML(html, i)
-            roomsData.rooms.forEach { room: Room ->
-                roomDao.insert(
-                    LectureRoomEntity(
-                        monthDay = date.plusDays(i.toLong()).toString(),
-                        roomDisplayName = room.roomDisplayName,
-                        eventsInfoJSON = GsonInstance.gson.toJson(room.eventsInfo)
-                    )
+        val roomsData = extractRoomsDataModelFromHTML(html)
+        roomsData.rooms.forEach { room: Room ->
+            roomDao.insert(
+                LectureRoomEntity(
+                    monthDay = date.toString(),
+                    roomDisplayName = room.roomDisplayName,
+                    eventsInfoJSON = GsonInstance.gson.toJson(room.eventsInfo)
                 )
-            }
+            )
         }
     }
 
-    suspend fun isRoomsDataExist(application: Application, date: LocalDate): Boolean {
+    suspend fun isRoomsDataExist(application: Application, date: MonthDay): Boolean {
         initializeDB(application)
         return roomDao.isDataExistByDate(date.toString()) > 0
     }
 
-    suspend fun loadFromDB(application: Application, date: LocalDate) {
+    suspend fun loadFromDB(application: Application, date: MonthDay) {
         initializeDB(application)
         val acquiredData = roomDao.getByDate(date.toString())
         if (acquiredData.isNotEmpty()) {
@@ -78,10 +75,10 @@ object RoomLocalDatasource {
         }
     }
 
-    private fun extractRoomsDataModelFromHTML(html: String, row: Int): RoomsDataModel {
+    private fun extractRoomsDataModelFromHTML(html: String): RoomsDataModel {
         val rooms: MutableList<Room> = mutableListOf()
         val table: Element =
-            Jsoup.parse(html).getElementsByClass("kyuko-shisetsu-nofixed")[row]
+            Jsoup.parse(html).getElementsByClass("kyuko-shisetsu-nofixed").first()!!
         val tableBody: Element = table.getElementsByTag("tbody").first()!!
         val column = tableBody.getElementsByTag("tr")
         column.forEach {
