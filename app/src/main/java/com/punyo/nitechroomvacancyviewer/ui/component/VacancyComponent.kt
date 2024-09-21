@@ -60,6 +60,7 @@ fun VacancyComponent(
         stringResource(id = R.string.UI_NAVHOST_COMPOSABLE_ROOMVACANCYSCREEN_PARAMETER2)
     LaunchedEffect(true) {
         viewModel.loadBuildings(context.resources.openRawResource(R.raw.buildings))
+        viewModel.loadRoomsData()
     }
     LaunchedEffect(key1 = currentState.roomsData) {
         while (true) {
@@ -121,16 +122,6 @@ fun VacancyComponent(
 
     } else {
         LoadingProgressIndicatorComponent()
-    }
-    if (currentState.roomsData == null && currentState.buildings != null) {
-        Box(modifier = modifier) {
-            CampusSquareWebViewComponent(
-                onGetReservationTableHTML = { html ->
-                    viewModel.loadRoomsDataFromHTML(html)
-                },
-                sso4cookie = viewModel.sso4cookie!!
-            )
-        }
     }
 }
 
