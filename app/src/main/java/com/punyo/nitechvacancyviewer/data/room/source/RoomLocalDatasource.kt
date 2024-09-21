@@ -11,7 +11,6 @@ import com.punyo.nitechvacancyviewer.data.room.model.RoomsDataModel
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 import java.time.LocalDateTime
-import java.time.MonthDay
 
 object RoomLocalDatasource {
     private const val DBNAME = "lecture_room"

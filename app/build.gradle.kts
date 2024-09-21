@@ -8,10 +8,10 @@ plugins {
 
 android {
 
-    namespace = "com.punyo.nitechroomvacancyviewer"
+    namespace = "com.punyo.nitechvacancyviewer"
     compileSdk = 34
     defaultConfig {
-        applicationId = "com.punyo.nitechroomvacancyviewer"
+        applicationId = "com.punyo.nitechvacancyviewer"
         minSdk = 26
         targetSdk = 34
         versionCode = 1

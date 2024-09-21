@@ -25,7 +25,6 @@ class VacancyComponentViewModel(
         get() = DateTimeFormatter.ofPattern("HH:mm")
     private val state = MutableStateFlow(VacancyComponentUiState())
     val uiState: StateFlow<VacancyComponentUiState> = state.asStateFlow()
-    val sso4cookie = AuthRepository.currentToken
 
     fun getNumberOfVacantRoom(roomsData: Array<Room>, time: LocalDateTime): UInt {
         return roomsData.filter { room ->
