@@ -181,7 +181,35 @@ fun InitializeScreen(
 }
 
 @Composable
-private fun AskForSignInDialogComponent(
+private fun LongerActionSnackbarComponent(snackbarData: SnackbarData) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    ) {
+        Row {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.Start
+            ) {
+                Text(text = snackbarData.visuals.message)
+                snackbarData.visuals.actionLabel?.let {
+                    TextButton(
+                        modifier = Modifier.align(Alignment.End),
+                        onClick = { snackbarData.performAction() },
+                        content = { Text(snackbarData.visuals.actionLabel!!) }
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun AskForSignInDialogComponent(
     @StringRes dialogTitle: Int,
     @StringRes dialogText: Int,
     @StringRes confirmButtonText: Int,
@@ -218,34 +246,6 @@ private fun AskForSignInDialogComponent(
             }
         }
     )
-}
-
-@Composable
-private fun LongerActionSnackbarComponent(snackbarData: SnackbarData) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-    ) {
-        Row {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.Start
-            ) {
-                Text(text = snackbarData.visuals.message)
-                snackbarData.visuals.actionLabel?.let {
-                    TextButton(
-                        modifier = Modifier.align(Alignment.End),
-                        onClick = { snackbarData.performAction() },
-                        content = { Text(snackbarData.visuals.actionLabel!!) }
-                    )
-                }
-            }
-        }
-    }
 }
 
 @Preview(showBackground = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_NO)

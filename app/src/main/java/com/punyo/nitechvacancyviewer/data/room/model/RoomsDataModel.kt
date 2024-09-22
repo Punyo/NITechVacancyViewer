@@ -1,9 +1,11 @@
 package com.punyo.nitechvacancyviewer.data.room.model
 
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 data class RoomsDataModel(
-    val rooms: Array<Room>
+    val rooms: Array<Room>,
+    val date: LocalDate
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

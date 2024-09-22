@@ -36,7 +36,6 @@ class InitializeScreenViewModel(
         viewModelScope.launch {
             val date = LocalDate.now()
             if (roomRepository.isRoomsDataExist(getApplication(), date)) {
-                roomRepository.loadRoomsDataFromDB(getApplication(), date)
                 state.value = state.value.copy(loadedRoomsDataFromDB = true)
             } else {
                 state.value = state.value.copy(loadedRoomsDataFromDB = false)
@@ -71,7 +70,6 @@ class InitializeScreenViewModel(
             runCatching {
                 roomRepository.saveToDBFromHTML(getApplication(), html, date)
             }.onSuccess {
-                roomRepository.loadRoomsDataFromDB(getApplication(), date)
                 state.value = state.value.copy(loadedRoomsDataFromCampusSquare = true)
             }.onFailure {
                 Log.e("RoomLocalDatasource", it.stackTraceToString())

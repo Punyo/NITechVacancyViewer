@@ -33,17 +33,19 @@ class VacancyComponentViewModel(
         }.size.toUInt()
     }
 
-    fun loadRoomsData() {
-        state.value = state.value.copy(roomsData = roomRepository.getLoadedRoomsData())
-    }
-
     suspend fun loadBuildings(inputStream: InputStream) {
         val buildings = buildingRepository.getBuildings(inputStream)
         state.value = state.value.copy(buildings = buildings)
     }
 
-    fun updateRoomVacancy() {
-        state.value = state.value.copy(lastUpdateTime = LocalDateTime.now())
+    suspend fun updateRoomVacancy() {
+        val roomsData = roomRepository.getTodayRoomsData(getApplication())
+        if (roomsData != null) {
+            state.value =
+                state.value.copy(roomsData = roomsData.rooms, lastUpdateTime = LocalDateTime.now())
+        } else {
+            state.value = state.value.copy(isTodayRoomsDataNotFoundOnDB = true)
+        }
     }
 
     fun getLastUpdateTimeString(time: LocalDateTime): String {
@@ -72,7 +74,8 @@ class VacancyComponentViewModel(
 data class VacancyComponentUiState(
     val buildings: Array<Building>? = null,
     val roomsData: Array<Room>? = null,
-    val lastUpdateTime: LocalDateTime? = null
+    val lastUpdateTime: LocalDateTime? = null,
+    val isTodayRoomsDataNotFoundOnDB: Boolean = false
 )
 
 enum class RoomVacancyStatus {

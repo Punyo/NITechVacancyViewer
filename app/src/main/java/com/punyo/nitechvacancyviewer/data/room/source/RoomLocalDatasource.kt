@@ -23,15 +23,19 @@ object RoomLocalDatasource {
     suspend fun saveOneWeekRoomsDataToDBFromHTML(
         application: Application,
         html: String,
-        date: LocalDate
+        date: LocalDate,
+        overwriteOldRoomsData: Boolean = true
     ) {
         initializeDB(application)
+        if (overwriteOldRoomsData) {
+            roomDao.deleteAll()
+        }
         for (i in 0..6) {
-            val roomsData = extractRoomsDataModelFromHTML(html, i)
+            val roomsData = extractRoomsDataModelFromHTML(html, i, date)
             roomsData.rooms.forEach { room: Room ->
                 roomDao.insert(
                     LectureRoomEntity(
-                        monthDay = date.plusDays(i.toLong()).toString(),
+                        monthDay = roomsData.date.toString(),
                         roomDisplayName = room.roomDisplayName,
                         eventsInfoJSON = GsonInstance.gson.toJson(room.eventsInfo)
                     )
@@ -61,7 +65,7 @@ object RoomLocalDatasource {
                     )
                 )
             }
-            loadedRoomsData = RoomsDataModel(rooms.toTypedArray())
+            loadedRoomsData = RoomsDataModel(rooms.toTypedArray(), date)
         } else {
             throw NullPointerException("No data found for the given date")
         }
@@ -77,7 +81,11 @@ object RoomLocalDatasource {
         }
     }
 
-    private fun extractRoomsDataModelFromHTML(html: String, row: Int): RoomsDataModel {
+    private fun extractRoomsDataModelFromHTML(
+        html: String,
+        row: Int,
+        earliestDayOfData: LocalDate
+    ): RoomsDataModel {
         val rooms: MutableList<Room> = mutableListOf()
         val table: Element =
             Jsoup.parse(html).getElementsByClass("kyuko-shisetsu-nofixed")[row]
@@ -101,7 +109,7 @@ object RoomLocalDatasource {
             }
             rooms.add(Room(roomDisplayName, events.toTypedArray()))
         }
-        return RoomsDataModel(rooms.toTypedArray())
+        return RoomsDataModel(rooms.toTypedArray(), earliestDayOfData.plusDays(row.toLong()))
     }
 
     private fun parseTime(time: String): LocalDateTime {
