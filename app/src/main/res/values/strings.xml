@@ -1,5 +1,5 @@
 <resources>
-    <string name="APP_NAME">NITechRoomVacancyViewer</string>
+    <string name="APP_NAME">NITechVacancyViewer</string>
     <string name="BUILDING_1">1号館</string>
     <string name="BUILDING_2">2号館</string>
     <string name="BUILDING_12">12号館</string>

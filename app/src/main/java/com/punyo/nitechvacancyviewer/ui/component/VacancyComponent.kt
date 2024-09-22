@@ -33,6 +33,7 @@ import com.punyo.nitechvacancyviewer.R
 import com.punyo.nitechvacancyviewer.data.building.BuildingRepository
 import com.punyo.nitechvacancyviewer.data.building.source.BuildingLocalDatasource
 import com.punyo.nitechvacancyviewer.data.room.RoomRepository
+import com.punyo.nitechvacancyviewer.ui.ScreenDestinations
 import com.punyo.nitechvacancyviewer.ui.model.VacancyComponentViewModel
 import kotlinx.coroutines.delay
 import java.time.LocalDateTime
@@ -59,7 +60,7 @@ fun VacancyComponent(
         stringResource(id = R.string.UI_NAVHOST_COMPOSABLE_ROOMVACANCYSCREEN_PARAMETER2)
     LaunchedEffect(key1 = Unit) {
         viewModel.loadBuildings(context.resources.openRawResource(R.raw.buildings))
-        viewModel.loadRoomsData()
+        viewModel.updateRoomVacancy()
     }
     LaunchedEffect(key1 = currentState.roomsData) {
         while (true) {
@@ -117,10 +118,11 @@ fun VacancyComponent(
                 )
             }
         }
-
-
     } else {
         LoadingProgressIndicatorComponent()
+    }
+    if (currentState.isTodayRoomsDataNotFoundOnDB) {
+        navHostController.navigate(ScreenDestinations.Initialize.name)
     }
 }
 
