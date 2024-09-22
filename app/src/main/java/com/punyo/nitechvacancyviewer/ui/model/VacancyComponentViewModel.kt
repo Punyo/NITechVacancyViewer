@@ -1,6 +1,8 @@
 package com.punyo.nitechvacancyviewer.ui.model
 
 import android.app.Application
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -48,6 +50,10 @@ class VacancyComponentViewModel(
         }
     }
 
+    fun setRefreshing(isRefreshing: Boolean) {
+        state.value = state.value.copy(isRefreshing = isRefreshing)
+    }
+
     fun getLastUpdateTimeString(time: LocalDateTime): String {
         return time.format(dateTimeFormatter)
     }
@@ -75,7 +81,8 @@ data class VacancyComponentUiState(
     val buildings: Array<Building>? = null,
     val roomsData: Array<Room>? = null,
     val lastUpdateTime: LocalDateTime? = null,
-    val isTodayRoomsDataNotFoundOnDB: Boolean = false
+    val isTodayRoomsDataNotFoundOnDB: Boolean = false,
+    val isRefreshing: Boolean = false
 )
 
 enum class RoomVacancyStatus {

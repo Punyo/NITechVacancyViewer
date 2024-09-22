@@ -26,7 +26,7 @@
     <string name="UI_CARD_TEXT_VACANTANDMAXROOMS">空室：%d/%d[部屋]</string>
     <string name="UI_BUTTON_TEXT_LOGIN">ログイン</string>
     <string name="UI_BUTTON_TEXT_LOGIN_ATTEMPTING">ログインしています…</string>
-    <string name="UI_LAZYVERTICALGRID_TEXT_LASTUPDATETIME">最終更新：%s</string>
+    <string name="UI_LAZYVERTICALGRID_TEXT_LASTUPDATETIME">最終更新：%s\n60秒おきに自動更新されます</string>
     <string name="UI_LISTITEM_TEXT_VACANT">空室</string>
     <string name="UI_LISTITEM_TEXT_OCCUPY">使用中：%s</string>
     <string name="UI_DIALOG_SIGN_IN_TITLE">ログインが必要です</string>
