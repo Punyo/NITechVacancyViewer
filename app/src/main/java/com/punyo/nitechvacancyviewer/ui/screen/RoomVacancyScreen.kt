@@ -1,8 +1,10 @@
 package com.punyo.nitechvacancyviewer.ui.screen
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material3.HorizontalDivider
@@ -41,9 +43,10 @@ fun RoomVacancyScreen(
                 onBackPressed = onBackPressed
             )
         }) { innerPadding ->
-        LazyColumn(modifier = Modifier.padding(innerPadding)) {
-            items(rooms.size) { index ->
-                val room = rooms[index]
+        Column(modifier = Modifier
+            .padding(innerPadding)
+            .verticalScroll(rememberScrollState())) {
+            rooms.forEachIndexed() { index, room ->
                 val roomVacancyStatus =
                     roomVacancyScreenViewModel.getRoomVacancy(room, LocalDateTime.now())
                 ListItem(
@@ -87,7 +90,7 @@ fun RoomVacancyScreen(
                 )
                 if (index != rooms.size - 1) HorizontalDivider()
             }
-            item { HorizontalDivider() }
+            HorizontalDivider()
         }
     }
 }

@@ -101,8 +101,8 @@ object RoomLocalDatasource {
                 val eventTimes = eventStrings[0].split("-")
                 events.add(
                     EventInfo(
-                        start = parseTime(eventTimes[0]),
-                        end = parseTime(eventTimes[1]),
+                        start = parseTime(eventTimes[0]).plusDays(row.toLong()),
+                        end = parseTime(eventTimes[1]).plusDays(row.toLong()),
                         eventDescription = eventStrings[1]
                     )
                 )
