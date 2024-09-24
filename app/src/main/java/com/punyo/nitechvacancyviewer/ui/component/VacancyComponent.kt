@@ -102,14 +102,9 @@ fun VacancyComponent(
                 modifier = Modifier.fillMaxSize(), columns = GridCells.Fixed(2)
             ) {
                 item(span = { GridItemSpan(maxCurrentLineSpan) }) {
-                    Text(
-                        modifier = Modifier.padding(8.dp),
-                        text = stringResource(id = R.string.UI_LAZYVERTICALGRID_TEXT_LASTUPDATETIME).format(
-                            currentState.lastUpdateTime?.let { viewModel.getLastUpdateTimeString(it) }
-                        ),
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
+                    LastUpdateTimeTextComponent(lastUpdateTimeString = currentState.lastUpdateTime!!.let {
+                        viewModel.getLastUpdateTimeString(it)
+                    })
                 }
                 items(buildings.size) { index ->
                     val buildingData = buildings[index]
