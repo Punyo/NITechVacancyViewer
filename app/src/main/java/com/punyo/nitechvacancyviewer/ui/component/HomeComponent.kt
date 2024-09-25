@@ -1,6 +1,5 @@
 package com.punyo.nitechvacancyviewer.ui.component
 
-import android.app.Application
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -13,42 +12,30 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
 import com.punyo.nitechvacancyviewer.R
-import com.punyo.nitechvacancyviewer.data.room.RoomRepository
 import com.punyo.nitechvacancyviewer.data.room.model.Room
-import com.punyo.nitechvacancyviewer.ui.ScreenDestinations
 import com.punyo.nitechvacancyviewer.ui.model.HomeComponentViewModel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeComponent(
     modifier: Modifier = Modifier,
-    navHostController: NavHostController,
-    homeComponentViewModel: HomeComponentViewModel = viewModel(
-        factory = HomeComponentViewModel.Factory(
-            application = LocalContext.current.applicationContext as Application,
-            roomRepository = RoomRepository()
-        )
-    )
+    onRefreshVacancy: () -> Unit,
+    isRefreshVacancy: Boolean,
+    lastVacancyRefreshTimeString: String,
+    roomsData: Array<Room>,
+    homeComponentViewModel: HomeComponentViewModel = viewModel()
 ) {
     val titles = arrayOf(
         stringResource(id = R.string.UI_TAB_TITLE_CURRENT_VACANT_ROOMS),
         stringResource(id = R.string.UI_TAB_TITLE_TODAY_RESERVATION_LIST)
     )
     val currentState by homeComponentViewModel.uiState.collectAsStateWithLifecycle()
-    val coroutineScope = rememberCoroutineScope()
-    val refreshingDelay = integerResource(id = R.integer.PULL_TO_REFRESH_DELAY_MILLISECOND).toLong()
-    homeComponentViewModel.updateCurrentVacantRoomsArray()
+    homeComponentViewModel.setCurrentVacantRooms(roomsData)
     Column(modifier = modifier) {
         PrimaryTabRow(selectedTabIndex = currentState.selectedTabIndex) {
             titles.forEachIndexed { index, title ->
@@ -61,33 +48,23 @@ fun HomeComponent(
         }
         when (currentState.selectedTabIndex) {
             0 -> {
-                currentState.currentVacantRooms?.let {
-                    CurrentVacantRoomsListComponent(
-                        modifier = Modifier.weight(1f),
-                        isRefreshing = currentState.isRefreshingCurrentVacantRoomsList,
-                        onRefresh = {
-                            homeComponentViewModel.setRefreshingCurrentVacantRoomsList(true)
-                            coroutineScope.launch {
-                                homeComponentViewModel.updateCurrentVacantRoomsArray()
-                                delay(refreshingDelay)
-                                homeComponentViewModel.setRefreshingCurrentVacantRoomsList(false)
-                            }
-                        },
-                        vacantRoomsAndMinutesUntilNextEvent = it.associateWith { room ->
-                            homeComponentViewModel.getMinutesUntilNextEvent(
-                                room
-                            )
-                        })
-                }
+                CurrentVacantRoomsListComponent(
+                    modifier = Modifier.weight(1f),
+                    isRefreshing = isRefreshVacancy,
+                    onRefresh = onRefreshVacancy,
+                    vacantRoomsAndMinutesUntilNextEvent = currentState.currentVacantRooms.associateWith { room ->
+                        homeComponentViewModel.getMinutesUntilNextEvent(
+                            room
+                        )
+                    },
+                    lastUpdateTimeString = lastVacancyRefreshTimeString
+                )
             }
 
             1 -> {
 
             }
         }
-    }
-    if (currentState.isTodayRoomsDataNotFoundOnDB) {
-        navHostController.navigate(ScreenDestinations.Initialize.name)
     }
 }
 
@@ -96,7 +73,8 @@ fun HomeComponent(
 private fun TodayReservationListComponent(
     modifier: Modifier = Modifier,
     isRefreshing: Boolean,
-    onRefresh: () -> Unit
+    onRefresh: () -> Unit,
+    lastUpdateTimeString: String
 ) {
     PullToRefreshBox(
         modifier = modifier.fillMaxSize(),
@@ -114,6 +92,7 @@ private fun CurrentVacantRoomsListComponent(
     modifier: Modifier = Modifier,
     isRefreshing: Boolean,
     onRefresh: () -> Unit,
+    lastUpdateTimeString: String,
     vacantRoomsAndMinutesUntilNextEvent: Map<Room, Int?>
 ) {
     PullToRefreshBox(
@@ -122,6 +101,7 @@ private fun CurrentVacantRoomsListComponent(
         onRefresh = onRefresh
     ) {
         LazyColumn {
+            item { LastUpdateTimeTextComponent(lastUpdateTimeString = lastUpdateTimeString) }
             items(vacantRoomsAndMinutesUntilNextEvent.size) { index ->
                 val room = vacantRoomsAndMinutesUntilNextEvent.keys.elementAt(index)
                 ListItem(
