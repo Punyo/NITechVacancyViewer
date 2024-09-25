@@ -10,9 +10,9 @@ import androidx.compose.ui.unit.dp
 import com.punyo.nitechvacancyviewer.R
 
 @Composable
-fun LastUpdateTimeTextComponent(lastUpdateTimeString: String) {
+fun LastUpdateTimeTextComponent(modifier: Modifier = Modifier, lastUpdateTimeString: String) {
     Text(
-        modifier = Modifier.padding(8.dp),
+        modifier = modifier.padding(8.dp),
         text = stringResource(id = R.string.UI_LAZYVERTICALGRID_TEXT_LASTUPDATETIME).format(
             lastUpdateTimeString
         ),

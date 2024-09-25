@@ -1,7 +1,6 @@
 package com.punyo.nitechvacancyviewer.ui.component
 
 import android.annotation.SuppressLint
-import android.app.Application
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
@@ -23,26 +22,22 @@ import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.punyo.nitechvacancyviewer.GsonInstance
 import com.punyo.nitechvacancyviewer.R
 import com.punyo.nitechvacancyviewer.data.building.BuildingRepository
 import com.punyo.nitechvacancyviewer.data.building.source.BuildingLocalDatasource
-import com.punyo.nitechvacancyviewer.data.room.RoomRepository
-import com.punyo.nitechvacancyviewer.ui.ScreenDestinations
+import com.punyo.nitechvacancyviewer.data.room.model.Room
 import com.punyo.nitechvacancyviewer.ui.model.VacancyComponentViewModel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -51,60 +46,40 @@ import java.time.LocalDateTime
 fun VacancyComponent(
     modifier: Modifier = Modifier,
     navHostController: NavHostController,
-    viewModel: VacancyComponentViewModel = androidx.lifecycle.viewmodel.compose.viewModel(
+    onRefreshVacancy: () -> Unit,
+    isRefreshVacancy: Boolean,
+    lastVacancyRefreshTimeString: String,
+    roomsData: Array<Room>,
+    viewModel: VacancyComponentViewModel = viewModel(
         factory = VacancyComponentViewModel.Factory(
-            LocalContext.current.applicationContext as Application,
-            BuildingRepository(BuildingLocalDatasource()), RoomRepository()
+            buildingRepository = BuildingRepository(BuildingLocalDatasource())
         )
     )
 ) {
     val context = LocalContext.current
     val currentState by viewModel.uiState.collectAsStateWithLifecycle()
-    val isAllDataLoaded = currentState.buildings != null && currentState.roomsData != null
     val navigationRoute = stringResource(id = R.string.UI_NAVHOST_COMPOSABLE_ROOMVACANCYSCREEN)
     val navigationRouteParam1 =
         stringResource(id = R.string.UI_NAVHOST_COMPOSABLE_ROOMVACANCYSCREEN_PARAMETER1)
     val navigationRoteParam2 =
         stringResource(id = R.string.UI_NAVHOST_COMPOSABLE_ROOMVACANCYSCREEN_PARAMETER2)
-    val vacancyUpdateInterval =
-        integerResource(id = R.integer.VACANCY_UPDATE_INTERVAL_MILLISECOND).toLong()
-    val pullToRefreshDelay =
-        integerResource(id = R.integer.PULL_TO_REFRESH_DELAY_MILLISECOND).toLong()
-    val coroutineScope = rememberCoroutineScope()
     val pullToRefreshState = rememberPullToRefreshState()
     LaunchedEffect(key1 = Unit) {
         viewModel.loadBuildings(context.resources.openRawResource(R.raw.buildings))
-        viewModel.updateRoomVacancy()
     }
-    LaunchedEffect(key1 = currentState.roomsData) {
-        while (true) {
-            viewModel.updateRoomVacancy()
-            delay(vacancyUpdateInterval)
-        }
-    }
-    if (isAllDataLoaded) {
+    if (currentState.buildings != null) {
         val buildings = currentState.buildings!!
-        val rooms = currentState.roomsData!!
         PullToRefreshBox(
             modifier = modifier.padding(8.dp),
             state = pullToRefreshState,
-            isRefreshing = currentState.isRefreshing,
-            onRefresh = {
-                viewModel.setRefreshing(true)
-                coroutineScope.launch {
-                    viewModel.updateRoomVacancy()
-                    delay(pullToRefreshDelay)
-                    viewModel.setRefreshing(false)
-                }
-            }
+            isRefreshing = isRefreshVacancy,
+            onRefresh = onRefreshVacancy
         ) {
             LazyVerticalGrid(
                 modifier = Modifier.fillMaxSize(), columns = GridCells.Fixed(2)
             ) {
                 item(span = { GridItemSpan(maxCurrentLineSpan) }) {
-                    LastUpdateTimeTextComponent(lastUpdateTimeString = currentState.lastUpdateTime!!.let {
-                        viewModel.getLastUpdateTimeString(it)
-                    })
+                    LastUpdateTimeTextComponent(lastUpdateTimeString = lastVacancyRefreshTimeString)
                 }
                 items(buildings.size) { index ->
                     val buildingData = buildings[index]
@@ -113,11 +88,11 @@ fun VacancyComponent(
                         "string",
                         context.packageName
                     )
-                    val roomsData = rooms.filter { room ->
+                    val registeredRoomsData = roomsData.filter { room ->
                         buildingData.buildingRoomDisplayNames.contains(room.roomDisplayName)
                     }.toTypedArray()
                     val numberOfVacantRooms =
-                        viewModel.getNumberOfVacantRoom(roomsData, LocalDateTime.now())
+                        viewModel.getNumberOfVacantRoom(registeredRoomsData, LocalDateTime.now())
                     BuildingsCard(
                         modifier = Modifier.padding(8.dp),
                         buildingName = buildingNameIdentifier,
@@ -135,7 +110,7 @@ fun VacancyComponent(
                                     context.getString(buildingNameIdentifier)
                                 ).replace(
                                     "{${navigationRoteParam2}}",
-                                    GsonInstance.gson.toJson(roomsData)
+                                    GsonInstance.gson.toJson(registeredRoomsData)
                                 )
                             )
                         }
@@ -146,10 +121,8 @@ fun VacancyComponent(
     } else {
         LoadingProgressIndicatorComponent()
     }
-    if (currentState.isTodayRoomsDataNotFoundOnDB) {
-        navHostController.navigate(ScreenDestinations.Initialize.name)
-    }
 }
+
 
 @Composable
 fun BuildingsCard(
