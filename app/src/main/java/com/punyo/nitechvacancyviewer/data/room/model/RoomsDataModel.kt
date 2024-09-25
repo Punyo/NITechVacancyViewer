@@ -1,5 +1,6 @@
 package com.punyo.nitechvacancyviewer.data.room.model
 
+import com.punyo.nitechvacancyviewer.ui.CommonDateTimeFormater
 import java.time.LocalDate
 import java.time.LocalDateTime
 
@@ -30,4 +31,9 @@ data class EventInfo(
     val start: LocalDateTime,
     val end: LocalDateTime,
     val eventDescription: String = ""
-)
+) {
+    fun getStartAndEndString(): String {
+        val formatter = CommonDateTimeFormater.formatter
+        return "${start.format(formatter)} ～ ${end.format(formatter)}"
+    }
+}

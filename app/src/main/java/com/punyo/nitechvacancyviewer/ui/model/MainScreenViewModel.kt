@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.punyo.nitechvacancyviewer.data.room.RoomRepository
 import com.punyo.nitechvacancyviewer.data.room.model.Room
+import com.punyo.nitechvacancyviewer.ui.CommonDateTimeFormater
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,12 +15,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 class MainScreenViewModel(application: Application, private val roomRepository: RoomRepository) :
     AndroidViewModel(application) {
-    private val dateTimeFormatter: DateTimeFormatter
-        get() = DateTimeFormatter.ofPattern("HH:mm")
     private val state = MutableStateFlow(MainScreenUiState())
     val uiState: StateFlow<MainScreenUiState> = state.asStateFlow()
 
@@ -52,7 +50,7 @@ class MainScreenViewModel(application: Application, private val roomRepository: 
     }
 
     fun getLastUpdateTimeString(): String {
-        return state.value.lastVacancyUpdateTime!!.format(dateTimeFormatter)
+        return state.value.lastVacancyUpdateTime!!.format(CommonDateTimeFormater.formatter)
     }
 
     class Factory(private val context: Application, private val roomRepository: RoomRepository) :
