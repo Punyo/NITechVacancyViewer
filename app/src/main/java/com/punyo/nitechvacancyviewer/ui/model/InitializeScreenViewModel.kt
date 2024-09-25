@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.punyo.nitechvacancyviewer.data.auth.AuthRepository
 import com.punyo.nitechvacancyviewer.data.room.RoomRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -33,10 +34,9 @@ class InitializeScreenViewModel(
     }
 
     private fun tryToLoadSavedRoomsData() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val date = LocalDate.now()
             if (roomRepository.isRoomsDataExist(getApplication(), date)) {
-                roomRepository.loadRoomsDataFromDB(getApplication(), date)
                 state.value = state.value.copy(loadedRoomsDataFromDB = true)
             } else {
                 state.value = state.value.copy(loadedRoomsDataFromDB = false)
@@ -71,7 +71,6 @@ class InitializeScreenViewModel(
             runCatching {
                 roomRepository.saveToDBFromHTML(getApplication(), html, date)
             }.onSuccess {
-                roomRepository.loadRoomsDataFromDB(getApplication(), date)
                 state.value = state.value.copy(loadedRoomsDataFromCampusSquare = true)
             }.onFailure {
                 Log.e("RoomLocalDatasource", it.stackTraceToString())

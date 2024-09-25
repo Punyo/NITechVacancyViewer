@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="VACANCY_UPDATE_INTERVAL_MILLISECOND">60000</integer>
+    <integer name="PULL_TO_REFRESH_DELAY_MILLISECOND">250</integer>
+</resources>

@@ -15,6 +15,7 @@ import com.punyo.nitechvacancyviewer.R
 import com.punyo.nitechvacancyviewer.data.room.model.Room
 import com.punyo.nitechvacancyviewer.ui.screen.InitializeScreen
 import com.punyo.nitechvacancyviewer.ui.screen.MainScreen
+import com.punyo.nitechvacancyviewer.ui.screen.ReservationTableScreen
 import com.punyo.nitechvacancyviewer.ui.screen.RoomVacancyScreen
 import com.punyo.nitechvacancyviewer.ui.screen.SignInScreen
 
@@ -46,7 +47,11 @@ fun MainNavigation(navController: NavHostController = rememberNavController()) {
         }
         composable(ScreenDestinations.SignIn.name) {
             SignInScreen(onSignInSuccess = {
-                navigateOneSide(navController, ScreenDestinations.SignIn, ScreenDestinations.Initialize)
+                navigateOneSide(
+                    navController,
+                    ScreenDestinations.SignIn,
+                    ScreenDestinations.Initialize
+                )
             })
         }
         composable(ScreenDestinations.Main.name) {
@@ -74,6 +79,21 @@ fun MainNavigation(navController: NavHostController = rememberNavController()) {
                 onBackPressed = { navController.popBackStack() },
                 rooms = GsonInstance.gson.fromJson(roomVacancy, Array<Room>::class.java)
             )
+        }
+        composable(
+            route = context.getString(R.string.UI_NAVHOST_COMPOSABLE_RESERVATIONTABLESCREEN),
+            arguments = listOf(
+                navArgument(context.getString(R.string.UI_NAVHOST_COMPOSABLE_RESERVATIONTABLESCREEN_PARAMETER1)) {
+                    type = NavType.StringType
+                }
+            )
+        ) { backStackEntry ->
+            val roomData =
+                backStackEntry.arguments?.getString(context.getString(R.string.UI_NAVHOST_COMPOSABLE_RESERVATIONTABLESCREEN_PARAMETER1))
+
+            ReservationTableScreen(
+                roomData = GsonInstance.gson.fromJson(roomData, Room::class.java),
+                onBackPressed = { navController.popBackStack() })
         }
     }
 }
