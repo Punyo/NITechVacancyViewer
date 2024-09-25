@@ -15,7 +15,7 @@
     <string name="ERROR_HTTP_503">サーバーが現在利用できません。時間をおいてまたお試しください。</string>
     <string name="ERROR_HTTP_OTHERS">エラーが頻発する場合は管理者に連絡してください。(Response：%d)</string>
     <string name="ERROR_VACANCY_TABLE_LAYOUT_CHANGED">管理者による修正までお待ちください。</string>
-    <string name="UI_NAVIGATIONBARITEM_TEXT_VACANCY">講義室の使用状況</string>
+    <string name="UI_NAVIGATIONBARITEM_TEXT_RESERVATION">今日の予約状況</string>
     <string name="UI_NAVIGATIONBARITEM_TEXT_HOME">ホーム</string>
     <string name="UI_NAVIGATIONBARITEM_TEXT_SETTINGS">設定</string>
     <string name="UI_TEXTFIELD_TEXT_USERNAME">基盤ID</string>
@@ -23,8 +23,7 @@
     <string name="UI_TEXTFIELD_TEXT_PASSWORD">パスワード</string>
     <string name="UI_TEXTFIELD_TEXT_PASSWORD_HINT">パスワード</string>
     <string name="UI_TEXTFIELD_SUPPORTINGTEXT_EMPTY">入力してください</string>
-    <string name="UI_TAB_TITLE_CURRENT_VACANT_ROOMS">現在の空室</string>
-    <string name="UI_TAB_TITLE_TODAY_RESERVATION_LIST">今日の講義室予約状況</string>
+    <string name="UI_TEXT_NO_RESERVATION">予約がありません</string>
     <string name="UI_CARD_TEXT_VACANTANDMAXROOMS">空室：%d/%d[部屋]</string>
     <string name="UI_BUTTON_TEXT_LOGIN">ログイン</string>
     <string name="UI_BUTTON_TEXT_LOGIN_ATTEMPTING">ログインしています…</string>
@@ -43,4 +42,6 @@
     <string name="UI_NAVHOST_COMPOSABLE_ROOMVACANCYSCREEN">RoomVacancyScreen/{buildingName}/{roomsData}</string>
     <string name="UI_NAVHOST_COMPOSABLE_ROOMVACANCYSCREEN_PARAMETER1">buildingName</string>
     <string name="UI_NAVHOST_COMPOSABLE_ROOMVACANCYSCREEN_PARAMETER2">roomsData</string>
+    <string name="UI_NAVHOST_COMPOSABLE_RESERVATIONTABLESCREEN">ReservationTableScreen/{roomData}</string>
+    <string name="UI_NAVHOST_COMPOSABLE_RESERVATIONTABLESCREEN_PARAMETER1">roomData</string>
 </resources>
