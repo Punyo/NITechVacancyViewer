@@ -46,8 +46,8 @@
     <string name="UI_LAZYVERTICALGRID_TEXT_LASTUPDATETIME">最終更新：%s\n60秒おきに自動更新されます</string>
     <string name="UI_LISTITEM_TEXT_VACANT">空室</string>
     <string name="UI_LISTITEM_TEXT_OCCUPY">使用中：%s</string>
-    <string name="UI_LISTITEM_TEXT_MINUTESUNTILNEXTEVENT">%d分後に使用予定</string>
-    <string name="UI_LISTITEM_TEXT_NO_NEXT_EVENT">次の使用予定はありません</string>
+    <string name="UI_LISTITEM_TEXT_RESERVATION_NUM">%d件の予約</string>
+    <string name="UI_LISTITEM_TEXT_NO_RESERVATION">予約なし</string>
     <string name="UI_DIALOG_SIGN_IN_TITLE">ログインが必要です</string>
     <string name="UI_DIALOG_SIGN_IN_TEXT">空室状況のデータを取得するために基盤IDでのログインが必要です。続行しますか？\n
     ※MAINS-X、またはVPN接続による学内ネットワークへの接続が必須です</string>
