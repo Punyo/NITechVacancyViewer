@@ -23,16 +23,13 @@ fun RoomReservationListComponent(
     navHostController: NavHostController,
     reservationRoomListComponentViewModel: ReservationRoomListComponentViewModel = viewModel()
 ) {
-    val vacantRoomsAndMinutesUntilNextEvent = roomsData.associateWith { room ->
-        reservationRoomListComponentViewModel.getMinutesUntilNextEvent(room)
-    }
     val navigationRoute = stringResource(R.string.UI_NAVHOST_COMPOSABLE_RESERVATIONTABLESCREEN)
     val navigationParam1 =
         stringResource(R.string.UI_NAVHOST_COMPOSABLE_RESERVATIONTABLESCREEN_PARAMETER1)
     LazyColumn(modifier = modifier.fillMaxSize()) {
-        items(vacantRoomsAndMinutesUntilNextEvent.size) { index ->
-            val room = vacantRoomsAndMinutesUntilNextEvent.keys.elementAt(index)
-            val minutesUntilNextEvent = vacantRoomsAndMinutesUntilNextEvent[room]
+        items(roomsData.size) { index ->
+            val room = roomsData[index]
+            val eventsInfo = room.eventsInfo
             ListItem(
                 modifier = Modifier.clickable {
                     navHostController.navigate(
@@ -44,18 +41,16 @@ fun RoomReservationListComponent(
                 },
                 headlineContent = { Text(text = room.roomDisplayName) },
                 supportingContent = {
-                    if (minutesUntilNextEvent != null) {
+                    if (eventsInfo.isNotEmpty()) {
                         Text(
-                            text = stringResource(R.string.UI_LISTITEM_TEXT_MINUTESUNTILNEXTEVENT).format(
-                                minutesUntilNextEvent
-                            )
+                            text = stringResource(R.string.UI_LISTITEM_TEXT_RESERVATION_NUM).format(eventsInfo.size)
                         )
                     } else {
-                        Text(text = stringResource(R.string.UI_LISTITEM_TEXT_NO_NEXT_EVENT))
+                        Text(text = stringResource(R.string.UI_LISTITEM_TEXT_NO_RESERVATION))
                     }
                 }
             )
-            if (index != vacantRoomsAndMinutesUntilNextEvent.size - 1) HorizontalDivider()
+            if (index != roomsData.size - 1) HorizontalDivider()
         }
         item { HorizontalDivider() }
     }
