@@ -41,8 +41,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.punyo.nitechvacancyviewer.R
 import com.punyo.nitechvacancyviewer.data.room.RoomRepository
 import com.punyo.nitechvacancyviewer.data.setting.SettingRepository
@@ -112,7 +114,10 @@ fun SettingsComponent(
         )
         SettingsListItem(
             title = R.string.UI_TEXT_LICENSE,
-            icon = R.drawable.outline_launch_24
+            icon = R.drawable.outline_launch_24,
+            onClick = {
+                context.startActivity(Intent(context, OssLicensesMenuActivity::class.java))
+            }
         )
         SettingsListItem(
             title = R.string.UI_TEXT_VERSION,

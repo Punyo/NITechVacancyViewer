@@ -6,3 +6,11 @@ plugins {
     alias(libs.plugins.androidx.room) apply false
     id("com.google.devtools.ksp") version "2.0.20-1.0.25"
 }
+buildscript {
+    repositories {
+        google()
+    }
+    dependencies {
+        classpath("com.google.android.gms:oss-licenses-plugin:0.10.6")
+    }
+}
