@@ -106,7 +106,10 @@ fun MainScreen(
                     roomsData = currentState.roomsData!!
                 )
 
-                2 -> SettingsComponent(modifier.padding(innerPadding))
+                2 -> SettingsComponent(
+                    modifier = modifier.padding(innerPadding),
+                    navHostController = navHostController
+                )
             }
         } else {
             LoadingProgressIndicatorComponent()

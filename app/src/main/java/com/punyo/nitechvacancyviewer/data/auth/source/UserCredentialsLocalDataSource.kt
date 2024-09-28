@@ -35,4 +35,12 @@ object UserCredentialsLocalDataSource {
             preferences[PASSWORD_PREFERENCE] = userCredentials.password
         }
     }
+
+    suspend fun clearCredentials(context: Context) {
+        val dataStore: DataStore<Preferences> = context.dataStore
+        dataStore.edit { preferences ->
+            preferences.remove(USERNAME_PREFERENCE)
+            preferences.remove(PASSWORD_PREFERENCE)
+        }
+    }
 }

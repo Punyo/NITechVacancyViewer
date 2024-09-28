@@ -24,4 +24,8 @@ class RoomRepository {
         }
         return RoomLocalDatasource.loadedRoomsData
     }
+
+    suspend fun clearDB(application: Application) {
+        RoomLocalDatasource.clearDB(application)
+    }
 }
