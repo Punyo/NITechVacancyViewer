@@ -3,11 +3,11 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.androidx.room)
+    id("com.google.android.gms.oss-licenses-plugin")
     id("com.google.devtools.ksp") version "2.0.20-1.0.25"
 }
 
 android {
-
     namespace = "com.punyo.nitechvacancyviewer"
     compileSdk = 34
     defaultConfig {
@@ -63,6 +63,7 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
+    implementation(libs.gms.licenses)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
