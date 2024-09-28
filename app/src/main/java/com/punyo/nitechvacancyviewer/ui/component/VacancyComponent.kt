@@ -70,7 +70,7 @@ fun VacancyComponent(
     if (currentState.buildings != null) {
         val buildings = currentState.buildings!!
         PullToRefreshBox(
-            modifier = modifier.padding(8.dp),
+            modifier = modifier.padding(start = 8.dp, end = 8.dp),
             state = pullToRefreshState,
             isRefreshing = isRefreshVacancy,
             onRefresh = onRefreshVacancy
