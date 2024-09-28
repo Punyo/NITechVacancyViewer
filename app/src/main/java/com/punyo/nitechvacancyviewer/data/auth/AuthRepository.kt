@@ -39,6 +39,13 @@ object AuthRepository {
         return result
     }
 
+    suspend fun signOutAndClearSavedCredentials(context: Context) {
+        UserCredentialsLocalDataSource.clearCredentials(context)
+        currentToken = null
+        currentUserName = null
+        currentPassword = null
+    }
+
     private suspend fun acquireToken(userName: String, password: String): AuthResultStatus {
         try {
             val token =
@@ -67,15 +74,6 @@ object AuthRepository {
             }
         }
         return AuthResultStatus.UNKNOWN_ERROR
-    }
-
-    suspend fun refreshToken(): AuthResultStatus {
-        currentUserName?.let { userName ->
-            currentPassword?.let { password ->
-                return acquireToken(userName, password)
-            }
-        }
-        return AuthResultStatus.CREDENTIALS_NOT_FOUND
     }
 
     enum class AuthResultStatus {
