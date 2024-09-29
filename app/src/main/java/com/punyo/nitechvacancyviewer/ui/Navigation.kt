@@ -4,14 +4,10 @@ import android.app.Application
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -24,7 +20,6 @@ import com.punyo.nitechvacancyviewer.R
 import com.punyo.nitechvacancyviewer.data.room.model.Room
 import com.punyo.nitechvacancyviewer.data.setting.SettingRepository
 import com.punyo.nitechvacancyviewer.data.setting.model.ThemeSettings
-import com.punyo.nitechvacancyviewer.data.setting.source.SettingLocalDatasource
 import com.punyo.nitechvacancyviewer.ui.model.MainNavigationViewModel
 import com.punyo.nitechvacancyviewer.ui.screen.InitializeScreen
 import com.punyo.nitechvacancyviewer.ui.screen.MainScreen
@@ -32,7 +27,6 @@ import com.punyo.nitechvacancyviewer.ui.screen.ReservationTableScreen
 import com.punyo.nitechvacancyviewer.ui.screen.RoomVacancyScreen
 import com.punyo.nitechvacancyviewer.ui.screen.SignInScreen
 import com.punyo.nitechvacancyviewer.ui.theme.AppTheme
-import kotlinx.coroutines.launch
 
 @Composable
 fun MainNavigation(

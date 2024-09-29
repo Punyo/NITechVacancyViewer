@@ -8,6 +8,14 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        create("NITechVacancyViewer_release") {
+            storeFile = file("C:\\Users\\punyo\\StudioProjects\\KeyStores\\NITechVacancyViewer.jks")
+            storePassword = "harukiokuda"
+            keyAlias = "release"
+            keyPassword = "harukiokuda"
+        }
+    }
     namespace = "com.punyo.nitechvacancyviewer"
     compileSdk = 34
     defaultConfig {
@@ -24,6 +32,9 @@ android {
 
     }
 
+    buildFeatures {
+        buildConfig = true
+    }
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -31,6 +42,12 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            versionNameSuffix = "-release"
+            signingConfig = signingConfigs.getByName("NITechVacancyViewer_release")
+        }
+        getByName("debug") {
+            versionNameSuffix = "-debug"
+            signingConfig = signingConfigs.getByName("NITechVacancyViewer_release")
         }
     }
     compileOptions {
@@ -63,7 +80,8 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
-    implementation(libs.gms.licenses)
+    implementation(libs.play.services.licenses)
+    implementation(libs.play.services.ads)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
