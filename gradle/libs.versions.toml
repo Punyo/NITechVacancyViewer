@@ -13,9 +13,11 @@ activityCompose = "1.9.2"
 composeBom = "2024.09.02"
 lifecycleRuntimeComposeAndroid = "2.8.6"
 navigationCompose = "2.8.1"
+ossLicensesPlugin = "0.10.6"
+playServicesAds = "23.3.0"
 retrofit = "2.9.0"
 room = "2.6.1"
-gms-oss-licenses = "17.1.0"
+play-services-licenses = "17.1.0"
 gms-oss-licenses-plugin = "0.10.6"
 
 
@@ -44,8 +46,10 @@ androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-lifecycle-runtime-compose-android = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose-android", version.ref = "lifecycleRuntimeComposeAndroid" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
+oss-licenses-plugin = { module = "com.google.android.gms:oss-licenses-plugin", version.ref = "ossLicensesPlugin" }
+play-services-ads = { module = "com.google.android.gms:play-services-ads", version.ref = "playServicesAds" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
-gms-licenses = { module = "com.google.android.gms:play-services-oss-licenses", version.ref = "gms-oss-licenses" }
+play-services-licenses = { module = "com.google.android.gms:play-services-oss-licenses", version.ref = "play-services-licenses" }
 
 [plugins]
 
@@ -53,4 +57,3 @@ android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 androidx_room = { id = "androidx.room", version.ref = "room" }
-gms-licenses = { id = "com.google.android.gms.oss-licenses-plugin", version.ref = "gms-oss-licenses-plugin" }
