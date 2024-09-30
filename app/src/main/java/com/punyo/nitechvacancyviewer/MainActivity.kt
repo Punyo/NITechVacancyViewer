@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.google.android.gms.ads.MobileAds
 import com.punyo.nitechvacancyviewer.ad.AppOpenAdLoader
+import com.punyo.nitechvacancyviewer.ad.NativeAdLoader
 import com.punyo.nitechvacancyviewer.ui.MainNavigation
 
 class MainActivity : ComponentActivity() {
@@ -23,6 +24,9 @@ class MainActivity : ComponentActivity() {
     override fun onResume() {
         super.onResume()
         AppOpenAdLoader.showAdIfAvailable(this)
-        Log.d("MainActivity", "onResume")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
     }
 }

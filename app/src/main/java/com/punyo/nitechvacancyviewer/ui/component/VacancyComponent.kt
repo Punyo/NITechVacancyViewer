@@ -34,6 +34,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.punyo.nitechvacancyviewer.GsonInstance
 import com.punyo.nitechvacancyviewer.R
+import com.punyo.nitechvacancyviewer.ad.NativeAdLoader
+import com.punyo.nitechvacancyviewer.ad.component.VacancyComponentNativeAd
 import com.punyo.nitechvacancyviewer.data.building.BuildingRepository
 import com.punyo.nitechvacancyviewer.data.building.source.BuildingLocalDatasource
 import com.punyo.nitechvacancyviewer.data.room.model.Room
@@ -80,6 +82,9 @@ fun VacancyComponent(
             ) {
                 item(span = { GridItemSpan(maxCurrentLineSpan) }) {
                     LastUpdateTimeTextComponent(lastUpdateTimeString = lastVacancyRefreshTimeString)
+                }
+                item(span = { GridItemSpan(maxCurrentLineSpan) }) {
+                    VacancyComponentNativeAd(modifier = Modifier.padding(8.dp))
                 }
                 items(buildings.size) { index ->
                     val buildingData = buildings[index]
