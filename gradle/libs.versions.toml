@@ -18,7 +18,7 @@ playServicesAds = "23.3.0"
 retrofit = "2.9.0"
 room = "2.6.1"
 play-services-licenses = "17.1.0"
-gms-oss-licenses-plugin = "0.10.6"
+admobnative-compose = "1.2"
 
 
 [libraries]
@@ -50,6 +50,7 @@ oss-licenses-plugin = { module = "com.google.android.gms:oss-licenses-plugin", v
 play-services-ads = { module = "com.google.android.gms:play-services-ads", version.ref = "playServicesAds" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 play-services-licenses = { module = "com.google.android.gms:play-services-oss-licenses", version.ref = "play-services-licenses" }
+admobnative-compose = { module = "io.github.farimarwat:admobnative-compose", version.ref = "admobnative-compose" }
 
 [plugins]
 
