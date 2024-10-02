@@ -18,8 +18,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.punyo.nitechvacancyviewer.R
+import com.punyo.nitechvacancyviewer.ad.AdConstants
+import com.punyo.nitechvacancyviewer.ad.component.NativeAdComponent
 import com.punyo.nitechvacancyviewer.data.room.model.EventInfo
 import com.punyo.nitechvacancyviewer.data.room.model.Room
 import com.punyo.nitechvacancyviewer.ui.component.TopAppBarWithBackArrowComponent
@@ -43,10 +46,16 @@ fun RoomVacancyScreen(
                 onBackPressed = onBackPressed
             )
         }) { innerPadding ->
-        Column(modifier = Modifier
-            .padding(innerPadding)
-            .verticalScroll(rememberScrollState())) {
-            rooms.forEachIndexed() { index, room ->
+        Column(
+            modifier = Modifier
+                .padding(innerPadding)
+                .verticalScroll(rememberScrollState())
+        ) {
+            NativeAdComponent(
+                modifier = Modifier.padding(8.dp),
+                adUnitId = AdConstants.NATIVE_ROOMVACANCYSCREEN_AD
+            )
+            rooms.forEachIndexed { index, room ->
                 val roomVacancyStatus =
                     roomVacancyScreenViewModel.getRoomVacancy(room, LocalDateTime.now())
                 ListItem(

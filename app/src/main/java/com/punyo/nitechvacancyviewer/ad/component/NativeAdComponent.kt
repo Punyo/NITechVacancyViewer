@@ -37,12 +37,12 @@ import com.punyo.nitechvacancyviewer.ui.theme.AppTheme
 import kotlinx.coroutines.delay
 
 @Composable
-fun VacancyComponentNativeAd(modifier: Modifier = Modifier) {
+fun NativeAdComponent(modifier: Modifier = Modifier, adUnitId: String) {
     val context = LocalContext.current
     var nativeAd by remember { mutableStateOf<NativeAd?>(null) }
     LaunchedEffect(key1 = Unit) {
         while (true) {
-            nativeAd = NativeAdLoader.getAd(context, AdConstants.NATIVE_VACANCYCOMPONENT_AD)
+            nativeAd = NativeAdLoader.getAd(context, adUnitId)
             delay(AdConstants.NATIVE_AD_REFRESH_INTERVAL_MILLISECOND)
         }
     }

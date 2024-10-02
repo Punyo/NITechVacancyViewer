@@ -20,6 +20,11 @@ class MainActivity : ComponentActivity() {
             AdConstants.NATIVE_AD_INITIAL_CACHE_AMOUNT,
             AdConstants.NATIVE_VACANCYCOMPONENT_AD
         )
+        NativeAdLoader.loadAdAndCache(
+            this,
+            AdConstants.NATIVE_AD_INITIAL_CACHE_AMOUNT,
+            AdConstants.NATIVE_ROOMVACANCYSCREEN_AD
+        )
         enableEdgeToEdge()
         setContent {
             MainNavigation()
@@ -29,9 +34,5 @@ class MainActivity : ComponentActivity() {
     override fun onResume() {
         super.onResume()
         AppOpenAdLoader.showAdIfAvailable(this)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
     }
 }
