@@ -9,12 +9,11 @@ import java.util.Date
 import kotlin.coroutines.resume
 
 object NativeAdLoader {
-    private lateinit var adLoader: AdLoader
     private val loadedAds: MutableMap<Long, NativeAd> = mutableMapOf()
 
     private suspend fun loadAd(context: Context): Long {
         return suspendCancellableCoroutine { continuation ->
-            adLoader = AdLoader.Builder(context, AdConstants.NATIVE_VACANCYCOMPONENT_AD)
+            val adLoader = AdLoader.Builder(context, AdConstants.NATIVE_VACANCYCOMPONENT_AD)
                 .forNativeAd { nativeAd ->
                     if (continuation.isActive) {
                         val time = Date().time
