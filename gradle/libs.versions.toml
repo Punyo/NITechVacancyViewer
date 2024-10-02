@@ -1,5 +1,6 @@
 [versions]
 agp = "8.6.1"
+coilCompose = "2.7.0"
 converterGson = "2.9.0"
 datastorePreferences = "1.1.1"
 jsoup = "1.18.1"
@@ -19,6 +20,7 @@ retrofit = "2.9.0"
 room = "2.6.1"
 play-services-licenses = "17.1.0"
 admobnative-compose = "1.2"
+tinkAndroid = "1.15.0"
 
 
 [libraries]
@@ -29,6 +31,7 @@ androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-
 androidx_room_runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 androidx_room_compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 androidx_room_ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
 jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -51,6 +54,7 @@ play-services-ads = { module = "com.google.android.gms:play-services-ads", versi
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 play-services-licenses = { module = "com.google.android.gms:play-services-oss-licenses", version.ref = "play-services-licenses" }
 admobnative-compose = { module = "io.github.farimarwat:admobnative-compose", version.ref = "admobnative-compose" }
+tink-android = { module = "com.google.crypto.tink:tink-android", version.ref = "tinkAndroid" }
 
 [plugins]
 
