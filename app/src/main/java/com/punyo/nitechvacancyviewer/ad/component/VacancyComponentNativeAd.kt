@@ -20,7 +20,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
@@ -36,7 +35,6 @@ import com.punyo.nitechvacancyviewer.ad.AdConstants
 import com.punyo.nitechvacancyviewer.ad.NativeAdLoader
 import com.punyo.nitechvacancyviewer.ui.theme.AppTheme
 import kotlinx.coroutines.delay
-import retrofit2.http.Body
 
 @Composable
 fun VacancyComponentNativeAd(modifier: Modifier = Modifier) {
@@ -44,7 +42,7 @@ fun VacancyComponentNativeAd(modifier: Modifier = Modifier) {
     var nativeAd by remember { mutableStateOf<NativeAd?>(null) }
     LaunchedEffect(key1 = Unit) {
         while (true) {
-            nativeAd = NativeAdLoader.getAd(context)
+            nativeAd = NativeAdLoader.getAd(context, AdConstants.NATIVE_VACANCYCOMPONENT_AD)
             delay(AdConstants.NATIVE_AD_REFRESH_INTERVAL_MILLISECOND)
         }
     }

@@ -20,7 +20,7 @@ object AppOpenAdLoader {
     fun showAdIfAvailable(activity: Activity) {
         currentAd?.let { it ->
             if (adLoadTime!! + AdConstants.APPOPEN_AD_VALIDITY_MILLISECOND < Date().time) {
-                loadAd(activity)
+                loadAdAndCache(activity)
                 return
             }
             lastAdDismissTime?.let { dismissTime ->
@@ -32,14 +32,14 @@ object AppOpenAdLoader {
                 override fun onAdDismissedFullScreenContent() {
                     lastAdDismissTime = Date().time
                     Log.d(TAG, "AppOpenAd dismissed")
-                    loadAd(activity)
+                    loadAdAndCache(activity)
                 }
 
                 override fun onAdFailedToShowFullScreenContent(adError: AdError) {
                     if (adError.code != AdRequest.ERROR_CODE_NO_FILL) {
                         Log.e(TAG, "AppOpenAd failed to show: $adError")
                     }
-                    loadAd(activity)
+                    loadAdAndCache(activity)
                 }
 
                 override fun onAdShowedFullScreenContent() {
@@ -52,7 +52,7 @@ object AppOpenAdLoader {
         }
     }
 
-    fun loadAd(context: Context) {
+    fun loadAdAndCache(context: Context) {
         if (isLoadingAd) {
             return
         }
