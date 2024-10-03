@@ -18,11 +18,10 @@ composeBom = "2024.09.02"
 lifecycleRuntimeComposeAndroid = "2.8.6"
 navigationCompose = "2.8.1"
 ossLicensesPlugin = "0.10.6"
-playServicesAds = "23.3.0"
+playServicesAds = "23.4.0"
 retrofit = "2.9.0"
 room = "2.6.1"
 play-services-licenses = "17.1.0"
-admobnative-compose = "1.2"
 tinkAndroid = "1.15.0"
 
 
