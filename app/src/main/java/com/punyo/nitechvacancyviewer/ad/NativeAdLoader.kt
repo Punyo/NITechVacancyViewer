@@ -12,7 +12,7 @@ import java.util.Date
 import kotlin.coroutines.resume
 
 object NativeAdLoader {
-    private val cachedAds: MutableList<NativeAdWithConsumeTime> = mutableListOf()
+    private val cachedAds: MutableMap<String, MutableList<NativeAdWithConsumeTime>> = mutableMapOf()
     private val currentAds: MutableMap<String, NativeAdWithConsumeTime> = mutableMapOf()
 
     private suspend fun loadAd(
@@ -41,7 +41,21 @@ object NativeAdLoader {
 
     fun loadAdAndCache(context: Context, amount: Int, adUnitId: String) {
         CoroutineScope(Dispatchers.IO).launch {
-            loadAd(context, adUnitId, amount).forEach(cachedAds::add)
+            if (cachedAds[adUnitId] == null) {
+                cachedAds[adUnitId] = mutableListOf()
+            }
+            val cachedAdForCurrentId = cachedAds[adUnitId]!!
+            if (amount + cachedAdForCurrentId.size <= AdConstants.NATIVE_AD_MAX_CACHE_AMOUNT) {
+                cachedAdForCurrentId.addAll(loadAd(context, adUnitId, amount))
+            } else {
+                val cacheableAmount =
+                    AdConstants.NATIVE_AD_MAX_CACHE_AMOUNT - cachedAdForCurrentId.size
+                if (cacheableAmount > 0) {
+                    cachedAdForCurrentId.addAll(
+                        loadAd(context, adUnitId, cacheableAmount)
+                    )
+                }
+            }
         }
     }
 
@@ -54,7 +68,7 @@ object NativeAdLoader {
                 currentAd.nativeAd
             }
         } else {
-            val cachedAd = cachedAds.removeFirstOrNull()
+            val cachedAd = cachedAds[adUnitId]!!.removeFirstOrNull()
             if (cachedAd != null) {
                 currentAds[adUnitId] = cachedAd.copy(consumeTime = Date().time)
                 return cachedAd.nativeAd
