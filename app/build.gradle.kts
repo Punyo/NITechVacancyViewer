@@ -5,6 +5,8 @@ plugins {
     alias(libs.plugins.androidx.room)
     id("com.google.android.gms.oss-licenses-plugin")
     id("com.google.devtools.ksp") version "2.0.20-1.0.25"
+    id("com.google.gms.google-services")
+    id ("com.google.firebase.crashlytics")
 }
 
 android {
@@ -107,4 +109,6 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    implementation (libs.firebase.crashlytics.ktx)
+    implementation (libs.firebase.analytics.ktx)
 }

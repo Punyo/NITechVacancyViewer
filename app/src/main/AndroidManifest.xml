@@ -14,6 +14,10 @@
         android:theme="@style/Theme.NITechRoomVacancyViewer"
         tools:targetApi="31"
         >
+        <property
+            android:name="android.adservices.AD_SERVICES_CONFIG"
+            android:resource="@xml/gma_ad_services_config"
+            tools:replace="android:resource" />
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-6759533750115056~8450363983"/>
@@ -21,7 +25,7 @@
             android:name=".MainActivity"
             android:exported="true"
             android:theme="@style/Theme.NITechRoomVacancyViewer"
-            android:screenOrientation="portrait">
+            android:screenOrientation="fullSensor">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -31,10 +35,9 @@
         <activity
             android:name="com.google.android.gms.oss.licenses.OssLicensesMenuActivity"
             android:theme="@style/Theme.AppCompat"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="fullSensor"/>
         <activity
             android:name="com.google.android.gms.oss.licenses.OssLicensesActivity"
             android:theme="@style/Theme.AppCompat" />
     </application>
-
 </manifest>

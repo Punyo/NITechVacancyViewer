@@ -3,6 +3,9 @@ agp = "8.6.1"
 coilCompose = "2.7.0"
 converterGson = "2.9.0"
 datastorePreferences = "1.1.1"
+firebaseAnalyticsKtx = "22.1.2"
+firebaseCrashlyticsGradle = "3.0.2"
+firebaseCrashlyticsKtx = "19.2.0"
 jsoup = "1.18.1"
 kotlin = "2.0.20"
 coreKtx = "1.13.1"
@@ -33,6 +36,9 @@ androidx_room_compiler = { module = "androidx.room:room-compiler", version.ref =
 androidx_room_ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
+firebase-analytics-ktx = { module = "com.google.firebase:firebase-analytics-ktx", version.ref = "firebaseAnalyticsKtx" }
+firebase-crashlytics-gradle = { module = "com.google.firebase:firebase-crashlytics-gradle", version.ref = "firebaseCrashlyticsGradle" }
+firebase-crashlytics-ktx = { module = "com.google.firebase:firebase-crashlytics-ktx", version.ref = "firebaseCrashlyticsKtx" }
 jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
@@ -53,7 +59,6 @@ oss-licenses-plugin = { module = "com.google.android.gms:oss-licenses-plugin", v
 play-services-ads = { module = "com.google.android.gms:play-services-ads", version.ref = "playServicesAds" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 play-services-licenses = { module = "com.google.android.gms:play-services-oss-licenses", version.ref = "play-services-licenses" }
-admobnative-compose = { module = "io.github.farimarwat:admobnative-compose", version.ref = "admobnative-compose" }
 tink-android = { module = "com.google.crypto.tink:tink-android", version.ref = "tinkAndroid" }
 
 [plugins]

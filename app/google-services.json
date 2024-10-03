@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "574475202797",
+    "project_id": "nitechvacancyviewer",
+    "storage_bucket": "nitechvacancyviewer.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:574475202797:android:b5ea4ad75be852e0845ce4",
+        "android_client_info": {
+          "package_name": "com.punyo.nitechvacancyviewer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDCLph8jtTqAnYkEGbwgmJHW9f550YRl38"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
