@@ -11,8 +11,10 @@ import com.punyo.nitechvacancyviewer.ad.NativeAdLoader
 import com.punyo.nitechvacancyviewer.ui.MainNavigation
 
 class MainActivity : ComponentActivity() {
+    private var showAdinOnResume = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        showAdinOnResume = false
         MobileAds.initialize(this)
         AppOpenAdLoader.loadAdAndCache(this)
         NativeAdLoader.loadAdAndCache(
@@ -33,6 +35,10 @@ class MainActivity : ComponentActivity() {
 
     override fun onResume() {
         super.onResume()
-        AppOpenAdLoader.showAdIfAvailable(this)
+        if (showAdinOnResume) {
+            AppOpenAdLoader.showAdIfAvailable(this)
+        } else {
+            showAdinOnResume = true
+        }
     }
 }
