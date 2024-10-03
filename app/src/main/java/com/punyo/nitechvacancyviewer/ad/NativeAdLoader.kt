@@ -86,9 +86,7 @@ object NativeAdLoader {
         val currentAd = currentAds[adUnitId]
         if (currentAd != null) {
             currentAds.remove(adUnitId)!!.nativeAd.destroy()
-            val newAd = loadAd(context, adUnitId, 1).first()
-            currentAds[adUnitId] = newAd.copy(consumeTime = Date().time)
-            return currentAds[adUnitId]!!.nativeAd
+            return getAd(context, adUnitId)
         } else {
             throw NullPointerException("No ad to refresh")
         }
