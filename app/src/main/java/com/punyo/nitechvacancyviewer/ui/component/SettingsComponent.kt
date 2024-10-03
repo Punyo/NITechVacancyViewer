@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Person
@@ -41,7 +43,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
@@ -67,7 +68,9 @@ fun SettingsComponent(
 ) {
     val context = LocalContext.current
     val currentState by settingsComponentViewModel.uiState.collectAsState()
-    Column(modifier = modifier.fillMaxSize()) {
+    Column(modifier = modifier
+        .fillMaxSize()
+        .verticalScroll(rememberScrollState())) {
         ListItem(
             headlineContent = {
                 Text(
