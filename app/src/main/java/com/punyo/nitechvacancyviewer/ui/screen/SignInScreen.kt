@@ -199,7 +199,10 @@ fun SignInScreen(
                     .height(40.dp),
                 enabled = currentState.isSignInButtonEnabled,
                 onClick = {
-                    signInScreenViewModel.onSignInButtonClicked(onSignInSuccess)
+                    signInScreenViewModel.onSignInButtonClicked(
+                        onSignInSuccess,
+                        context.getString(R.string.APP_DEMO_TRIGGER_USERNAME_AND_PASSWORD)
+                    )
                 }) {
                 Text(
                     text = if (currentState.isSignInButtonEnabled) {

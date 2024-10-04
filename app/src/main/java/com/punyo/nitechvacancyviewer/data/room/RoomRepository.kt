@@ -6,23 +6,43 @@ import com.punyo.nitechvacancyviewer.data.room.source.RoomLocalDatasource
 import java.time.LocalDate
 
 class RoomRepository {
-    suspend fun isRoomsDataExist(application: Application, date: LocalDate) =
-        RoomLocalDatasource.isRoomsDataExist(application, date)
+    companion object {
+        private var isDemoMode: Boolean = false
+
+        fun setDemoMode(isDemoMode: Boolean) {
+            RoomRepository.isDemoMode = isDemoMode
+        }
+    }
+
+
+    suspend fun isRoomsDataExist(application: Application, date: LocalDate): Boolean {
+        return if (!isDemoMode) {
+            RoomLocalDatasource.isRoomsDataExist(application, date)
+        } else {
+            true
+        }
+    }
 
     suspend fun saveToDBFromHTML(application: Application, html: String, date: LocalDate) {
-        RoomLocalDatasource.saveOneWeekRoomsDataToDBFromHTML(application, html, date)
+        if (!isDemoMode) {
+            RoomLocalDatasource.saveOneWeekRoomsDataToDBFromHTML(application, html, date)
+        }
     }
 
     suspend fun getTodayRoomsData(application: Application): RoomsDataModel? {
-        val currentDate = LocalDate.now()
-        if (currentDate != RoomLocalDatasource.loadedRoomsData?.date) {
-            if (isRoomsDataExist(application, currentDate)) {
-                RoomLocalDatasource.loadFromDB(application, currentDate)
-            } else {
-                return null
+        if (!isDemoMode) {
+            val currentDate = LocalDate.now()
+            if (currentDate != RoomLocalDatasource.loadedRoomsData?.date) {
+                if (isRoomsDataExist(application, currentDate)) {
+                    RoomLocalDatasource.loadFromDB(application, currentDate)
+                } else {
+                    return null
+                }
             }
+            return RoomLocalDatasource.loadedRoomsData
+        } else {
+            return RoomLocalDatasource.getDemoRoomsData()
         }
-        return RoomLocalDatasource.loadedRoomsData
     }
 
     suspend fun clearDB(application: Application) {

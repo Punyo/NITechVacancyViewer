@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.punyo.nitechvacancyviewer.data.auth.AuthRepository
+import com.punyo.nitechvacancyviewer.data.room.RoomRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,20 +16,25 @@ class SignInScreenViewModel(application: Application) : AndroidViewModel(applica
     private val state = MutableStateFlow(SignInScreenUiState())
     val uiState: StateFlow<SignInScreenUiState> = state.asStateFlow()
 
-    fun onSignInButtonClicked(onSignInSuccess: () -> Unit) {
+    fun onSignInButtonClicked(onSignInSuccess: () -> Unit, demoModeUserNameAndPassword: String) {
         if (state.value.userName.isNotEmpty() && state.value.password.isNotEmpty()) {
-            state.value = state.value.copy(isSignInButtonEnabled = false, signInResult = null)
-            viewModelScope.launch {
-                val result =
-                    AuthRepository.signIn(
-                        getApplication(),
-                        state.value.userName,
-                        state.value.password
-                    )
-                if (result == AuthRepository.AuthResultStatus.SUCCESS) {
-                    onSignInSuccess()
+            if (state.value.userName == demoModeUserNameAndPassword && state.value.password == demoModeUserNameAndPassword) {
+                RoomRepository.setDemoMode(true)
+                onSignInSuccess()
+            } else {
+                state.value = state.value.copy(isSignInButtonEnabled = false, signInResult = null)
+                viewModelScope.launch {
+                    val result =
+                        AuthRepository.signIn(
+                            getApplication(),
+                            state.value.userName,
+                            state.value.password
+                        )
+                    if (result == AuthRepository.AuthResultStatus.SUCCESS) {
+                        onSignInSuccess()
+                    }
+                    state.value = state.value.copy(signInResult = result)
                 }
-                state.value = state.value.copy(signInResult = result)
             }
         } else {
             checkTextFieldsEmptiness()
