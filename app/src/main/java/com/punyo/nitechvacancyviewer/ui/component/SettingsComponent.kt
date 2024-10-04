@@ -68,9 +68,14 @@ fun SettingsComponent(
 ) {
     val context = LocalContext.current
     val currentState by settingsComponentViewModel.uiState.collectAsState()
-    Column(modifier = modifier
-        .fillMaxSize()
-        .verticalScroll(rememberScrollState())) {
+    val privacyPolicyUrl = stringResource(id = R.string.URL_PRIVACY_POLICY)
+    val tosUrl = stringResource(id = R.string.URL_TOS)
+    val storeUrl = stringResource(id = R.string.URL_STORE_PAGE)
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+    ) {
         ListItem(
             headlineContent = {
                 Text(
@@ -108,12 +113,31 @@ fun SettingsComponent(
             },
         )
         SettingsListItem(
+            title = R.string.UI_TEXT_TOS,
+            icon = R.drawable.outline_launch_24,
+            onClick = {
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.data = Uri.parse(tosUrl)
+                context.startActivity(intent)
+            }
+        )
+        SettingsListItem(
             title = R.string.UI_TEXT_PRIVACY_POLICY,
-            icon = R.drawable.outline_launch_24
+            icon = R.drawable.outline_launch_24,
+            onClick = {
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.data = Uri.parse(privacyPolicyUrl)
+                context.startActivity(intent)
+            }
         )
         SettingsListItem(
             title = R.string.UI_TEXT_STORE_PAGE,
-            icon = R.drawable.outline_launch_24
+            icon = R.drawable.outline_launch_24,
+            onClick = {
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.data = Uri.parse(storeUrl)
+                context.startActivity(intent)
+            }
         )
         SettingsListItem(
             title = R.string.UI_TEXT_LICENSE,
