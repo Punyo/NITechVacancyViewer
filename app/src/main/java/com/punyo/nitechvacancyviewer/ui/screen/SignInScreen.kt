@@ -1,6 +1,8 @@
 package com.punyo.nitechvacancyviewer.ui.screen
 
 import android.app.Application
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -24,15 +26,23 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.LinkAnnotation
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextLinkStyles
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withLink
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.punyo.nitechvacancyviewer.R
@@ -52,6 +62,28 @@ fun SignInScreen(
     val currentState by signInScreenViewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
+    val annotatedString = buildAnnotatedString {
+        append(
+            stringResource(id = R.string.UI_TEXT_CONSENT_TOS_AND_PRIVACY_POLICY).replaceAfter(
+                "%s",
+                ""
+            ).replace("%s", "")
+        )
+        withLink(
+            LinkAnnotation.Url(
+                stringResource(id = R.string.URL_LEGAL_NOTICE),
+                TextLinkStyles(style = SpanStyle(color = Color.Blue))
+            )
+        ) {
+            append(stringResource(id = R.string.UI_TEXT_TOS_AND_PRIVACY_POLICY))
+        }
+        append(
+            stringResource(id = R.string.UI_TEXT_CONSENT_TOS_AND_PRIVACY_POLICY).replaceBefore(
+                "%s",
+                ""
+            ).replace("%s", "")
+        )
+    }
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -94,16 +126,29 @@ fun SignInScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Image(
-                modifier = Modifier
-                    .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp)
-                    .size(200.dp),
-                painter = painterResource(id = R.drawable.ic_launcher_foreground),
-                contentDescription = stringResource(id = R.string.APP_NAME)
-            )
+            ResourcesCompat.getDrawable(
+                LocalContext.current.resources,
+                R.mipmap.ic_launcher_foreground, LocalContext.current.theme
+            )?.let { drawable ->
+                val bitmap = Bitmap.createBitmap(
+                    drawable.intrinsicWidth, drawable.intrinsicHeight,
+                    Bitmap.Config.ARGB_8888
+                )
+                val canvas = Canvas(bitmap)
+                drawable.setBounds(0, 0, canvas.width, canvas.height)
+                drawable.draw(canvas)
+                Image(
+                    modifier = Modifier
+                        .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp)
+                        .size(200.dp)
+                        .scale(1.5f),
+                    bitmap = bitmap.asImageBitmap(),
+                    contentDescription = stringResource(id = R.string.APP_NAME_FULL)
+                )
+            }
             Text(
                 modifier = Modifier.fillMaxWidth(),
-                text = stringResource(id = R.string.APP_NAME),
+                text = stringResource(id = R.string.APP_NAME_FULL),
                 textAlign = TextAlign.Center,
                 fontSize = MaterialTheme.typography.titleLarge.fontSize,
                 color = MaterialTheme.colorScheme.onPrimaryContainer
@@ -171,7 +216,7 @@ fun SignInScreen(
                 .padding(innerPadding)
         ) {
             Text(
-                text = "注意事項をここに挿入",
+                buildAnnotatedString { append(annotatedString) },
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp)

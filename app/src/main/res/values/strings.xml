@@ -1,5 +1,6 @@
 <resources>
     <string name="APP_NAME">空室検索</string>
+    <string name="APP_NAME_FULL">NITech空室検索</string>
     <string name="BUILDING_1">1号館</string>
     <string name="BUILDING_2">2号館</string>
     <string name="BUILDING_12">12号館</string>
@@ -40,6 +41,8 @@
     <string name="UI_TEXT_OK">OK</string>
     <string name="UI_TEXT_CANCEL">キャンセル</string>
     <string name="UI_TEXT_THEME_SYSTEM">システム既定のテーマ</string>
+    <string name="UI_TEXT_CONSENT_TOS_AND_PRIVACY_POLICY">"ログインボタンのタップにより%sに同意したとみなされます。"</string>
+    <string name="UI_TEXT_TOS_AND_PRIVACY_POLICY">"利用規約とプライバシーポリシー"</string>
     <string name="UI_CARD_TEXT_VACANTANDMAXROOMS">空室：%d/%d[部屋]</string>
     <string name="UI_BUTTON_TEXT_LOGIN">ログイン</string>
     <string name="UI_BUTTON_TEXT_LOGIN_ATTEMPTING">ログインしています…</string>
