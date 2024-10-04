@@ -12,7 +12,8 @@ plugins {
 android {
     signingConfigs {
         create("NITechVacancyViewer_release") {
-            storeFile = file("C:\\Users\\punyo\\StudioProjects\\KeyStores\\NITechVacancyViewer.jks")
+            storeFile =
+                file("C:\\Users\\punyo\\StudioProjects\\KeyStores\\NITechVacancyViewer_release.jks")
             storePassword = "harukiokuda"
             keyAlias = "release"
             keyPassword = "harukiokuda"
@@ -31,6 +32,7 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+        signingConfig = signingConfigs.getByName("NITechVacancyViewer_release")
 
     }
 

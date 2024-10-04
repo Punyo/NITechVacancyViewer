@@ -74,7 +74,7 @@ private fun VacancyComponentNativeAdImpl(
     ElevatedCard(
         modifier = modifier
             .fillMaxWidth()
-            .heightIn(max = 150.dp),
+            .heightIn(max = 200.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
         Box(modifier = Modifier.padding(start = 8.dp, end = 8.dp, top = 8.dp)) {
@@ -89,7 +89,7 @@ private fun VacancyComponentNativeAdImpl(
                 modifier = modifier
                     .fillMaxHeight()
                     .widthIn(max = 150.dp)
-                    .heightIn(max = 150.dp)
+                    .heightIn(max = 200.dp)
                     .clip(MaterialTheme.shapes.medium),
                 painter = image,
                 contentDescription = null,
