@@ -44,6 +44,11 @@ object RoomLocalDatasource {
         }
     }
 
+    suspend fun clearDB(application: Application) {
+        initializeDB(application)
+        roomDao.deleteAll()
+    }
+
     suspend fun isRoomsDataExist(application: Application, date: LocalDate): Boolean {
         initializeDB(application)
         return roomDao.isDataExistByDate(date.toString()) > 0
