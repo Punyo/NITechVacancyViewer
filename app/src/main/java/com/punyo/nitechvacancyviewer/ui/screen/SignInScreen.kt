@@ -143,12 +143,12 @@ fun SignInScreen(
                         .size(200.dp)
                         .scale(1.5f),
                     bitmap = bitmap.asImageBitmap(),
-                    contentDescription = stringResource(id = R.string.APP_NAME_FULL)
+                    contentDescription = stringResource(id = R.string.APP_NAME_SIGNINSCREEN)
                 )
             }
             Text(
                 modifier = Modifier.fillMaxWidth(),
-                text = stringResource(id = R.string.APP_NAME_FULL),
+                text = stringResource(id = R.string.APP_NAME_SIGNINSCREEN),
                 textAlign = TextAlign.Center,
                 fontSize = MaterialTheme.typography.titleLarge.fontSize,
                 color = MaterialTheme.colorScheme.onPrimaryContainer
@@ -199,7 +199,10 @@ fun SignInScreen(
                     .height(40.dp),
                 enabled = currentState.isSignInButtonEnabled,
                 onClick = {
-                    signInScreenViewModel.onSignInButtonClicked(onSignInSuccess)
+                    signInScreenViewModel.onSignInButtonClicked(
+                        onSignInSuccess,
+                        context.getString(R.string.APP_DEMO_TRIGGER_USERNAME_AND_PASSWORD)
+                    )
                 }) {
                 Text(
                     text = if (currentState.isSignInButtonEnabled) {

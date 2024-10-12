@@ -20,6 +20,42 @@ object RoomLocalDatasource {
     var loadedRoomsData: RoomsDataModel? = null
         private set
 
+    fun getDemoRoomsData(): RoomsDataModel {
+        val rooms = arrayOf(
+            Room(
+                "0111",
+                arrayOf(
+                    EventInfo(
+                        LocalDateTime.now().withHour(9).withMinute(0),
+                        LocalDateTime.now().withHour(10).withMinute(30),
+                        "Demo Event 1"
+                    ),
+                    EventInfo(
+                        LocalDateTime.now().withHour(13).withMinute(0),
+                        LocalDateTime.now().withHour(14).withMinute(30),
+                        "Demo Event 2"
+                    )
+                )
+            ),
+            Room(
+                "0112",
+                arrayOf(
+                    EventInfo(
+                        LocalDateTime.now().withHour(9).withMinute(0),
+                        LocalDateTime.now().withHour(10).withMinute(30),
+                        "Demo Event 3"
+                    ),
+                    EventInfo(
+                        LocalDateTime.now().withHour(13).withMinute(0),
+                        LocalDateTime.now().withHour(14).withMinute(30),
+                        "Demo Event 4"
+                    )
+                )
+            )
+        )
+        return RoomsDataModel(rooms, LocalDate.now())
+    }
+
     suspend fun saveOneWeekRoomsDataToDBFromHTML(
         application: Application,
         html: String,

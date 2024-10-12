@@ -1,6 +1,7 @@
 <resources>
-    <string name="APP_NAME">空室検索</string>
-    <string name="APP_NAME_FULL">NITech空室検索</string>
+    <string name="APP_NAME_LABEL">NITech空室検索 - 名工大の空き教室検索アプリ</string>
+    <string name="APP_NAME_SIGNINSCREEN">NITech空室検索</string>
+    <string name="APP_DEMO_TRIGGER_USERNAME_AND_PASSWORD">demoMode</string>
     <string name="BUILDING_1">1号館</string>
     <string name="BUILDING_2">2号館</string>
     <string name="BUILDING_12">12号館</string>
@@ -63,8 +64,8 @@
     <string name="UI_NAVHOST_COMPOSABLE_ROOMVACANCYSCREEN_PARAMETER2">roomsData</string>
     <string name="UI_NAVHOST_COMPOSABLE_RESERVATIONTABLESCREEN">ReservationTableScreen/{roomData}</string>
     <string name="UI_NAVHOST_COMPOSABLE_RESERVATIONTABLESCREEN_PARAMETER1">roomData</string>
-    <string name="URL_LEGAL_NOTICE">https://punyo.github.io/NITechVacancyViewer_ToSAndPrivacyPolicy/index.html</string>
-    <string name="URL_TOS">https://punyo.github.io/NITechVacancyViewer_ToSAndPrivacyPolicy/tos.html</string>
-    <string name="URL_PRIVACY_POLICY">https://punyo.github.io/NITechVacancyViewer_ToSAndPrivacyPolicy/privacypolicy.html</string>
+    <string name="URL_LEGAL_NOTICE">https://punyo.github.io/legal/navigation.html</string>
+    <string name="URL_TOS">https://punyo.github.io/legal/tos.html</string>
+    <string name="URL_PRIVACY_POLICY">https://punyo.github.io/legal/privacypolicy.html</string>
     <string name="URL_STORE_PAGE">https://play.google.com/store/apps/details?id=com.punyo.nitechvacancyviewer</string>
 </resources>

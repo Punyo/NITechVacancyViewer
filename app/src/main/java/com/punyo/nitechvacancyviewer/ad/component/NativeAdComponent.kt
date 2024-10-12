@@ -1,7 +1,7 @@
 package com.punyo.nitechvacancyviewer.ad.component
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -74,16 +74,22 @@ private fun VacancyComponentNativeAdImpl(
     ElevatedCard(
         modifier = modifier
             .fillMaxWidth()
-            .heightIn(max = 150.dp)
-            .clickable { onClick() },
+            .heightIn(max = 200.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
+        Box(modifier = Modifier.padding(start = 8.dp, end = 8.dp, top = 8.dp)) {
+            Image(
+                painter = painterResource(id = R.drawable.ad_badge),
+                contentDescription = null,
+                contentScale = ContentScale.Crop
+            )
+        }
         Row {
             Image(
                 modifier = modifier
                     .fillMaxHeight()
                     .widthIn(max = 150.dp)
-                    .heightIn(max = 150.dp)
+                    .heightIn(max = 200.dp)
                     .clip(MaterialTheme.shapes.medium),
                 painter = image,
                 contentDescription = null,
