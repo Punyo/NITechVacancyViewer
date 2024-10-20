@@ -44,7 +44,7 @@ object NativeAdLoader {
             if (cachedAds[adUnitId] == null) {
                 cachedAds[adUnitId] = mutableListOf()
             }
-            val cachedAdForCurrentId = cachedAds[adUnitId]!!
+            val cachedAdForCurrentId = cachedAds[adUnitId] ?: mutableListOf()
             if (amount + cachedAdForCurrentId.size <= AdConstants.NATIVE_AD_MAX_CACHE_AMOUNT) {
                 cachedAdForCurrentId.addAll(loadAd(context, adUnitId, amount))
             } else {
