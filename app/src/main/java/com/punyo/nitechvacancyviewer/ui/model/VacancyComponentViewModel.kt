@@ -2,7 +2,6 @@ package com.punyo.nitechvacancyviewer.ui.model
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.gms.ads.nativead.NativeAd
 import com.punyo.nitechvacancyviewer.data.building.BuildingRepository
 import com.punyo.nitechvacancyviewer.data.building.model.Building
 import com.punyo.nitechvacancyviewer.data.room.model.Room
