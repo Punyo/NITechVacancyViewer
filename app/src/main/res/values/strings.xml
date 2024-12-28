@@ -1,6 +1,6 @@
 <resources>
-    <string name="APP_NAME_LABEL">NITechSearch：名工大の講義室使用状況検索アプリ</string>
-    <string name="APP_NAME_SIGNINSCREEN">NITechSearch</string>
+    <string name="APP_NAME_LABEL">NITech空室検索 - 名工大の空き教室検索アプリ</string>
+    <string name="APP_NAME_SIGNINSCREEN">NITech空室検索</string>
     <string name="APP_DEMO_TRIGGER_USERNAME_AND_PASSWORD">demoMode</string>
     <string name="BUILDING_1">1号館</string>
     <string name="BUILDING_2">2号館</string>
@@ -31,7 +31,6 @@
     <string name="UI_TEXT_TOS">利用規約</string>
     <string name="UI_TEXT_PRIVACY_POLICY">プライバシーポリシー</string>
     <string name="UI_TEXT_STORE_PAGE">ストアページ</string>
-    <string name="UI_TEXT_SOURCE_CODE">ソースコード</string>
     <string name="UI_TEXT_LICENSE">ライセンス</string>
     <string name="UI_TEXT_VERSION">バージョン</string>
     <string name="UI_TEXT_SIGN_OUT">ログアウト</string>
@@ -69,5 +68,4 @@
     <string name="URL_TOS">https://punyo.github.io/legal/tos.html</string>
     <string name="URL_PRIVACY_POLICY">https://punyo.github.io/legal/privacypolicy.html</string>
     <string name="URL_STORE_PAGE">https://play.google.com/store/apps/details?id=com.punyo.nitechvacancyviewer</string>
-    <string name="URL_SOURCE_CODE">https://github.com/Punyo/NITechVacancyViewer</string>
 </resources>

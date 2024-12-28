@@ -71,7 +71,6 @@ fun SettingsComponent(
     val privacyPolicyUrl = stringResource(id = R.string.URL_PRIVACY_POLICY)
     val tosUrl = stringResource(id = R.string.URL_TOS)
     val storeUrl = stringResource(id = R.string.URL_STORE_PAGE)
-    val srcUrl = stringResource(id = R.string.URL_SOURCE_CODE)
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -137,15 +136,6 @@ fun SettingsComponent(
             onClick = {
                 val intent = Intent(Intent.ACTION_VIEW)
                 intent.data = Uri.parse(storeUrl)
-                context.startActivity(intent)
-            }
-        )
-        SettingsListItem(
-            title = R.string.UI_TEXT_SOURCE_CODE,
-            icon = R.drawable.outline_launch_24,
-            onClick = {
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.data = Uri.parse(srcUrl)
                 context.startActivity(intent)
             }
         )
