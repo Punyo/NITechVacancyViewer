@@ -31,6 +31,7 @@
     <string name="UI_TEXT_TOS">利用規約</string>
     <string name="UI_TEXT_PRIVACY_POLICY">プライバシーポリシー</string>
     <string name="UI_TEXT_STORE_PAGE">ストアページ</string>
+    <string name="UI_TEXT_SOURCE_CODE">ソースコード</string>
     <string name="UI_TEXT_LICENSE">ライセンス</string>
     <string name="UI_TEXT_VERSION">バージョン</string>
     <string name="UI_TEXT_SIGN_OUT">ログアウト</string>
@@ -68,4 +69,5 @@
     <string name="URL_TOS">https://punyo.github.io/legal/tos.html</string>
     <string name="URL_PRIVACY_POLICY">https://punyo.github.io/legal/privacypolicy.html</string>
     <string name="URL_STORE_PAGE">https://play.google.com/store/apps/details?id=com.punyo.nitechvacancyviewer</string>
+    <string name="URL_SOURCE_CODE">https://github.com/Punyo/NITechVacancyViewer</string>
 </resources>
