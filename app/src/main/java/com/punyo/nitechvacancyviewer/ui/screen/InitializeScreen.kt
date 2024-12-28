@@ -33,7 +33,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.punyo.nitechvacancyviewer.R
-import com.punyo.nitechvacancyviewer.ad.AppOpenAdLoader
 import com.punyo.nitechvacancyviewer.data.room.RoomRepository
 import com.punyo.nitechvacancyviewer.ui.component.CampusSquareWebViewComponent
 import com.punyo.nitechvacancyviewer.ui.component.LoadingProgressIndicatorComponent
@@ -71,7 +70,6 @@ fun InitializeScreen(
     LaunchedEffect(key1 = currentState.signedInWithSavedCredentialsOrAlreadySignedIn) {
         currentState.signedInWithSavedCredentialsOrAlreadySignedIn?.let {
             if (it) {
-                AppOpenAdLoader.showAdIfAvailable(context as Activity)
                 initializeScreenViewModel.activateCampusSquareWebView()
             } else {
                 onFailedSignInWithSavedCredentials()
