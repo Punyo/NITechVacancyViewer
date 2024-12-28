@@ -12,6 +12,7 @@ import com.google.crypto.tink.aead.AeadConfig
 import com.google.crypto.tink.integration.android.AndroidKeysetManager
 import com.punyo.nitechvacancyviewer.data.auth.model.UserCredentialsDataModel
 import kotlinx.coroutines.flow.first
+import java.security.InvalidKeyException
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
@@ -36,6 +37,8 @@ object UserCredentialsLocalDataSource {
                 null
             }
         } catch (e: NoSuchElementException) {
+            return null
+        } catch (e: InvalidKeyException) {
             return null
         }
     }

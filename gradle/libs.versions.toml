@@ -1,7 +1,7 @@
 [versions]
 agp = "8.6.1"
 coilCompose = "2.7.0"
-converterGson = "2.9.0"
+converterGson = "2.11.0"
 datastorePreferences = "1.1.1"
 firebaseAnalyticsKtx = "22.1.2"
 firebaseCrashlyticsGradle = "3.0.2"
@@ -14,19 +14,19 @@ junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 lifecycleRuntimeKtx = "2.8.6"
 activityCompose = "1.9.2"
-composeBom = "2024.09.02"
+composeBom = "2024.09.03"
 lifecycleRuntimeComposeAndroid = "2.8.6"
-navigationCompose = "2.8.1"
+navigationCompose = "2.8.2"
 ossLicensesPlugin = "0.10.6"
 playServicesAds = "23.4.0"
-retrofit = "2.9.0"
+retrofit = "2.11.0"
 room = "2.6.1"
 play-services-licenses = "17.1.0"
 tinkAndroid = "1.15.0"
 
 
 [libraries]
-accompanist-flowlayout = { module = "com.google.accompanist:accompanist-flowlayout", version = "0.34.0" }
+accompanist-flowlayout = { module = "com.google.accompanist:accompanist-flowlayout", version = "0.36.0" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleRuntimeKtx" }
