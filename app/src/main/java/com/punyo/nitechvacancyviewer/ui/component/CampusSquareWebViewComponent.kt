@@ -1,7 +1,6 @@
 package com.punyo.nitechvacancyviewer.ui.component
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.view.View
 import android.webkit.CookieManager
 import android.webkit.JavascriptInterface
@@ -85,7 +84,6 @@ class CampusSquareWebViewClient(
         //URLにflowExecutionKeyが含まれている=日表示の「施設利用状況参照」ページが開かれている
         //週表示の「施設利用状況参照」ページへのURLを抽出する
         url?.let {
-            Log.d("CampusSquareWebViewClient", "$url loaded on CampusSquareWebViewComponent")
             if (url == MAIN_MENU_URL) {
                 view?.loadUrl(FLOWEXECUTIONKEY_URL)
             }
@@ -99,7 +97,6 @@ class CampusSquareWebViewClient(
         view: WebView?,
         request: WebResourceRequest?
     ): WebResourceResponse? {
-        Log.d("CampusSquareWebViewClient", "shouldInterceptRequest: ${request?.url}")
         return super.shouldInterceptRequest(view, request)
     }
 
