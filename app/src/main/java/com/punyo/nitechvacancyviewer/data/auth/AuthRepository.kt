@@ -8,8 +8,8 @@ import com.punyo.nitechvacancyviewer.data.auth.source.AuthNetworkDataSource
 import com.punyo.nitechvacancyviewer.data.auth.source.UserCredentialsLocalDataSource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import java.security.AccessControlException
 import kotlinx.coroutines.async
+import java.security.AccessControlException
 
 object AuthRepository {
     private var currentUserName: String? = null
@@ -17,7 +17,10 @@ object AuthRepository {
     var currentToken: String? = null
         private set
 
-    private fun setCurrentUser(userName: String, password: String) {
+    private fun setCurrentUser(
+        userName: String,
+        password: String,
+    ) {
         currentUserName = userName
         currentPassword = password
     }
@@ -28,12 +31,16 @@ object AuthRepository {
         } ?: return AuthResultStatus.CREDENTIALS_NOT_FOUND
     }
 
-    suspend fun signIn(context: Context, userName: String, password: String): AuthResultStatus {
+    suspend fun signIn(
+        context: Context,
+        userName: String,
+        password: String,
+    ): AuthResultStatus {
         val result = acquireToken(userName, password)
         if (result == AuthResultStatus.SUCCESS) {
             UserCredentialsLocalDataSource.saveCredentials(
                 context,
-                UserCredentialsDataModel(userName, password)
+                UserCredentialsDataModel(userName, password),
             )
         }
         return result
@@ -46,13 +53,16 @@ object AuthRepository {
         currentPassword = null
     }
 
-    private suspend fun acquireToken(userName: String, password: String): AuthResultStatus {
+    private suspend fun acquireToken(
+        userName: String,
+        password: String,
+    ): AuthResultStatus {
         try {
             val token =
                 CoroutineScope(Dispatchers.IO).async {
                     AuthNetworkDataSource.getToken(
                         userName,
-                        password
+                        password,
                     )
                 }
             val result = token.await()
@@ -81,6 +91,6 @@ object AuthRepository {
         INVALID_CREDENTIALS,
         NETWORK_ERROR,
         CREDENTIALS_NOT_FOUND,
-        UNKNOWN_ERROR
+        UNKNOWN_ERROR,
     }
 }

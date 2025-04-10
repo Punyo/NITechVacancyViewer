@@ -9,18 +9,26 @@ import java.time.Duration
 import kotlin.jvm.Throws
 
 object AuthNetworkDataSource {
-    private val retrofit = Retrofit.Builder()
-        .baseUrl("https://slb4oam.ict.nitech.ac.jp/")
-        .addConverterFactory(GsonConverterFactory.create())
-        .client(
-            OkHttpClient.Builder().writeTimeout(Duration.ZERO).readTimeout(Duration.ZERO).build()
-        )
-        .build()
+    private val retrofit =
+        Retrofit
+            .Builder()
+            .baseUrl("https://slb4oam.ict.nitech.ac.jp/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(
+                OkHttpClient
+                    .Builder()
+                    .writeTimeout(Duration.ZERO)
+                    .readTimeout(Duration.ZERO)
+                    .build(),
+            ).build()
 
     private val authService = retrofit.create(NITechAuthService::class.java)
 
     @Throws(AccessControlException::class, IOException::class)
-    suspend fun getToken(userName: String, password: String): String? {
+    suspend fun getToken(
+        userName: String,
+        password: String,
+    ): String? {
         val call = authService.getToken(userName, password)
         if (call.isSuccessful && call.body() != null) {
             return call.body()!!.tokenId

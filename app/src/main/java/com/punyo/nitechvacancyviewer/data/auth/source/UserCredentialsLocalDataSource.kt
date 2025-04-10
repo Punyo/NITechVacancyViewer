@@ -1,6 +1,7 @@
 package com.punyo.nitechvacancyviewer.data.auth.source
 
 import android.content.Context
+import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -12,7 +13,7 @@ import com.google.crypto.tink.aead.AeadConfig
 import com.google.crypto.tink.integration.android.AndroidKeysetManager
 import com.punyo.nitechvacancyviewer.data.auth.model.UserCredentialsDataModel
 import kotlinx.coroutines.flow.first
-import java.security.InvalidKeyException
+import java.lang.Exception
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
@@ -38,12 +39,17 @@ object UserCredentialsLocalDataSource {
             }
         } catch (e: NoSuchElementException) {
             return null
-        } catch (e: InvalidKeyException) {
+        } catch (e: Exception) {
+            Log.e("UserCredentialsLocalDataSource", "Loading credentials failed: ${e.message}\nClear existing credentials...")
+            clearCredentials(context)
             return null
         }
     }
 
-    suspend fun saveCredentials(context: Context, userCredentials: UserCredentialsDataModel) {
+    suspend fun saveCredentials(
+        context: Context,
+        userCredentials: UserCredentialsDataModel,
+    ) {
         val dataStore: DataStore<Preferences> = context.dataStore
         val encryptedCredentials = encryptCredentials(context, userCredentials)
         dataStore.edit { preferences ->
@@ -63,7 +69,7 @@ object UserCredentialsLocalDataSource {
     @OptIn(ExperimentalEncodingApi::class)
     private fun encryptCredentials(
         context: Context,
-        credential: UserCredentialsDataModel
+        credential: UserCredentialsDataModel,
     ): UserCredentialsDataModel {
         if (::aead.isInitialized.not()) {
             initializeAead(context)
@@ -72,14 +78,14 @@ object UserCredentialsLocalDataSource {
         val encryptedPassword = aead.encrypt(credential.password.toByteArray(), null)
         return UserCredentialsDataModel(
             Base64.encode(encryptedUserName),
-            Base64.encode(encryptedPassword)
+            Base64.encode(encryptedPassword),
         )
     }
 
     @OptIn(ExperimentalEncodingApi::class)
     private fun decryptCredentials(
         context: Context,
-        credential: UserCredentialsDataModel
+        credential: UserCredentialsDataModel,
     ): UserCredentialsDataModel {
         if (::aead.isInitialized.not()) {
             initializeAead(context)
@@ -88,23 +94,23 @@ object UserCredentialsLocalDataSource {
         val decryptedPassword = aead.decrypt(Base64.decode(credential.password), null)
         return UserCredentialsDataModel(
             decryptedUserName.toString(Charsets.UTF_8),
-            decryptedPassword.toString(Charsets.UTF_8)
+            decryptedPassword.toString(Charsets.UTF_8),
         )
     }
 
     private fun initializeAead(context: Context) {
         AeadConfig.register()
-        aead = AndroidKeysetManager.Builder()
-            .withSharedPref(
-                context,
-                KEYSET_NAME,
-                PREF_FILE_NAME
-            )
-            .withKeyTemplate(KeyTemplates.get("AES256_GCM"))
-            .withMasterKeyUri("android-keystore://$KEYSTORE_ALIAS")
-            .build()
-            .keysetHandle
-            .getPrimitive(Aead::class.java)
+        aead =
+            AndroidKeysetManager
+                .Builder()
+                .withSharedPref(
+                    context,
+                    KEYSET_NAME,
+                    PREF_FILE_NAME,
+                ).withKeyTemplate(KeyTemplates.get("AES256_GCM"))
+                .withMasterKeyUri("android-keystore://$KEYSTORE_ALIAS")
+                .build()
+                .keysetHandle
+                .getPrimitive(Aead::class.java)
     }
-
 }

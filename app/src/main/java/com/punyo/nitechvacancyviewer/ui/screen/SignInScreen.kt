@@ -1,7 +1,6 @@
 package com.punyo.nitechvacancyviewer.ui.screen
 
 import android.app.Application
-import android.graphics.Bitmap
 import android.graphics.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -43,6 +42,7 @@ import androidx.compose.ui.text.withLink
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.createBitmap
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.punyo.nitechvacancyviewer.R
@@ -53,43 +53,47 @@ import com.punyo.nitechvacancyviewer.ui.theme.AppTheme
 @Composable
 fun SignInScreen(
     onSignInSuccess: () -> Unit = {},
-    signInScreenViewModel: SignInScreenViewModel = viewModel(
-        factory = SignInScreenViewModel.Factory(
-            LocalContext.current.applicationContext as Application
-        )
-    )
+    signInScreenViewModel: SignInScreenViewModel =
+        viewModel(
+            factory =
+                SignInScreenViewModel.Factory(
+                    LocalContext.current.applicationContext as Application,
+                ),
+        ),
 ) {
     val currentState by signInScreenViewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
-    val annotatedString = buildAnnotatedString {
-        append(
-            stringResource(id = R.string.UI_TEXT_CONSENT_TOS_AND_PRIVACY_POLICY).replaceAfter(
-                "%s",
-                ""
-            ).replace("%s", "")
-        )
-        withLink(
-            LinkAnnotation.Url(
-                stringResource(id = R.string.URL_LEGAL_NOTICE),
-                TextLinkStyles(style = SpanStyle(color = Color.Blue))
+    val annotatedString =
+        buildAnnotatedString {
+            append(
+                stringResource(id = R.string.UI_TEXT_CONSENT_TOS_AND_PRIVACY_POLICY)
+                    .replaceAfter(
+                        "%s",
+                        "",
+                    ).replace("%s", ""),
             )
-        ) {
-            append(stringResource(id = R.string.UI_TEXT_TOS_AND_PRIVACY_POLICY))
+            withLink(
+                LinkAnnotation.Url(
+                    stringResource(id = R.string.URL_LEGAL_NOTICE),
+                    TextLinkStyles(style = SpanStyle(color = Color.Blue)),
+                ),
+            ) {
+                append(stringResource(id = R.string.UI_TEXT_TOS_AND_PRIVACY_POLICY))
+            }
+            append(
+                stringResource(id = R.string.UI_TEXT_CONSENT_TOS_AND_PRIVACY_POLICY)
+                    .replaceBefore(
+                        "%s",
+                        "",
+                    ).replace("%s", ""),
+            )
         }
-        append(
-            stringResource(id = R.string.UI_TEXT_CONSENT_TOS_AND_PRIVACY_POLICY).replaceBefore(
-                "%s",
-                ""
-            ).replace("%s", "")
-        )
-    }
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         containerColor = MaterialTheme.colorScheme.primaryContainer,
-        snackbarHost = { SnackbarHost(snackbarHostState) }
-    )
-    { innerPadding ->
+        snackbarHost = { SnackbarHost(snackbarHostState) },
+    ) { innerPadding ->
         LaunchedEffect(key1 = currentState.signInResult) {
             currentState.signInResult?.let {
                 var failReason = context.getString(R.string.ERROR_PREFIX_SIGN_IN_FAILED)
@@ -120,43 +124,46 @@ fun SignInScreen(
             }
         }
         Column(
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize(),
+            modifier =
+                Modifier
+                    .padding(innerPadding)
+                    .fillMaxSize(),
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            ResourcesCompat.getDrawable(
-                LocalContext.current.resources,
-                R.mipmap.ic_launcher_foreground, LocalContext.current.theme
-            )?.let { drawable ->
-                val bitmap = Bitmap.createBitmap(
-                    drawable.intrinsicWidth, drawable.intrinsicHeight,
-                    Bitmap.Config.ARGB_8888
-                )
-                val canvas = Canvas(bitmap)
-                drawable.setBounds(0, 0, canvas.width, canvas.height)
-                drawable.draw(canvas)
-                Image(
-                    modifier = Modifier
-                        .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp)
-                        .size(200.dp)
-                        .scale(1.5f),
-                    bitmap = bitmap.asImageBitmap(),
-                    contentDescription = stringResource(id = R.string.APP_NAME_SIGNINSCREEN)
-                )
-            }
+            ResourcesCompat
+                .getDrawable(
+                    LocalContext.current.resources,
+                    R.mipmap.ic_launcher_foreground,
+                    LocalContext.current.theme,
+                )?.let { drawable ->
+                    val bitmap =
+                        createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight)
+                    val canvas = Canvas(bitmap)
+                    drawable.setBounds(0, 0, canvas.width, canvas.height)
+                    drawable.draw(canvas)
+                    Image(
+                        modifier =
+                            Modifier
+                                .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp)
+                                .size(200.dp)
+                                .scale(1.5f),
+                        bitmap = bitmap.asImageBitmap(),
+                        contentDescription = stringResource(id = R.string.APP_NAME_SIGNINSCREEN),
+                    )
+                }
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 text = stringResource(id = R.string.APP_NAME_SIGNINSCREEN),
                 textAlign = TextAlign.Center,
                 fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                color = MaterialTheme.colorScheme.onPrimaryContainer
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
             )
             TextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp),
                 value = currentState.userName,
                 label = { Text(text = stringResource(id = R.string.UI_TEXTFIELD_TEXT_USERNAME)) },
                 singleLine = true,
@@ -166,16 +173,19 @@ fun SignInScreen(
                         Text(stringResource(id = R.string.UI_TEXTFIELD_SUPPORTINGTEXT_EMPTY))
                     }
                 },
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Uri,
-                    imeAction = ImeAction.Next,
-                ),
+                keyboardOptions =
+                    KeyboardOptions(
+                        keyboardType = KeyboardType.Uri,
+                        imeAction = ImeAction.Next,
+                    ),
                 placeholder = { Text(text = stringResource(id = R.string.UI_TEXTFIELD_TEXT_USERNAME_HINT)) },
-                onValueChange = { signInScreenViewModel.setUserName(it) })
+                onValueChange = { signInScreenViewModel.setUserName(it) },
+            )
             TextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp),
                 value = currentState.password,
                 label = { Text(stringResource(id = R.string.UI_TEXTFIELD_TEXT_PASSWORD)) },
                 singleLine = true,
@@ -186,47 +196,53 @@ fun SignInScreen(
                         Text(stringResource(id = R.string.UI_TEXTFIELD_SUPPORTINGTEXT_EMPTY))
                     }
                 },
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Password,
-                    imeAction = ImeAction.Done,
-                ),
+                keyboardOptions =
+                    KeyboardOptions(
+                        keyboardType = KeyboardType.Password,
+                        imeAction = ImeAction.Done,
+                    ),
                 placeholder = { Text(stringResource(id = R.string.UI_TEXTFIELD_TEXT_PASSWORD_HINT)) },
-                onValueChange = { signInScreenViewModel.setPassword(it) })
+                onValueChange = { signInScreenViewModel.setPassword(it) },
+            )
             Button(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp)
-                    .height(40.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp)
+                        .height(40.dp),
                 enabled = currentState.isSignInButtonEnabled,
                 onClick = {
                     signInScreenViewModel.onSignInButtonClicked(
                         onSignInSuccess,
-                        context.getString(R.string.APP_DEMO_TRIGGER_USERNAME_AND_PASSWORD)
+                        context.getString(R.string.APP_DEMO_TRIGGER_USERNAME_AND_PASSWORD),
                     )
-                }) {
+                },
+            ) {
                 Text(
-                    text = if (currentState.isSignInButtonEnabled) {
-                        stringResource(id = R.string.UI_BUTTON_TEXT_LOGIN)
-                    } else {
-                        stringResource(id = R.string.UI_BUTTON_TEXT_LOGIN_ATTEMPTING)
-                    }
+                    text =
+                        if (currentState.isSignInButtonEnabled) {
+                            stringResource(id = R.string.UI_BUTTON_TEXT_LOGIN)
+                        } else {
+                            stringResource(id = R.string.UI_BUTTON_TEXT_LOGIN_ATTEMPTING)
+                        },
                 )
             }
         }
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
         ) {
             Text(
                 buildAnnotatedString { append(annotatedString) },
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp)
+                modifier =
+                    Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp),
             )
         }
     }
-
 }
 
 @Preview(showBackground = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_NO)
