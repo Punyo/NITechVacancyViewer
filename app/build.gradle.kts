@@ -1,5 +1,6 @@
 
 
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -29,6 +30,15 @@ android {
         buildConfig = true
     }
 
+    signingConfigs {
+        create("release") {
+            keyAlias = System.getenv("RELEASE_KEYSTORE_ALIAS")
+            keyPassword = System.getenv("RELEASE_KEYSTORE_KEY_PASSWORD")
+            storeFile =
+                file("./app/release.keystore")
+            storePassword = System.getenv("RELEASE_KEYSTORE_STORE_PASSWORD")
+        }
+    }
     buildTypes {
         release {
             isMinifyEnabled = true
@@ -37,19 +47,10 @@ android {
                 "proguard-rules.pro",
             )
             versionNameSuffix = "-release"
+            signingConfig = signingConfigs.getByName("release")
         }
         debug {
             versionNameSuffix = "-debug"
-        }
-    }
-
-    signingConfigs {
-        create("release") {
-            storeFile =
-                file("./app/release.keystore")
-            storePassword = System.getenv("RELEASE_KEYSTORE_STORE_PASSWORD")
-            keyAlias = System.getenv("RELEASE_KEYSTORE_ALIAS")
-            keyPassword = System.getenv("RELEASE_KEYSTORE_KEY_PASSWORD")
         }
     }
 
