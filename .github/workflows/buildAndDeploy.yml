@@ -27,7 +27,7 @@ jobs:
       run: ./gradlew build
       
     - name: Decode Keystore
-      run: echo ${{ secrets.B64_ENCORDED_KEYSTORE }} | base64 --decode > ${{ test.keystore }}
+      run: echo ${{ secrets.B64_ENCORDED_KEYSTORE }} | base64 --decode > ./app/release.keystore
 
     - name: Generate AAB
       run: ./gradlew :app:bundleRelease
@@ -39,7 +39,7 @@ jobs:
       id: deploy
       uses: r0adkll/upload-google-play@v1.0.15
       with:
-         serviceAccountJsonPlainText: ${{ SERVICE_ACCOUNT_JSON }}
+         serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
          packageName: com.punyo.nitechvacancyviewer
          releaseFile: app/build/outputs/bundle/release/app-release.aab
          track: production
