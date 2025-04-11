@@ -14,6 +14,5 @@ buildscript {
     }
     dependencies {
         classpath(libs.oss.licenses.plugin)
-        classpath(libs.firebase.crashlytics.gradle)
     }
 }
