@@ -3,7 +3,6 @@ agp = "8.6.1"
 coilCompose = "2.7.0"
 converterGson = "2.11.0"
 datastorePreferences = "1.1.1"
-firebaseCrashlyticsGradle = "3.0.2"
 jsoup = "1.18.1"
 kotlin = "2.0.20"
 coreKtx = "1.13.1"
@@ -32,7 +31,6 @@ androidx_room_compiler = { module = "androidx.room:room-compiler", version.ref =
 androidx_room_ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
-firebase-crashlytics-gradle = { module = "com.google.firebase:firebase-crashlytics-gradle", version.ref = "firebaseCrashlyticsGradle" }
 jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
