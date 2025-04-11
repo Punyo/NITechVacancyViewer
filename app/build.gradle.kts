@@ -35,7 +35,7 @@ android {
             keyAlias = System.getenv("RELEASE_KEYSTORE_ALIAS")
             keyPassword = System.getenv("RELEASE_KEYSTORE_KEY_PASSWORD")
             storeFile =
-                file("./app/release.keystore")
+                file("./release.keystore")
             storePassword = System.getenv("RELEASE_KEYSTORE_STORE_PASSWORD")
         }
     }
