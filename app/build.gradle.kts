@@ -14,8 +14,8 @@ android {
         applicationId = "com.punyo.nitechvacancyviewer"
         minSdk = 26
         targetSdk = 34
-        versionCode = 7
-        versionName = "1.3"
+        versionCode = 8
+        versionName = "1.4"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -31,11 +31,11 @@ android {
             isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
             versionNameSuffix = "-release"
         }
-        getByName("debug") {
+        debug {
             versionNameSuffix = "-debug"
         }
     }
@@ -72,7 +72,7 @@ dependencies {
     implementation(libs.play.services.licenses)
     implementation(libs.androidx.core.ktx)
     implementation(libs.coil.compose)
-    implementation (libs.tink.android)
+    implementation(libs.tink.android)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
