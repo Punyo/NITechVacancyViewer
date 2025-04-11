@@ -1,3 +1,5 @@
+
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -26,6 +28,7 @@ android {
     buildFeatures {
         buildConfig = true
     }
+
     buildTypes {
         release {
             isMinifyEnabled = true
@@ -39,6 +42,17 @@ android {
             versionNameSuffix = "-debug"
         }
     }
+
+    signingConfigs {
+        create("release") {
+            storeFile =
+                file("./app/release.keystore")
+            storePassword = System.getenv("KEY_PASSWORD")
+            keyAlias = System.getenv("KEY_ALIAS")
+            keyPassword = System.getenv("KEY_STORE_PASSWORD")
+        }
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
