@@ -12,7 +12,7 @@ plugins {
 
 android {
     namespace = "com.punyo.nitechvacancyviewer"
-    compileSdk = 34
+    compileSdk = 35
     defaultConfig {
         applicationId = "com.punyo.nitechvacancyviewer"
         minSdk = 26
