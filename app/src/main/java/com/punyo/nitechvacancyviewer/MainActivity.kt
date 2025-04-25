@@ -9,11 +9,8 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    private var showAdinOnResume = false
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        showAdinOnResume = false
         enableEdgeToEdge()
         setContent {
             MainNavigation()

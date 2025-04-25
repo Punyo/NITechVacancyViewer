@@ -5,9 +5,9 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.punyo.nitechvacancyviewer.application.CommonDateTimeFormater
 import com.punyo.nitechvacancyviewer.data.room.RoomRepository
 import com.punyo.nitechvacancyviewer.data.room.model.Room
-import com.punyo.nitechvacancyviewer.ui.CommonDateTimeFormater
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,8 +16,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 
-class MainScreenViewModel(application: Application, private val roomRepository: RoomRepository) :
-    AndroidViewModel(application) {
+class MainScreenViewModel(
+    application: Application,
+    private val roomRepository: RoomRepository,
+) : AndroidViewModel(application) {
     private val state = MutableStateFlow(MainScreenUiState())
     val uiState: StateFlow<MainScreenUiState> = state.asStateFlow()
 
@@ -41,7 +43,7 @@ class MainScreenViewModel(application: Application, private val roomRepository: 
                 state.value =
                     state.value.copy(
                         roomsData = roomsData.rooms,
-                        lastVacancyUpdateTime = LocalDateTime.now()
+                        lastVacancyUpdateTime = LocalDateTime.now(),
                     )
             } else {
                 state.value = state.value.copy(isTodayRoomsDataNotFoundOnDB = true)
@@ -49,12 +51,12 @@ class MainScreenViewModel(application: Application, private val roomRepository: 
         }
     }
 
-    fun getLastUpdateTimeString(): String {
-        return state.value.lastVacancyUpdateTime!!.format(CommonDateTimeFormater.formatter)
-    }
+    fun getLastUpdateTimeString(): String = state.value.lastVacancyUpdateTime!!.format(CommonDateTimeFormater.formatter)
 
-    class Factory(private val context: Application, private val roomRepository: RoomRepository) :
-        ViewModelProvider.Factory {
+    class Factory(
+        private val context: Application,
+        private val roomRepository: RoomRepository,
+    ) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(MainScreenViewModel::class.java)) {
                 @Suppress("UNCHECKED_CAST")
@@ -70,5 +72,5 @@ data class MainScreenUiState(
     val isRefreshVacancy: Boolean = false,
     val isTodayRoomsDataNotFoundOnDB: Boolean = false,
     val lastVacancyUpdateTime: LocalDateTime? = null,
-    val roomsData: Array<Room>? = null
+    val roomsData: Array<Room>? = null,
 )

@@ -11,8 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import com.punyo.nitechvacancyviewer.GsonInstance
 import com.punyo.nitechvacancyviewer.R
+import com.punyo.nitechvacancyviewer.application.GsonInstance
 import com.punyo.nitechvacancyviewer.data.room.model.Room
 import com.punyo.nitechvacancyviewer.ui.model.ReservationRoomListComponentViewModel
 
@@ -21,7 +21,7 @@ fun RoomReservationListComponent(
     modifier: Modifier = Modifier,
     roomsData: Array<Room>,
     navHostController: NavHostController,
-    reservationRoomListComponentViewModel: ReservationRoomListComponentViewModel = viewModel()
+    reservationRoomListComponentViewModel: ReservationRoomListComponentViewModel = viewModel(),
 ) {
     val navigationRoute = stringResource(R.string.UI_NAVHOST_COMPOSABLE_RESERVATIONTABLESCREEN)
     val navigationParam1 =
@@ -31,28 +31,28 @@ fun RoomReservationListComponent(
             val room = roomsData[index]
             val eventsInfo = room.eventsInfo
             ListItem(
-                modifier = Modifier.clickable {
-                    navHostController.navigate(
-                        navigationRoute.replace(
-                            "{${navigationParam1}}",
-                            GsonInstance.gson.toJson(room)
+                modifier =
+                    Modifier.clickable {
+                        navHostController.navigate(
+                            navigationRoute.replace(
+                                "{$navigationParam1}",
+                                GsonInstance.gson.toJson(room),
+                            ),
                         )
-                    )
-                },
+                    },
                 headlineContent = { Text(text = room.roomDisplayName) },
                 supportingContent = {
                     if (eventsInfo.isNotEmpty()) {
                         Text(
-                            text = stringResource(R.string.UI_LISTITEM_TEXT_RESERVATION_NUM).format(eventsInfo.size)
+                            text = stringResource(R.string.UI_LISTITEM_TEXT_RESERVATION_NUM).format(eventsInfo.size),
                         )
                     } else {
                         Text(text = stringResource(R.string.UI_LISTITEM_TEXT_NO_RESERVATION))
                     }
-                }
+                },
             )
             if (index != roomsData.size - 1) HorizontalDivider()
         }
         item { HorizontalDivider() }
     }
-
 }
