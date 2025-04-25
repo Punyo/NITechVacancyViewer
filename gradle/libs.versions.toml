@@ -4,12 +4,16 @@ coilCompose = "2.7.0"
 converterGson = "2.11.0"
 datastorePreferences = "1.1.4"
 jsoup = "1.18.1"
+daggerHilt = "2.51.1"
+ksp = "2.0.21-1.0.27"
 kotlin = "2.0.21"
 coreKtx = "1.16.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 lifecycleRuntimeKtx = "2.8.7"
+hiltAndroid = "2.51.1"
+hiltAndroidCompiler = "2.51.1"
 activityCompose = "1.10.1"
 composeBom = "2025.04.01"
 lifecycleRuntimeComposeAndroid = "2.8.7"
@@ -26,9 +30,9 @@ accompanist-flowlayout = { module = "com.google.accompanist:accompanist-flowlayo
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleRuntimeKtx" }
-androidx_room_runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
-androidx_room_compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
-androidx_room_ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
 jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
@@ -51,10 +55,15 @@ oss-licenses-plugin = { module = "com.google.android.gms:oss-licenses-plugin", v
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 play-services-licenses = { module = "com.google.android.gms:play-services-oss-licenses", version.ref = "play-services-licenses" }
 tink-android = { module = "com.google.crypto.tink:tink-android", version.ref = "tinkAndroid" }
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
+hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroidCompiler" }
 
 [plugins]
 
 android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-androidx_room = { id = "androidx.room", version.ref = "room" }
+jetbrains-kotlin-plugin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+androidx-room = { id = "androidx.room", version.ref = "room" }
+google-dagger-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "daggerHilt" }
+google-android-gms-oss-licenses-plugin = { id = "com.google.android.gms.oss-licenses-plugin", version.ref = "ossLicensesPlugin" }
+google-devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
