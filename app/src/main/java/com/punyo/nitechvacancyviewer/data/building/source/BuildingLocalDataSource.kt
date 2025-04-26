@@ -7,7 +7,7 @@ import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.InputStream
 
-class BuildingLocalDatasource {
+class BuildingLocalDataSource {
     suspend fun getBuildingsDataFromJson(inputStream: InputStream): BuildingsDataModel =
         withContext(Dispatchers.IO) {
             val bufferedReader = BufferedReader(inputStream.reader())
