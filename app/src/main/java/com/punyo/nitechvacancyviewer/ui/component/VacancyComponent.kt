@@ -29,13 +29,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.punyo.nitechvacancyviewer.R
 import com.punyo.nitechvacancyviewer.application.GsonInstance
-import com.punyo.nitechvacancyviewer.data.building.BuildingRepository
-import com.punyo.nitechvacancyviewer.data.building.source.BuildingLocalDatasource
 import com.punyo.nitechvacancyviewer.data.room.model.Room
 import com.punyo.nitechvacancyviewer.ui.model.VacancyComponentViewModel
 import java.time.LocalDateTime
@@ -50,13 +48,7 @@ fun VacancyComponent(
     isRefreshVacancy: Boolean,
     lastVacancyRefreshTimeString: String,
     roomsData: Array<Room>,
-    viewModel: VacancyComponentViewModel =
-        viewModel(
-            factory =
-                VacancyComponentViewModel.Factory(
-                    buildingRepository = BuildingRepository(BuildingLocalDatasource()),
-                ),
-        ),
+    viewModel: VacancyComponentViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
     val currentState by viewModel.uiState.collectAsStateWithLifecycle()
