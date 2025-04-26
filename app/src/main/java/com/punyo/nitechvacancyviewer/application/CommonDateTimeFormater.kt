@@ -1,4 +1,4 @@
-package com.punyo.nitechvacancyviewer.ui
+package com.punyo.nitechvacancyviewer.application
 
 import java.time.format.DateTimeFormatter
 

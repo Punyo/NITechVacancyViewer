@@ -1,18 +1,16 @@
-
-
-
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.jetbrains.kotlin.android)
-    alias(libs.plugins.compose.compiler)
     alias(libs.plugins.androidx.room)
-    id("com.google.android.gms.oss-licenses-plugin")
-    id("com.google.devtools.ksp") version "2.0.20-1.0.25"
+    alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.jetbrains.kotlin.plugin.compose)
+    alias(libs.plugins.google.dagger.hilt.android)
+    alias(libs.plugins.google.devtools.ksp)
+    alias(libs.plugins.google.android.gms.oss.licenses.plugin)
 }
 
 android {
     namespace = "com.punyo.nitechvacancyviewer"
-    compileSdk = 34
+    compileSdk = 35
     defaultConfig {
         applicationId = "com.punyo.nitechvacancyviewer"
         minSdk = 26
@@ -82,13 +80,7 @@ room {
 }
 dependencies {
     implementation(libs.androidx.room.runtime)
-    ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
-    implementation(libs.play.services.licenses)
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.coil.compose)
-    implementation(libs.tink.android)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
@@ -96,18 +88,32 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
-    implementation(libs.accompanist.flowlayout)
-    implementation(libs.jsoup)
+    implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.datastore.preferences)
-    implementation(libs.retrofit)
-    implementation(libs.converter.gson)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.runtime.compose.android)
     implementation(libs.androidx.navigation.compose)
+
+    implementation(libs.play.services.licenses)
+    implementation(libs.coil.compose)
+    implementation(libs.tink.android)
+    implementation(libs.accompanist.flowlayout)
+    implementation(libs.jsoup)
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.hilt.android)
+    implementation(libs.hilt.android.navigation.compose)
+
+    ksp(libs.androidx.room.compiler)
+    ksp(libs.hilt.android.compiler)
+
     testImplementation(libs.junit)
+
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
+
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 }

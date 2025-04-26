@@ -1,7 +1,7 @@
 package com.punyo.nitechvacancyviewer.data.room.source
 
 import android.app.Application
-import com.punyo.nitechvacancyviewer.GsonInstance
+import com.punyo.nitechvacancyviewer.application.GsonInstance
 import com.punyo.nitechvacancyviewer.data.room.model.EventInfo
 import com.punyo.nitechvacancyviewer.data.room.model.LectureRoomDao
 import com.punyo.nitechvacancyviewer.data.room.model.LectureRoomDatabase
@@ -21,38 +21,39 @@ object RoomLocalDatasource {
         private set
 
     fun getDemoRoomsData(): RoomsDataModel {
-        val rooms = arrayOf(
-            Room(
-                "0111",
-                arrayOf(
-                    EventInfo(
-                        LocalDateTime.now().withHour(9).withMinute(0),
-                        LocalDateTime.now().withHour(10).withMinute(30),
-                        "Demo Event 1"
+        val rooms =
+            arrayOf(
+                Room(
+                    "0111",
+                    arrayOf(
+                        EventInfo(
+                            LocalDateTime.now().withHour(9).withMinute(0),
+                            LocalDateTime.now().withHour(10).withMinute(30),
+                            "Demo Event 1",
+                        ),
+                        EventInfo(
+                            LocalDateTime.now().withHour(13).withMinute(0),
+                            LocalDateTime.now().withHour(14).withMinute(30),
+                            "Demo Event 2",
+                        ),
                     ),
-                    EventInfo(
-                        LocalDateTime.now().withHour(13).withMinute(0),
-                        LocalDateTime.now().withHour(14).withMinute(30),
-                        "Demo Event 2"
-                    )
-                )
-            ),
-            Room(
-                "0112",
-                arrayOf(
-                    EventInfo(
-                        LocalDateTime.now().withHour(9).withMinute(0),
-                        LocalDateTime.now().withHour(10).withMinute(30),
-                        "Demo Event 3"
+                ),
+                Room(
+                    "0112",
+                    arrayOf(
+                        EventInfo(
+                            LocalDateTime.now().withHour(9).withMinute(0),
+                            LocalDateTime.now().withHour(10).withMinute(30),
+                            "Demo Event 3",
+                        ),
+                        EventInfo(
+                            LocalDateTime.now().withHour(13).withMinute(0),
+                            LocalDateTime.now().withHour(14).withMinute(30),
+                            "Demo Event 4",
+                        ),
                     ),
-                    EventInfo(
-                        LocalDateTime.now().withHour(13).withMinute(0),
-                        LocalDateTime.now().withHour(14).withMinute(30),
-                        "Demo Event 4"
-                    )
-                )
+                ),
             )
-        )
         return RoomsDataModel(rooms, LocalDate.now())
     }
 
@@ -60,7 +61,7 @@ object RoomLocalDatasource {
         application: Application,
         html: String,
         date: LocalDate,
-        overwriteOldRoomsData: Boolean = true
+        overwriteOldRoomsData: Boolean = true,
     ) {
         initializeDB(application)
         if (overwriteOldRoomsData) {
@@ -73,8 +74,8 @@ object RoomLocalDatasource {
                     LectureRoomEntity(
                         monthDay = roomsData.date.toString(),
                         roomDisplayName = room.roomDisplayName,
-                        eventsInfoJSON = GsonInstance.gson.toJson(room.eventsInfo)
-                    )
+                        eventsInfoJSON = GsonInstance.gson.toJson(room.eventsInfo),
+                    ),
                 )
             }
         }
@@ -85,12 +86,18 @@ object RoomLocalDatasource {
         roomDao.deleteAll()
     }
 
-    suspend fun isRoomsDataExist(application: Application, date: LocalDate): Boolean {
+    suspend fun isRoomsDataExist(
+        application: Application,
+        date: LocalDate,
+    ): Boolean {
         initializeDB(application)
         return roomDao.isDataExistByDate(date.toString()) > 0
     }
 
-    suspend fun loadFromDB(application: Application, date: LocalDate) {
+    suspend fun loadFromDB(
+        application: Application,
+        date: LocalDate,
+    ) {
         initializeDB(application)
         val acquiredData = roomDao.getByDate(date.toString())
         if (acquiredData.isNotEmpty()) {
@@ -99,11 +106,12 @@ object RoomLocalDatasource {
                 rooms.add(
                     Room(
                         roomDisplayName = entity.roomDisplayName,
-                        eventsInfo = GsonInstance.gson.fromJson(
-                            entity.eventsInfoJSON,
-                            Array<EventInfo>::class.java
-                        )
-                    )
+                        eventsInfo =
+                            GsonInstance.gson.fromJson(
+                                entity.eventsInfoJSON,
+                                Array<EventInfo>::class.java,
+                            ),
+                    ),
                 )
             }
             loadedRoomsData = RoomsDataModel(rooms.toTypedArray(), date)
@@ -114,10 +122,13 @@ object RoomLocalDatasource {
 
     private fun initializeDB(application: Application) {
         if (this::db.isInitialized.not() || this::roomDao.isInitialized.not()) {
-            db = androidx.room.Room.databaseBuilder(
-                application,
-                LectureRoomDatabase::class.java, DBNAME
-            ).build()
+            db =
+                androidx.room.Room
+                    .databaseBuilder(
+                        application,
+                        LectureRoomDatabase::class.java,
+                        DBNAME,
+                    ).build()
             roomDao = db.lectureRoomDao()
         }
     }
@@ -125,7 +136,7 @@ object RoomLocalDatasource {
     private fun extractRoomsDataModelFromHTML(
         html: String,
         row: Int,
-        earliestDayOfData: LocalDate
+        earliestDayOfData: LocalDate,
     ): RoomsDataModel {
         val rooms: MutableList<Room> = mutableListOf()
         val table: Element =
@@ -134,18 +145,21 @@ object RoomLocalDatasource {
         val column = tableBody.getElementsByTag("tr")
         column.forEach {
             val roomDisplayName = it.getElementsByClass("kyuko-shi-shisetsunm").text()
-            val eventsData = it.getElementsByAttributeValue("valign", "top").first()!!
-                .getElementsByClass("kyuko-shi-jugyo")
+            val eventsData =
+                it
+                    .getElementsByAttributeValue("valign", "top")
+                    .first()!!
+                    .getElementsByClass("kyuko-shi-jugyo")
             val events: MutableList<EventInfo> = mutableListOf()
-            eventsData.forEach() { event ->
+            eventsData.forEach { event ->
                 val eventStrings = event.text().split("　")
                 val eventTimes = eventStrings[0].split("-")
                 events.add(
                     EventInfo(
                         start = parseTime(eventTimes[0]).plusDays(row.toLong()),
                         end = parseTime(eventTimes[1]).plusDays(row.toLong()),
-                        eventDescription = eventStrings[1]
-                    )
+                        eventDescription = eventStrings[1],
+                    ),
                 )
             }
             rooms.add(Room(roomDisplayName, events.toTypedArray()))
@@ -155,7 +169,10 @@ object RoomLocalDatasource {
 
     private fun parseTime(time: String): LocalDateTime {
         val timeArray = time.split(":")
-        return LocalDateTime.now().withHour(timeArray[0].toInt()).withMinute(timeArray[1].toInt())
+        return LocalDateTime
+            .now()
+            .withHour(timeArray[0].toInt())
+            .withMinute(timeArray[1].toInt())
             .withSecond(0)
     }
 }
