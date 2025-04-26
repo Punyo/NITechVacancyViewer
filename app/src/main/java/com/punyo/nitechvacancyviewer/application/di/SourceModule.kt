@@ -1,6 +1,6 @@
 package com.punyo.nitechvacancyviewer.application.di
 
-import com.punyo.nitechvacancyviewer.data.building.source.BuildingLocalDatasource
+import com.punyo.nitechvacancyviewer.data.building.source.BuildingLocalDataSource
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -12,5 +12,5 @@ import javax.inject.Singleton
 object SourceModule {
     @Provides
     @Singleton
-    fun provideBuildingLocalDataSource(): BuildingLocalDatasource = BuildingLocalDatasource()
+    fun provideBuildingLocalDataSource(): BuildingLocalDataSource = BuildingLocalDataSource()
 }
