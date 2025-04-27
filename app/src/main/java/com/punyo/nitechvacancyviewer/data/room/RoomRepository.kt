@@ -1,51 +1,24 @@
 package com.punyo.nitechvacancyviewer.data.room
 
-import android.app.Application
+import android.content.Context
 import com.punyo.nitechvacancyviewer.data.room.model.RoomsDataModel
-import com.punyo.nitechvacancyviewer.data.room.source.RoomLocalDatasource
 import java.time.LocalDate
 
-class RoomRepository {
-    companion object {
-        private var isDemoMode: Boolean = false
+interface RoomRepository {
+    fun setDemoMode(isDemoMode: Boolean)
 
-        fun setDemoMode(isDemoMode: Boolean) {
-            RoomRepository.isDemoMode = isDemoMode
-        }
-    }
+    suspend fun isRoomsDataExist(
+        applicationContext: Context,
+        date: LocalDate,
+    ): Boolean
 
+    suspend fun saveToDBFromHTML(
+        applicationContext: Context,
+        html: String,
+        date: LocalDate,
+    )
 
-    suspend fun isRoomsDataExist(application: Application, date: LocalDate): Boolean {
-        return if (!isDemoMode) {
-            RoomLocalDatasource.isRoomsDataExist(application, date)
-        } else {
-            true
-        }
-    }
+    suspend fun getTodayRoomsData(applicationContext: Context): RoomsDataModel?
 
-    suspend fun saveToDBFromHTML(application: Application, html: String, date: LocalDate) {
-        if (!isDemoMode) {
-            RoomLocalDatasource.saveOneWeekRoomsDataToDBFromHTML(application, html, date)
-        }
-    }
-
-    suspend fun getTodayRoomsData(application: Application): RoomsDataModel? {
-        if (!isDemoMode) {
-            val currentDate = LocalDate.now()
-            if (currentDate != RoomLocalDatasource.loadedRoomsData?.date) {
-                if (isRoomsDataExist(application, currentDate)) {
-                    RoomLocalDatasource.loadFromDB(application, currentDate)
-                } else {
-                    return null
-                }
-            }
-            return RoomLocalDatasource.loadedRoomsData
-        } else {
-            return RoomLocalDatasource.getDemoRoomsData()
-        }
-    }
-
-    suspend fun clearDB(application: Application) {
-        RoomLocalDatasource.clearDB(application)
-    }
+    suspend fun clearDB(applicationContext: Context)
 }

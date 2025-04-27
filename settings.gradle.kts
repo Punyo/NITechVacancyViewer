@@ -11,6 +11,13 @@ pluginManagement {
         mavenCentral()
         gradlePluginPortal()
     }
+    resolutionStrategy {
+        eachPlugin {
+            if (requested.id.id == "com.google.android.gms.oss-licenses-plugin") {
+                useModule("com.google.android.gms:oss-licenses-plugin:${requested.version}")
+            }
+        }
+    }
 }
 
 dependencyResolutionManagement {
@@ -23,4 +30,3 @@ dependencyResolutionManagement {
 
 rootProject.name = "NITechVacancyViewer"
 include(":app")
- 
