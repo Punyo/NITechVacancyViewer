@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.punyo.nitechvacancyviewer.ui.MainNavigation
+import com.punyo.nitechvacancyviewer.ui.navigation.MainNavigation
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

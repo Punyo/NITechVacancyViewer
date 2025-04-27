@@ -1,4 +1,4 @@
-package com.punyo.nitechvacancyviewer.ui.screen
+package com.punyo.nitechvacancyviewer.ui.roomvacancy
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,7 +24,6 @@ import com.punyo.nitechvacancyviewer.application.enums.RoomVacancyStatus
 import com.punyo.nitechvacancyviewer.data.room.model.EventInfo
 import com.punyo.nitechvacancyviewer.data.room.model.Room
 import com.punyo.nitechvacancyviewer.ui.component.TopAppBarWithBackArrowComponent
-import com.punyo.nitechvacancyviewer.ui.model.RoomVacancyScreenViewModel
 import com.punyo.nitechvacancyviewer.ui.theme.AppTheme
 import java.time.LocalDateTime
 

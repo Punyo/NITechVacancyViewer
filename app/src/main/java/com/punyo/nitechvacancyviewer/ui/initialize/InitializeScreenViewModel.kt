@@ -1,4 +1,4 @@
-package com.punyo.nitechvacancyviewer.ui.model
+package com.punyo.nitechvacancyviewer.ui.initialize
 
 import android.content.Context
 import android.util.Log

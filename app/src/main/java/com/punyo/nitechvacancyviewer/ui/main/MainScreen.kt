@@ -1,4 +1,4 @@
-package com.punyo.nitechvacancyviewer.ui.screen
+package com.punyo.nitechvacancyviewer.ui.main
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -27,12 +27,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.punyo.nitechvacancyviewer.R
-import com.punyo.nitechvacancyviewer.ui.ScreenDestinations
+import com.punyo.nitechvacancyviewer.ui.buildingvacancy.VacancyComponent
 import com.punyo.nitechvacancyviewer.ui.component.LoadingProgressIndicatorComponent
-import com.punyo.nitechvacancyviewer.ui.component.RoomReservationListComponent
-import com.punyo.nitechvacancyviewer.ui.component.SettingsComponent
-import com.punyo.nitechvacancyviewer.ui.component.VacancyComponent
-import com.punyo.nitechvacancyviewer.ui.model.MainScreenViewModel
+import com.punyo.nitechvacancyviewer.ui.navigation.ScreenDestinations
+import com.punyo.nitechvacancyviewer.ui.roomreservation.RoomReservationListComponent
+import com.punyo.nitechvacancyviewer.ui.setting.SettingsComponent
 import com.punyo.nitechvacancyviewer.ui.theme.AppTheme
 import kotlinx.coroutines.delay
 

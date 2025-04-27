@@ -1,4 +1,4 @@
-package com.punyo.nitechvacancyviewer.ui.model
+package com.punyo.nitechvacancyviewer.ui.setting
 
 import android.content.Context
 import androidx.lifecycle.ViewModel

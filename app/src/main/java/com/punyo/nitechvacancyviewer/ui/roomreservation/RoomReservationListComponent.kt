@@ -1,4 +1,4 @@
-package com.punyo.nitechvacancyviewer.ui.component
+package com.punyo.nitechvacancyviewer.ui.roomreservation
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,7 +14,6 @@ import androidx.navigation.NavHostController
 import com.punyo.nitechvacancyviewer.R
 import com.punyo.nitechvacancyviewer.application.GsonInstance
 import com.punyo.nitechvacancyviewer.data.room.model.Room
-import com.punyo.nitechvacancyviewer.ui.model.ReservationRoomListComponentViewModel
 
 @Composable
 fun RoomReservationListComponent(

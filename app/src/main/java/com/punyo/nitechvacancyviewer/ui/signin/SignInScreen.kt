@@ -1,4 +1,4 @@
-package com.punyo.nitechvacancyviewer.ui.screen
+package com.punyo.nitechvacancyviewer.ui.signin
 
 import android.graphics.Canvas
 import androidx.compose.foundation.Image
@@ -46,7 +46,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.punyo.nitechvacancyviewer.R
 import com.punyo.nitechvacancyviewer.application.enums.AuthResultStatus
-import com.punyo.nitechvacancyviewer.ui.model.SignInScreenViewModel
 import com.punyo.nitechvacancyviewer.ui.theme.AppTheme
 
 @Composable

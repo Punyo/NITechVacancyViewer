@@ -1,4 +1,4 @@
-package com.punyo.nitechvacancyviewer.ui
+package com.punyo.nitechvacancyviewer.ui.navigation
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,12 +18,11 @@ import com.punyo.nitechvacancyviewer.R
 import com.punyo.nitechvacancyviewer.application.GsonInstance
 import com.punyo.nitechvacancyviewer.data.room.model.Room
 import com.punyo.nitechvacancyviewer.data.setting.model.ThemeSettings
-import com.punyo.nitechvacancyviewer.ui.model.MainNavigationViewModel
-import com.punyo.nitechvacancyviewer.ui.screen.InitializeScreen
-import com.punyo.nitechvacancyviewer.ui.screen.MainScreen
-import com.punyo.nitechvacancyviewer.ui.screen.ReservationTableScreen
-import com.punyo.nitechvacancyviewer.ui.screen.RoomVacancyScreen
-import com.punyo.nitechvacancyviewer.ui.screen.SignInScreen
+import com.punyo.nitechvacancyviewer.ui.component.ReservationTableScreen
+import com.punyo.nitechvacancyviewer.ui.initialize.InitializeScreen
+import com.punyo.nitechvacancyviewer.ui.main.MainScreen
+import com.punyo.nitechvacancyviewer.ui.roomvacancy.RoomVacancyScreen
+import com.punyo.nitechvacancyviewer.ui.signin.SignInScreen
 import com.punyo.nitechvacancyviewer.ui.theme.AppTheme
 
 @Composable

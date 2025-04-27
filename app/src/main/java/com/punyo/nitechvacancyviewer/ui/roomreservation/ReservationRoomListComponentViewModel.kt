@@ -1,4 +1,4 @@
-package com.punyo.nitechvacancyviewer.ui.model
+package com.punyo.nitechvacancyviewer.ui.roomreservation
 
 import androidx.lifecycle.ViewModel
 import com.punyo.nitechvacancyviewer.data.room.model.Room
