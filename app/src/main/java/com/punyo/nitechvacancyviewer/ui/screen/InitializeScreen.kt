@@ -1,7 +1,6 @@
 package com.punyo.nitechvacancyviewer.ui.screen
 
 import android.app.Activity
-import android.app.Application
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -30,10 +29,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.punyo.nitechvacancyviewer.R
-import com.punyo.nitechvacancyviewer.data.room.RoomRepository
 import com.punyo.nitechvacancyviewer.ui.component.CampusSquareWebViewComponent
 import com.punyo.nitechvacancyviewer.ui.component.LoadingProgressIndicatorComponent
 import com.punyo.nitechvacancyviewer.ui.model.InitializeScreenViewModel
@@ -43,12 +41,7 @@ import com.punyo.nitechvacancyviewer.ui.theme.AppTheme
 fun InitializeScreen(
     onLoadedRoomsData: () -> Unit,
     onFailedSignInWithSavedCredentials: () -> Unit,
-    initializeScreenViewModel: InitializeScreenViewModel = viewModel(
-        factory = InitializeScreenViewModel.Factory(
-            LocalContext.current.applicationContext as Application,
-            RoomRepository()
-        )
-    )
+    initializeScreenViewModel: InitializeScreenViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
     val currentState by initializeScreenViewModel.uiState.collectAsStateWithLifecycle()
@@ -82,10 +75,11 @@ fun InitializeScreen(
                 onLoadedRoomsData()
             } else {
                 initializeScreenViewModel.setErrorMessage(
-                    context.getString(R.string.ERROR_PREFIX_FETCH_FAILED) + context.getString(
-                        R.string.ERROR_VACANCY_TABLE_LAYOUT_CHANGED
-                    ),
-                    context.getString(R.string.UI_SNACKBAR_ACTIONLABEL_QUITAPP)
+                    context.getString(R.string.ERROR_PREFIX_FETCH_FAILED) +
+                        context.getString(
+                            R.string.ERROR_VACANCY_TABLE_LAYOUT_CHANGED,
+                        ),
+                    context.getString(R.string.UI_SNACKBAR_ACTIONLABEL_QUITAPP),
                 ) {
                     (context as Activity).finish()
                 }
@@ -94,11 +88,12 @@ fun InitializeScreen(
     }
     LaunchedEffect(key1 = currentState.errorMessage) {
         currentState.errorMessage?.let {
-            val result = snackbarHostState.showSnackbar(
-                message = it.message,
-                actionLabel = it.actionLabel,
-                duration = SnackbarDuration.Indefinite
-            )
+            val result =
+                snackbarHostState.showSnackbar(
+                    message = it.message,
+                    actionLabel = it.actionLabel,
+                    duration = SnackbarDuration.Indefinite,
+                )
             if (result == SnackbarResult.ActionPerformed) {
                 it.onClickAction()
             }
@@ -117,7 +112,8 @@ fun InitializeScreen(
             onConfirmation = {
                 initializeScreenViewModel.changeAskForSignInDialogVisibility(false)
                 initializeScreenViewModel.tryToSignInWithSavedCredentials()
-            })
+            },
+        )
     }
     if (currentState.isActivatedCampusSquareWebView) {
         CampusSquareWebViewComponent(
@@ -126,10 +122,11 @@ fun InitializeScreen(
             },
             onReceivedError = { webView, _ ->
                 initializeScreenViewModel.setErrorMessage(
-                    context.getString(R.string.ERROR_PREFIX_FETCH_FAILED) + context.getString(
-                        R.string.ERROR_NOT_CONNECTED_TO_NITECH_NETWORK
-                    ),
-                    context.getString(R.string.UI_SNACKBAR_ACTIONLABEL_RETRY)
+                    context.getString(R.string.ERROR_PREFIX_FETCH_FAILED) +
+                        context.getString(
+                            R.string.ERROR_NOT_CONNECTED_TO_NITECH_NETWORK,
+                        ),
+                    context.getString(R.string.UI_SNACKBAR_ACTIONLABEL_RETRY),
                 ) {
                     webView?.reload()
                 }
@@ -139,26 +136,29 @@ fun InitializeScreen(
                 statusCode?.let {
                     if (it == 503) {
                         initializeScreenViewModel.setErrorMessage(
-                            context.getString(R.string.ERROR_PREFIX_FETCH_FAILED) + context.getString(
-                                R.string.ERROR_HTTP_503
-                            ),
-                            context.getString(R.string.UI_SNACKBAR_ACTIONLABEL_QUITAPP)
+                            context.getString(R.string.ERROR_PREFIX_FETCH_FAILED) +
+                                context.getString(
+                                    R.string.ERROR_HTTP_503,
+                                ),
+                            context.getString(R.string.UI_SNACKBAR_ACTIONLABEL_QUITAPP),
                         ) {
                             (context as Activity).finish()
                         }
                     } else {
                         initializeScreenViewModel.setErrorMessage(
-                            context.getString(R.string.ERROR_PREFIX_FETCH_FAILED) + context.getString(
-                                R.string.ERROR_HTTP_OTHERS
-                            ).format(statusCode),
-                            context.getString(R.string.UI_SNACKBAR_ACTIONLABEL_QUITAPP)
+                            context.getString(R.string.ERROR_PREFIX_FETCH_FAILED) +
+                                context
+                                    .getString(
+                                        R.string.ERROR_HTTP_OTHERS,
+                                    ).format(statusCode),
+                            context.getString(R.string.UI_SNACKBAR_ACTIONLABEL_QUITAPP),
                         ) {
                             (context as Activity).finish()
                         }
                     }
                 }
             },
-            sso4cookie = initializeScreenViewModel.getCurrentToken()!!
+            sso4cookie = initializeScreenViewModel.getCurrentToken()!!,
         )
     }
     Scaffold(snackbarHost = {
@@ -166,14 +166,15 @@ fun InitializeScreen(
             hostState = snackbarHostState,
             snackbar = { snackbarData ->
                 LongerActionSnackbarComponent(snackbarData)
-            }
+            },
         )
     }) { contentPadding ->
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(contentPadding),
-            contentAlignment = Alignment.Center
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(contentPadding),
+            contentAlignment = Alignment.Center,
         ) {
             LoadingProgressIndicatorComponent()
         }
@@ -183,24 +184,26 @@ fun InitializeScreen(
 @Composable
 private fun LongerActionSnackbarComponent(snackbarData: SnackbarData) {
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
     ) {
         Row {
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
                 verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.Start
+                horizontalAlignment = Alignment.Start,
             ) {
                 Text(text = snackbarData.visuals.message)
                 snackbarData.visuals.actionLabel?.let {
                     TextButton(
                         modifier = Modifier.align(Alignment.End),
                         onClick = { snackbarData.performAction() },
-                        content = { Text(snackbarData.visuals.actionLabel!!) }
+                        content = { Text(snackbarData.visuals.actionLabel!!) },
                     )
                 }
             }
@@ -215,7 +218,7 @@ fun AskForSignInDialogComponent(
     @StringRes confirmButtonText: Int,
     @StringRes dismissButtonText: Int,
     onDismissRequest: () -> Unit,
-    onConfirmation: () -> Unit
+    onConfirmation: () -> Unit,
 ) {
     AlertDialog(
         title = {
@@ -231,7 +234,7 @@ fun AskForSignInDialogComponent(
             TextButton(
                 onClick = {
                     onConfirmation()
-                }
+                },
             ) {
                 Text(stringResource(id = confirmButtonText))
             }
@@ -240,11 +243,11 @@ fun AskForSignInDialogComponent(
             TextButton(
                 onClick = {
                     onDismissRequest()
-                }
+                },
             ) {
                 Text(stringResource(id = dismissButtonText))
             }
-        }
+        },
     )
 }
 
@@ -255,7 +258,6 @@ fun InitializeScreenLightPreview() {
         InitializeScreen(
             onLoadedRoomsData = {},
             onFailedSignInWithSavedCredentials = {},
-            InitializeScreenViewModel(Application(), RoomRepository())
         )
     }
 }
@@ -267,7 +269,6 @@ fun InitializeScreenDarkPreview() {
         InitializeScreen(
             onLoadedRoomsData = {},
             onFailedSignInWithSavedCredentials = {},
-            InitializeScreenViewModel(Application(), RoomRepository())
         )
     }
 }

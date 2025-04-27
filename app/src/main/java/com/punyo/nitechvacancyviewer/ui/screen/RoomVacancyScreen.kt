@@ -18,7 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.punyo.nitechvacancyviewer.R
 import com.punyo.nitechvacancyviewer.data.room.model.EventInfo
@@ -34,20 +33,22 @@ fun RoomVacancyScreen(
     buildingName: String,
     onBackPressed: () -> Unit = {},
     rooms: Array<Room>,
-    roomVacancyScreenViewModel: RoomVacancyScreenViewModel = viewModel()
+    roomVacancyScreenViewModel: RoomVacancyScreenViewModel = viewModel(),
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             TopAppBarWithBackArrowComponent(
                 headerText = buildingName,
-                onBackPressed = onBackPressed
+                onBackPressed = onBackPressed,
             )
-        }) { innerPadding ->
+        },
+    ) { innerPadding ->
         Column(
-            modifier = Modifier
-                .padding(innerPadding)
-                .verticalScroll(rememberScrollState())
+            modifier =
+                Modifier
+                    .padding(innerPadding)
+                    .verticalScroll(rememberScrollState()),
         ) {
             rooms.forEachIndexed { index, room ->
                 val roomVacancyStatus =
@@ -64,7 +65,7 @@ fun RoomVacancyScreen(
                                 Icon(
                                     imageVector = Icons.Outlined.CheckCircle,
                                     contentDescription = stringResource(id = R.string.UI_LISTITEM_TEXT_VACANT),
-                                    tint = MaterialTheme.colorScheme.primaryContainer
+                                    tint = MaterialTheme.colorScheme.primaryContainer,
                                 )
                             }
 
@@ -72,24 +73,27 @@ fun RoomVacancyScreen(
                                 Icon(
                                     painter = painterResource(id = R.drawable.outline_cancel_24),
                                     contentDescription = stringResource(id = R.string.UI_LISTITEM_TEXT_OCCUPY),
-                                    tint = MaterialTheme.colorScheme.error
+                                    tint = MaterialTheme.colorScheme.error,
                                 )
                             }
                         }
                     },
                     supportingContent = {
                         Text(
-                            text = when (roomVacancyStatus) {
-                                RoomVacancyStatus.VACANT -> stringResource(id = R.string.UI_LISTITEM_TEXT_VACANT)
-                                RoomVacancyStatus.OCCUPY -> stringResource(id = R.string.UI_LISTITEM_TEXT_OCCUPY).format(
-                                    roomVacancyScreenViewModel.getCurrentEvent(
-                                        room,
-                                        LocalDateTime.now()
-                                    )?.eventDescription ?: ""
-                                )
-                            }
+                            text =
+                                when (roomVacancyStatus) {
+                                    RoomVacancyStatus.VACANT -> stringResource(id = R.string.UI_LISTITEM_TEXT_VACANT)
+                                    RoomVacancyStatus.OCCUPY ->
+                                        stringResource(id = R.string.UI_LISTITEM_TEXT_OCCUPY).format(
+                                            roomVacancyScreenViewModel
+                                                .getCurrentEvent(
+                                                    room,
+                                                    LocalDateTime.now(),
+                                                )?.eventDescription ?: "",
+                                        )
+                                },
                         )
-                    }
+                    },
                 )
                 if (index != rooms.size - 1) HorizontalDivider()
             }
@@ -103,25 +107,30 @@ fun RoomVacancyScreen(
 fun RoomVacancyScreenLightModePreview() {
     AppTheme {
         RoomVacancyScreen(
-            "建物の名称", rooms = arrayOf(
-                Room(
-                    "部屋1", arrayOf(
-                        EventInfo(
-                            LocalDateTime.now().minusHours(1),
-                            LocalDateTime.now().plusHours(1), "数理情報概論"
+            "建物の名称",
+            rooms =
+                arrayOf(
+                    Room(
+                        "部屋1",
+                        arrayOf(
+                            EventInfo(
+                                LocalDateTime.now().minusHours(1),
+                                LocalDateTime.now().plusHours(1),
+                                "数理情報概論",
+                            ),
                         ),
-                    )
+                    ),
+                    Room(
+                        "部屋2",
+                        arrayOf(
+                            EventInfo(
+                                LocalDateTime.now().plusHours(1),
+                                LocalDateTime.now().plusHours(2),
+                                "イベント2",
+                            ),
+                        ),
+                    ),
                 ),
-                Room(
-                    "部屋2", arrayOf(
-                        EventInfo(
-                            LocalDateTime.now().plusHours(1),
-                            LocalDateTime.now().plusHours(2),
-                            "イベント2"
-                        ),
-                    )
-                )
-            )
         )
     }
 }

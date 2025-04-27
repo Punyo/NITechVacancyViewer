@@ -1,77 +1,79 @@
 package com.punyo.nitechvacancyviewer.ui.model
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import android.content.Context
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.punyo.nitechvacancyviewer.data.auth.AuthRepository
+import com.punyo.nitechvacancyviewer.data.auth.AuthRepositoryImpl
 import com.punyo.nitechvacancyviewer.data.room.RoomRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SignInScreenViewModel(application: Application) : AndroidViewModel(application) {
-    private val state = MutableStateFlow(SignInScreenUiState())
-    val uiState: StateFlow<SignInScreenUiState> = state.asStateFlow()
+@HiltViewModel
+class SignInScreenViewModel
+    @Inject
+    constructor(
+        private val applicationContext: Context,
+        private val roomRepository: RoomRepository,
+        private val authRepository: AuthRepository,
+    ) : ViewModel() {
+        private val state = MutableStateFlow(SignInScreenUiState())
+        val uiState: StateFlow<SignInScreenUiState> = state.asStateFlow()
 
-    fun onSignInButtonClicked(onSignInSuccess: () -> Unit, demoModeUserNameAndPassword: String) {
-        if (state.value.userName.isNotEmpty() && state.value.password.isNotEmpty()) {
-            if (state.value.userName == demoModeUserNameAndPassword && state.value.password == demoModeUserNameAndPassword) {
-                RoomRepository.setDemoMode(true)
-                onSignInSuccess()
-            } else {
-                state.value = state.value.copy(isSignInButtonEnabled = false, signInResult = null)
-                viewModelScope.launch {
-                    val result =
-                        AuthRepository.signIn(
-                            getApplication(),
-                            state.value.userName,
-                            state.value.password
-                        )
-                    if (result == AuthRepository.AuthResultStatus.SUCCESS) {
-                        onSignInSuccess()
+        fun onSignInButtonClicked(
+            onSignInSuccess: () -> Unit,
+            demoModeUserNameAndPassword: String,
+        ) {
+            if (state.value.userName.isNotEmpty() && state.value.password.isNotEmpty()) {
+                if (state.value.userName == demoModeUserNameAndPassword && state.value.password == demoModeUserNameAndPassword) {
+                    roomRepository.setDemoMode(true)
+                    onSignInSuccess()
+                } else {
+                    state.value = state.value.copy(isSignInButtonEnabled = false, signInResult = null)
+                    viewModelScope.launch {
+                        val result =
+                            authRepository.signIn(
+                                applicationContext,
+                                state.value.userName,
+                                state.value.password,
+                            )
+                        if (result == AuthRepositoryImpl.AuthResultStatus.SUCCESS) {
+                            onSignInSuccess()
+                        }
+                        state.value = state.value.copy(signInResult = result)
                     }
-                    state.value = state.value.copy(signInResult = result)
                 }
+            } else {
+                checkTextFieldsEmptiness()
             }
-        } else {
+        }
+
+        private fun checkTextFieldsEmptiness() {
+            state.value =
+                state.value.copy(
+                    isErrorUserName = state.value.userName.isEmpty(),
+                    isErrorPassword = state.value.password.isEmpty(),
+                )
+        }
+
+        fun setUserName(userName: String) {
+            state.value = state.value.copy(userName = userName)
             checkTextFieldsEmptiness()
         }
-    }
 
-    private fun checkTextFieldsEmptiness() {
-        state.value = state.value.copy(
-            isErrorUserName = state.value.userName.isEmpty(),
-            isErrorPassword = state.value.password.isEmpty()
-        )
-    }
+        fun setPassword(password: String) {
+            state.value = state.value.copy(password = password)
+            checkTextFieldsEmptiness()
+        }
 
-    fun setUserName(userName: String) {
-        state.value = state.value.copy(userName = userName)
-        checkTextFieldsEmptiness()
-    }
-
-    fun setPassword(password: String) {
-        state.value = state.value.copy(password = password)
-        checkTextFieldsEmptiness()
-    }
-
-    fun setSignInButtonEnabled(isEnabled: Boolean) {
-        state.value = state.value.copy(isSignInButtonEnabled = isEnabled)
-    }
-
-    class Factory(private val context: Application) : ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(SignInScreenViewModel::class.java)) {
-                @Suppress("UNCHECKED_CAST")
-                return SignInScreenViewModel(context) as T
-            }
-            throw IllegalArgumentException("Unknown ViewModel class")
+        fun setSignInButtonEnabled(isEnabled: Boolean) {
+            state.value = state.value.copy(isSignInButtonEnabled = isEnabled)
         }
     }
-}
 
 data class SignInScreenUiState(
     val userName: String = "",
@@ -79,5 +81,5 @@ data class SignInScreenUiState(
     val isErrorUserName: Boolean = false,
     val isErrorPassword: Boolean = false,
     val isSignInButtonEnabled: Boolean = true,
-    val signInResult: AuthRepository.AuthResultStatus? = null
+    val signInResult: AuthRepositoryImpl.AuthResultStatus? = null,
 )

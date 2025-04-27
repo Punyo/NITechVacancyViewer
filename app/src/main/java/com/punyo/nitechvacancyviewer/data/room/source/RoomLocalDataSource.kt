@@ -1,6 +1,6 @@
 package com.punyo.nitechvacancyviewer.data.room.source
 
-import android.app.Application
+import android.content.Context
 import com.punyo.nitechvacancyviewer.application.GsonInstance
 import com.punyo.nitechvacancyviewer.data.room.model.EventInfo
 import com.punyo.nitechvacancyviewer.data.room.model.LectureRoomDao
@@ -13,8 +13,7 @@ import org.jsoup.nodes.Element
 import java.time.LocalDate
 import java.time.LocalDateTime
 
-object RoomLocalDatasource {
-    private const val DBNAME = "lecture_room"
+class RoomLocalDataSource {
     private lateinit var db: LectureRoomDatabase
     private lateinit var roomDao: LectureRoomDao
     var loadedRoomsData: RoomsDataModel? = null
@@ -58,12 +57,12 @@ object RoomLocalDatasource {
     }
 
     suspend fun saveOneWeekRoomsDataToDBFromHTML(
-        application: Application,
+        applicationContext: Context,
         html: String,
         date: LocalDate,
         overwriteOldRoomsData: Boolean = true,
     ) {
-        initializeDB(application)
+        initializeDB(applicationContext)
         if (overwriteOldRoomsData) {
             roomDao.deleteAll()
         }
@@ -81,24 +80,24 @@ object RoomLocalDatasource {
         }
     }
 
-    suspend fun clearDB(application: Application) {
-        initializeDB(application)
+    suspend fun clearDB(applicationContext: Context) {
+        initializeDB(applicationContext)
         roomDao.deleteAll()
     }
 
     suspend fun isRoomsDataExist(
-        application: Application,
+        applicationContext: Context,
         date: LocalDate,
     ): Boolean {
-        initializeDB(application)
+        initializeDB(applicationContext)
         return roomDao.isDataExistByDate(date.toString()) > 0
     }
 
     suspend fun loadFromDB(
-        application: Application,
+        applicationContext: Context,
         date: LocalDate,
     ) {
-        initializeDB(application)
+        initializeDB(applicationContext)
         val acquiredData = roomDao.getByDate(date.toString())
         if (acquiredData.isNotEmpty()) {
             val rooms: MutableList<Room> = mutableListOf()
@@ -120,14 +119,14 @@ object RoomLocalDatasource {
         }
     }
 
-    private fun initializeDB(application: Application) {
+    private fun initializeDB(applicationContext: Context) {
         if (this::db.isInitialized.not() || this::roomDao.isInitialized.not()) {
             db =
                 androidx.room.Room
                     .databaseBuilder(
-                        application,
+                        applicationContext,
                         LectureRoomDatabase::class.java,
-                        DBNAME,
+                        "lecture_room",
                     ).build()
             roomDao = db.lectureRoomDao()
         }

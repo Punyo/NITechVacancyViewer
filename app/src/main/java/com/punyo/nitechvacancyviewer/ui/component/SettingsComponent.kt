@@ -1,6 +1,5 @@
 package com.punyo.nitechvacancyviewer.ui.component
 
-import android.app.Application
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
@@ -43,28 +42,21 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.punyo.nitechvacancyviewer.R
-import com.punyo.nitechvacancyviewer.data.room.RoomRepository
-import com.punyo.nitechvacancyviewer.data.setting.SettingRepository
 import com.punyo.nitechvacancyviewer.data.setting.model.ThemeSettings
 import com.punyo.nitechvacancyviewer.ui.ScreenDestinations
 import com.punyo.nitechvacancyviewer.ui.model.SettingsComponentViewModel
 import com.punyo.nitechvacancyviewer.ui.theme.AppTheme
+import androidx.core.net.toUri
 
 @Composable
 fun SettingsComponent(
     modifier: Modifier = Modifier,
     navHostController: NavHostController,
-    settingsComponentViewModel: SettingsComponentViewModel = viewModel(
-        factory = SettingsComponentViewModel.Factory(
-            LocalContext.current.applicationContext as Application,
-            RoomRepository(),
-            SettingRepository(LocalContext.current)
-        )
-    )
+    settingsComponentViewModel: SettingsComponentViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
     val currentState by settingsComponentViewModel.uiState.collectAsState()
@@ -73,16 +65,17 @@ fun SettingsComponent(
     val storeUrl = stringResource(id = R.string.URL_STORE_PAGE)
     val srcUrl = stringResource(id = R.string.URL_SOURCE_CODE)
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
+        modifier =
+            modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
     ) {
         ListItem(
             headlineContent = {
                 Text(
                     text = stringResource(id = R.string.UI_TEXT_GENERAL_SETTINGS),
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
             },
         )
@@ -90,18 +83,19 @@ fun SettingsComponent(
             title = R.string.UI_TEXT_OPEN_OS_APP_SETTINGS,
             icon = Icons.Outlined.Settings,
             onClick = {
-                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                    data = Uri.fromParts("package", context.packageName, null)
-                }
+                val intent =
+                    Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                        data = Uri.fromParts("package", context.packageName, null)
+                    }
                 context.startActivity(intent)
-            }
+            },
         )
         SettingsListItem(
             title = R.string.UI_TEXT_THEME,
             icon = R.drawable.outline_dark_mode_24,
             onClick = {
                 settingsComponentViewModel.showThemePickerDialog()
-            }
+            },
         )
         HorizontalDivider()
         ListItem(
@@ -109,7 +103,7 @@ fun SettingsComponent(
                 Text(
                     text = stringResource(id = R.string.UI_TEXT_ABOUT_APP),
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
             },
         )
@@ -118,49 +112,50 @@ fun SettingsComponent(
             icon = R.drawable.outline_launch_24,
             onClick = {
                 val intent = Intent(Intent.ACTION_VIEW)
-                intent.data = Uri.parse(tosUrl)
+                intent.data = tosUrl.toUri()
                 context.startActivity(intent)
-            }
+            },
         )
         SettingsListItem(
             title = R.string.UI_TEXT_PRIVACY_POLICY,
             icon = R.drawable.outline_launch_24,
             onClick = {
                 val intent = Intent(Intent.ACTION_VIEW)
-                intent.data = Uri.parse(privacyPolicyUrl)
+                intent.data = privacyPolicyUrl.toUri()
                 context.startActivity(intent)
-            }
+            },
         )
         SettingsListItem(
             title = R.string.UI_TEXT_STORE_PAGE,
             icon = R.drawable.outline_launch_24,
             onClick = {
                 val intent = Intent(Intent.ACTION_VIEW)
-                intent.data = Uri.parse(storeUrl)
+                intent.data = storeUrl.toUri()
                 context.startActivity(intent)
-            }
+            },
         )
         SettingsListItem(
             title = R.string.UI_TEXT_SOURCE_CODE,
             icon = R.drawable.outline_launch_24,
             onClick = {
                 val intent = Intent(Intent.ACTION_VIEW)
-                intent.data = Uri.parse(srcUrl)
+                intent.data = srcUrl.toUri()
                 context.startActivity(intent)
-            }
+            },
         )
         SettingsListItem(
             title = R.string.UI_TEXT_LICENSE,
             icon = R.drawable.outline_launch_24,
             onClick = {
                 context.startActivity(Intent(context, OssLicensesMenuActivity::class.java))
-            }
+            },
         )
         SettingsListItem(
             title = R.string.UI_TEXT_VERSION,
-            subtitle = context.packageManager.getPackageInfo(context.packageName, 0)?.versionName
-                ?: "",
-            icon = Icons.Outlined.Info
+            subtitle =
+                context.packageManager.getPackageInfo(context.packageName, 0)?.versionName
+                    ?: "",
+            icon = Icons.Outlined.Info,
         )
         SettingsListItem(
             title = R.string.UI_TEXT_SIGN_OUT,
@@ -168,7 +163,7 @@ fun SettingsComponent(
             onClick = {
                 settingsComponentViewModel.signOut()
                 navHostController.navigate(ScreenDestinations.SignIn.name)
-            }
+            },
         )
     }
     if (currentState.showThemePickerDialog) {
@@ -180,9 +175,8 @@ fun SettingsComponent(
             },
             onDismissRequest = {
                 settingsComponentViewModel.hideThemePickerDialog()
-            }
+            },
         )
-
     }
 }
 
@@ -191,12 +185,12 @@ private fun SettingsListItem(
     @StringRes title: Int,
     subtitle: String = "",
     @DrawableRes icon: Int,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit = {},
 ) {
     SettingsListItemImpl(onClick, title, subtitle) {
         Icon(
             painter = painterResource(id = icon),
-            contentDescription = null
+            contentDescription = null,
         )
     }
 }
@@ -206,12 +200,12 @@ private fun SettingsListItem(
     @StringRes title: Int,
     subtitle: String = "",
     icon: ImageVector,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit = {},
 ) {
     SettingsListItemImpl(onClick, title, subtitle) {
         Icon(
             imageVector = icon,
-            contentDescription = null
+            contentDescription = null,
         )
     }
 }
@@ -221,7 +215,7 @@ private fun SettingsListItemImpl(
     onClick: () -> Unit,
     title: Int,
     subtitle: String,
-    leadingContent: @Composable () -> Unit
+    leadingContent: @Composable () -> Unit,
 ) {
     ListItem(
         modifier = Modifier.clickable(onClick = onClick),
@@ -231,14 +225,13 @@ private fun SettingsListItemImpl(
                 Text(
                     text = subtitle,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
         },
-        leadingContent = leadingContent
+        leadingContent = leadingContent,
     )
 }
-
 
 @Composable
 fun ThemePickerDialogComponent(
@@ -255,58 +248,58 @@ fun ThemePickerDialogComponent(
             Column(
                 Modifier
                     .fillMaxWidth()
-                    .padding(24.dp)
+                    .padding(24.dp),
             ) {
                 Box(
                     Modifier
                         .padding(bottom = 16.dp)
-                        .align(Alignment.Start)
+                        .align(Alignment.Start),
                 ) {
                     Text(
                         text = stringResource(id = R.string.UI_DIALOG_SELECT_THEME_TITLE),
                         style = MaterialTheme.typography.headlineMedium,
-                        color = MaterialTheme.colorScheme.onSurface
+                        color = MaterialTheme.colorScheme.onSurface,
                     )
                 }
                 ThemePickerRadioButtonComponent(
                     title = R.string.UI_TEXT_THEME_LIGHT,
                     currentTheme = currentSelectedTheme,
-                    pickerTheme = ThemeSettings.LIGHT
+                    pickerTheme = ThemeSettings.LIGHT,
                 ) {
                     currentSelectedTheme = ThemeSettings.LIGHT
                 }
                 ThemePickerRadioButtonComponent(
                     title = R.string.UI_TEXT_THEME_DARK,
                     currentTheme = currentSelectedTheme,
-                    pickerTheme = ThemeSettings.DARK
+                    pickerTheme = ThemeSettings.DARK,
                 ) {
                     currentSelectedTheme = ThemeSettings.DARK
                 }
                 ThemePickerRadioButtonComponent(
                     title = R.string.UI_TEXT_THEME_SYSTEM,
                     currentTheme = currentSelectedTheme,
-                    pickerTheme = ThemeSettings.SYSTEM
+                    pickerTheme = ThemeSettings.SYSTEM,
                 ) {
                     currentSelectedTheme = ThemeSettings.SYSTEM
                 }
                 Box(
                     Modifier
                         .padding(top = 24.dp)
-                        .align(Alignment.End)
+                        .align(Alignment.End),
                 ) {
                     Row {
                         TextButton(onDismissRequest) {
                             Text(
                                 text = stringResource(id = R.string.UI_TEXT_CANCEL),
                                 style = MaterialTheme.typography.labelLarge,
-                                color = MaterialTheme.colorScheme.primary
+                                color = MaterialTheme.colorScheme.primary,
                             )
                         }
                         TextButton({ onConfirm(currentSelectedTheme) }) {
                             Text(
                                 text = stringResource(id = R.string.UI_TEXT_OK),
                                 style = MaterialTheme.typography.labelLarge,
-                                color = MaterialTheme.colorScheme.primary
+                                color = MaterialTheme.colorScheme.primary,
                             )
                         }
                     }
@@ -321,18 +314,18 @@ private fun ThemePickerRadioButtonComponent(
     @StringRes title: Int,
     currentTheme: ThemeSettings,
     pickerTheme: ThemeSettings,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     Row {
         RadioButton(
             onClick = onClick,
-            selected = currentTheme == pickerTheme
+            selected = currentTheme == pickerTheme,
         )
         Text(
             modifier = Modifier.align(Alignment.CenterVertically),
             text = stringResource(id = title),
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }
 }
@@ -343,11 +336,6 @@ fun SettingsComponentPreview() {
     AppTheme {
         SettingsComponent(
             navHostController = NavHostController(LocalContext.current),
-            settingsComponentViewModel = SettingsComponentViewModel(
-                Application(), RoomRepository(), SettingRepository(
-                    LocalContext.current
-                )
-            )
         )
     }
 }
@@ -356,8 +344,10 @@ fun SettingsComponentPreview() {
 @Composable
 fun ThemePickerDialogComponentPreview() {
     AppTheme {
-        ThemePickerDialogComponent(onDismissRequest = {},
+        ThemePickerDialogComponent(
+            onDismissRequest = {},
             currentTheme = ThemeSettings.LIGHT,
-            onConfirm = {})
+            onConfirm = {},
+        )
     }
 }

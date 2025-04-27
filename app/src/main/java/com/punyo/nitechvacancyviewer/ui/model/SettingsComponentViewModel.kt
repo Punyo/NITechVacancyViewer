@@ -1,73 +1,62 @@
 package com.punyo.nitechvacancyviewer.ui.model
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import android.content.Context
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.punyo.nitechvacancyviewer.data.auth.AuthRepository
-import com.punyo.nitechvacancyviewer.data.room.RoomRepository
+import com.punyo.nitechvacancyviewer.data.room.RoomRepositoryImpl
 import com.punyo.nitechvacancyviewer.data.setting.SettingRepository
 import com.punyo.nitechvacancyviewer.data.setting.model.ThemeSettings
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SettingsComponentViewModel(
-    application: Application,
-    private val roomRepository: RoomRepository,
-    private val settingRepository: SettingRepository
-) : AndroidViewModel(application) {
+@HiltViewModel
+class SettingsComponentViewModel
+    @Inject
+    constructor(
+        private val applicationContext: Context,
+        private val authRepository: AuthRepository,
+        private val roomRepository: RoomRepositoryImpl,
+        private val settingRepository: SettingRepository,
+    ) : ViewModel() {
+        private val state = MutableStateFlow(SettingsComponentUiState())
+        val uiState = state.asStateFlow()
 
-    private val state = MutableStateFlow(SettingsComponentUiState())
-    val uiState = state.asStateFlow()
-
-    fun signOut() {
-        viewModelScope.launch {
-            AuthRepository.signOutAndClearSavedCredentials(getApplication())
-            roomRepository.clearDB(getApplication())
-        }
-    }
-
-    fun saveThemeSetting(themeSettings: ThemeSettings) {
-        viewModelScope.launch {
-            settingRepository.saveThemeSetting(themeSettings)
-        }
-    }
-
-    fun showThemePickerDialog() {
-        viewModelScope.launch {
-            state.value = state.value.copy(
-                showThemePickerDialog = true,
-                currentTheme = settingRepository.themeSettings.first()
-            )
-        }
-    }
-
-    fun hideThemePickerDialog() {
-        viewModelScope.launch {
-            state.value = state.value.copy(showThemePickerDialog = false)
-        }
-    }
-
-    class Factory(
-        private val context: Application,
-        private val roomRepository: RoomRepository,
-        private val settingRepository: SettingRepository
-    ) :
-        ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(SettingsComponentViewModel::class.java)) {
-                @Suppress("UNCHECKED_CAST")
-                return SettingsComponentViewModel(context, roomRepository, settingRepository) as T
+        fun signOut() {
+            viewModelScope.launch {
+                authRepository.signOutAndClearSavedCredentials(applicationContext)
+                roomRepository.clearDB(applicationContext)
             }
-            throw IllegalArgumentException("Unknown ViewModel class")
+        }
+
+        fun saveThemeSetting(themeSettings: ThemeSettings) {
+            viewModelScope.launch {
+                settingRepository.saveThemeSetting(themeSettings)
+            }
+        }
+
+        fun showThemePickerDialog() {
+            viewModelScope.launch {
+                state.value =
+                    state.value.copy(
+                        showThemePickerDialog = true,
+                        currentTheme = settingRepository.themeSettings.first(),
+                    )
+            }
+        }
+
+        fun hideThemePickerDialog() {
+            viewModelScope.launch {
+                state.value = state.value.copy(showThemePickerDialog = false)
+            }
         }
     }
-}
 
 data class SettingsComponentUiState(
     val currentTheme: ThemeSettings = ThemeSettings.LIGHT,
-    val showThemePickerDialog: Boolean = false
+    val showThemePickerDialog: Boolean = false,
 )
