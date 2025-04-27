@@ -27,12 +27,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.punyo.nitechvacancyviewer.R
+import com.punyo.nitechvacancyviewer.theme.AppTheme
 import com.punyo.nitechvacancyviewer.ui.buildingvacancy.BuildingVacancyScreen
 import com.punyo.nitechvacancyviewer.ui.component.LoadingProgressIndicatorComponent
 import com.punyo.nitechvacancyviewer.ui.navigation.ScreenDestinations
 import com.punyo.nitechvacancyviewer.ui.roomreservation.RoomReservationScreen
 import com.punyo.nitechvacancyviewer.ui.setting.SettingScreen
-import com.punyo.nitechvacancyviewer.ui.theme.AppTheme
 import kotlinx.coroutines.delay
 
 @Composable

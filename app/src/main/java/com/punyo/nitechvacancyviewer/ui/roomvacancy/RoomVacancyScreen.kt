@@ -23,8 +23,8 @@ import com.punyo.nitechvacancyviewer.R
 import com.punyo.nitechvacancyviewer.application.enums.RoomVacancyStatus
 import com.punyo.nitechvacancyviewer.data.room.model.EventInfo
 import com.punyo.nitechvacancyviewer.data.room.model.Room
+import com.punyo.nitechvacancyviewer.theme.AppTheme
 import com.punyo.nitechvacancyviewer.ui.component.TopAppBarWithBackArrowComponent
-import com.punyo.nitechvacancyviewer.ui.theme.AppTheme
 import java.time.LocalDateTime
 
 @Composable

@@ -46,7 +46,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.punyo.nitechvacancyviewer.R
 import com.punyo.nitechvacancyviewer.application.enums.AuthResultStatus
-import com.punyo.nitechvacancyviewer.ui.theme.AppTheme
+import com.punyo.nitechvacancyviewer.theme.AppTheme
 
 @Composable
 fun SignInScreen(

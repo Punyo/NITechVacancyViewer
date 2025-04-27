@@ -48,8 +48,8 @@ import androidx.navigation.NavHostController
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.punyo.nitechvacancyviewer.R
 import com.punyo.nitechvacancyviewer.data.setting.model.ThemeSettings
+import com.punyo.nitechvacancyviewer.theme.AppTheme
 import com.punyo.nitechvacancyviewer.ui.navigation.ScreenDestinations
-import com.punyo.nitechvacancyviewer.ui.theme.AppTheme
 
 @Composable
 fun SettingScreen(

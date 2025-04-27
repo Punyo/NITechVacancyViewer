@@ -32,9 +32,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.punyo.nitechvacancyviewer.R
+import com.punyo.nitechvacancyviewer.theme.AppTheme
 import com.punyo.nitechvacancyviewer.ui.component.CampusSquareWebViewComponent
 import com.punyo.nitechvacancyviewer.ui.component.LoadingProgressIndicatorComponent
-import com.punyo.nitechvacancyviewer.ui.theme.AppTheme
 
 @Composable
 fun InitializeScreen(
