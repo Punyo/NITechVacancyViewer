@@ -1,4 +1,4 @@
-package com.punyo.nitechvacancyviewer.ui.component
+package com.punyo.nitechvacancyviewer.ui.setting
 
 import android.content.Intent
 import android.net.Uri
@@ -42,18 +42,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.punyo.nitechvacancyviewer.R
 import com.punyo.nitechvacancyviewer.data.setting.model.ThemeSettings
-import com.punyo.nitechvacancyviewer.ui.ScreenDestinations
-import com.punyo.nitechvacancyviewer.ui.model.SettingsComponentViewModel
-import com.punyo.nitechvacancyviewer.ui.theme.AppTheme
-import androidx.core.net.toUri
+import com.punyo.nitechvacancyviewer.theme.AppTheme
+import com.punyo.nitechvacancyviewer.ui.navigation.ScreenDestinations
 
 @Composable
-fun SettingsComponent(
+fun SettingScreen(
     modifier: Modifier = Modifier,
     navHostController: NavHostController,
     settingsComponentViewModel: SettingsComponentViewModel = hiltViewModel(),
@@ -334,7 +333,7 @@ private fun ThemePickerRadioButtonComponent(
 @Composable
 fun SettingsComponentPreview() {
     AppTheme {
-        SettingsComponent(
+        SettingScreen(
             navHostController = NavHostController(LocalContext.current),
         )
     }

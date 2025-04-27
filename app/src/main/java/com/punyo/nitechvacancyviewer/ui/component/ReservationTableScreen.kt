@@ -1,4 +1,4 @@
-package com.punyo.nitechvacancyviewer.ui.screen
+package com.punyo.nitechvacancyviewer.ui.component
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,45 +17,46 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.punyo.nitechvacancyviewer.R
 import com.punyo.nitechvacancyviewer.data.room.model.Room
-import com.punyo.nitechvacancyviewer.ui.component.TopAppBarWithBackArrowComponent
 
 @Composable
 fun ReservationTableScreen(
     roomData: Room,
-    onBackPressed: () -> Unit
+    onBackPressed: () -> Unit,
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             TopAppBarWithBackArrowComponent(
                 headerText = roomData.roomDisplayName,
-                onBackPressed = onBackPressed
+                onBackPressed = onBackPressed,
             )
-        }) { innerPadding ->
+        },
+    ) { innerPadding ->
         Column(
-            modifier = Modifier
-                .padding(innerPadding)
-                .verticalScroll(rememberScrollState())
+            modifier =
+                Modifier
+                    .padding(innerPadding)
+                    .verticalScroll(rememberScrollState()),
         ) {
             val events = roomData.eventsInfo
             events.forEach { event ->
                 ListItem(
                     headlineContent = { Text(text = event.eventDescription) },
-                    supportingContent = { Text(text = event.getStartAndEndString()) }
+                    supportingContent = { Text(text = event.getStartAndEndString()) },
                 )
                 HorizontalDivider()
             }
             if (events.isEmpty()) {
                 Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .align(Alignment.CenterHorizontally)
-                )
-                {
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .align(Alignment.CenterHorizontally),
+                ) {
                     Text(
                         modifier = Modifier.align(Alignment.Center),
                         textAlign = TextAlign.Center,
-                        text = stringResource(R.string.UI_TEXT_NO_RESERVATION)
+                        text = stringResource(R.string.UI_TEXT_NO_RESERVATION),
                     )
                 }
             }

@@ -1,4 +1,4 @@
-package com.punyo.nitechvacancyviewer.ui.model
+package com.punyo.nitechvacancyviewer.ui.navigation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

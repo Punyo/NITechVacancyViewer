@@ -1,4 +1,4 @@
-package com.punyo.nitechvacancyviewer.ui.model
+package com.punyo.nitechvacancyviewer.ui.buildingvacancy
 
 import androidx.lifecycle.ViewModel
 import com.punyo.nitechvacancyviewer.data.building.BuildingRepository
@@ -42,8 +42,3 @@ class VacancyComponentViewModel
 data class VacancyComponentUiState(
     val buildings: Array<Building>? = null,
 )
-
-enum class RoomVacancyStatus {
-    VACANT,
-    OCCUPY,
-}

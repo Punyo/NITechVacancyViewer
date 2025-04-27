@@ -1,10 +1,10 @@
-package com.punyo.nitechvacancyviewer.ui.model
+package com.punyo.nitechvacancyviewer.ui.signin
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.punyo.nitechvacancyviewer.application.enums.AuthResultStatus
 import com.punyo.nitechvacancyviewer.data.auth.AuthRepository
-import com.punyo.nitechvacancyviewer.data.auth.AuthRepositoryImpl
 import com.punyo.nitechvacancyviewer.data.room.RoomRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -41,7 +41,7 @@ class SignInScreenViewModel
                                 state.value.userName,
                                 state.value.password,
                             )
-                        if (result == AuthRepositoryImpl.AuthResultStatus.SUCCESS) {
+                        if (result == AuthResultStatus.SUCCESS) {
                             onSignInSuccess()
                         }
                         state.value = state.value.copy(signInResult = result)
@@ -81,5 +81,5 @@ data class SignInScreenUiState(
     val isErrorUserName: Boolean = false,
     val isErrorPassword: Boolean = false,
     val isSignInButtonEnabled: Boolean = true,
-    val signInResult: AuthRepositoryImpl.AuthResultStatus? = null,
+    val signInResult: AuthResultStatus? = null,
 )

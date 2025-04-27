@@ -1,4 +1,4 @@
-package com.punyo.nitechvacancyviewer.ui.theme
+package com.punyo.nitechvacancyviewer.theme
 
 import androidx.compose.material3.Typography
 

@@ -1,4 +1,4 @@
-package com.punyo.nitechvacancyviewer.ui.component
+package com.punyo.nitechvacancyviewer.ui.buildingvacancy
 
 import android.annotation.SuppressLint
 import androidx.annotation.DrawableRes
@@ -35,13 +35,14 @@ import androidx.navigation.NavHostController
 import com.punyo.nitechvacancyviewer.R
 import com.punyo.nitechvacancyviewer.application.GsonInstance
 import com.punyo.nitechvacancyviewer.data.room.model.Room
-import com.punyo.nitechvacancyviewer.ui.model.VacancyComponentViewModel
+import com.punyo.nitechvacancyviewer.ui.component.LastUpdateTimeTextComponent
+import com.punyo.nitechvacancyviewer.ui.component.LoadingProgressIndicatorComponent
 import java.time.LocalDateTime
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("DiscouragedApi")
 @Composable
-fun VacancyComponent(
+fun BuildingVacancyScreen(
     modifier: Modifier = Modifier,
     navHostController: NavHostController,
     onRefreshVacancy: () -> Unit,

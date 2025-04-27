@@ -1,4 +1,4 @@
-package com.punyo.nitechvacancyviewer.ui.theme
+package com.punyo.nitechvacancyviewer.theme
 import androidx.compose.ui.graphics.Color
 
 val primaryLight = Color(0xFF4C5C92)
@@ -216,10 +216,3 @@ val surfaceContainerLowDarkHighContrast = Color(0xFF1A1B21)
 val surfaceContainerDarkHighContrast = Color(0xFF1E1F25)
 val surfaceContainerHighDarkHighContrast = Color(0xFF292A2F)
 val surfaceContainerHighestDarkHighContrast = Color(0xFF34343A)
-
-
-
-
-
-
-
