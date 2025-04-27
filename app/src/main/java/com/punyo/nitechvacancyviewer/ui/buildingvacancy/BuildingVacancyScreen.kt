@@ -42,7 +42,7 @@ import java.time.LocalDateTime
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("DiscouragedApi")
 @Composable
-fun VacancyComponent(
+fun BuildingVacancyScreen(
     modifier: Modifier = Modifier,
     navHostController: NavHostController,
     onRefreshVacancy: () -> Unit,

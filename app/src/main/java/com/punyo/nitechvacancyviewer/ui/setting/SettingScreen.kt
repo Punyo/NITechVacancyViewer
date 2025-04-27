@@ -52,7 +52,7 @@ import com.punyo.nitechvacancyviewer.ui.navigation.ScreenDestinations
 import com.punyo.nitechvacancyviewer.ui.theme.AppTheme
 
 @Composable
-fun SettingsComponent(
+fun SettingScreen(
     modifier: Modifier = Modifier,
     navHostController: NavHostController,
     settingsComponentViewModel: SettingsComponentViewModel = hiltViewModel(),
@@ -333,7 +333,7 @@ private fun ThemePickerRadioButtonComponent(
 @Composable
 fun SettingsComponentPreview() {
     AppTheme {
-        SettingsComponent(
+        SettingScreen(
             navHostController = NavHostController(LocalContext.current),
         )
     }

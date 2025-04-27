@@ -27,11 +27,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.punyo.nitechvacancyviewer.R
-import com.punyo.nitechvacancyviewer.ui.buildingvacancy.VacancyComponent
+import com.punyo.nitechvacancyviewer.ui.buildingvacancy.BuildingVacancyScreen
 import com.punyo.nitechvacancyviewer.ui.component.LoadingProgressIndicatorComponent
 import com.punyo.nitechvacancyviewer.ui.navigation.ScreenDestinations
-import com.punyo.nitechvacancyviewer.ui.roomreservation.RoomReservationListComponent
-import com.punyo.nitechvacancyviewer.ui.setting.SettingsComponent
+import com.punyo.nitechvacancyviewer.ui.roomreservation.RoomReservationScreen
+import com.punyo.nitechvacancyviewer.ui.setting.SettingScreen
 import com.punyo.nitechvacancyviewer.ui.theme.AppTheme
 import kotlinx.coroutines.delay
 
@@ -86,7 +86,7 @@ fun MainScreen(
         if (currentState.roomsData != null) {
             when (currentState.currentNavIndex) {
                 0 ->
-                    VacancyComponent(
+                    BuildingVacancyScreen(
                         modifier = modifier.padding(innerPadding),
                         navHostController = navHostController,
                         onRefreshVacancy = { mainScreenViewModel.onRefreshVacancy(pullToRefreshDelay) },
@@ -96,14 +96,14 @@ fun MainScreen(
                     )
 
                 1 ->
-                    RoomReservationListComponent(
+                    RoomReservationScreen(
                         modifier = modifier.padding(innerPadding),
                         navHostController = navHostController,
                         roomsData = currentState.roomsData!!,
                     )
 
                 2 ->
-                    SettingsComponent(
+                    SettingScreen(
                         modifier = modifier.padding(innerPadding),
                         navHostController = navHostController,
                     )

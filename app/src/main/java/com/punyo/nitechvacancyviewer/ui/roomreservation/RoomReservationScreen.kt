@@ -16,11 +16,11 @@ import com.punyo.nitechvacancyviewer.application.GsonInstance
 import com.punyo.nitechvacancyviewer.data.room.model.Room
 
 @Composable
-fun RoomReservationListComponent(
+fun RoomReservationScreen(
     modifier: Modifier = Modifier,
     roomsData: Array<Room>,
     navHostController: NavHostController,
-    reservationRoomListComponentViewModel: ReservationRoomListComponentViewModel = viewModel(),
+    roomReservationViewModel: RoomReservationViewModel = viewModel(),
 ) {
     val navigationRoute = stringResource(R.string.UI_NAVHOST_COMPOSABLE_RESERVATIONTABLESCREEN)
     val navigationParam1 =
