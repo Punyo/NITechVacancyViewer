@@ -1,6 +1,5 @@
 package com.punyo.nitechvacancyviewer.ui.screen
 
-import android.app.Application
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -24,11 +23,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.punyo.nitechvacancyviewer.R
-import com.punyo.nitechvacancyviewer.data.room.RoomRepository
 import com.punyo.nitechvacancyviewer.ui.ScreenDestinations
 import com.punyo.nitechvacancyviewer.ui.component.LoadingProgressIndicatorComponent
 import com.punyo.nitechvacancyviewer.ui.component.RoomReservationListComponent
@@ -42,24 +40,21 @@ import kotlinx.coroutines.delay
 fun MainScreen(
     modifier: Modifier = Modifier,
     navHostController: NavHostController,
-    mainScreenViewModel: MainScreenViewModel = viewModel(
-        factory = MainScreenViewModel.Factory(
-            LocalContext.current.applicationContext as Application,
-            RoomRepository()
-        )
-    )
+    mainScreenViewModel: MainScreenViewModel = hiltViewModel(),
 ) {
     val currentState by mainScreenViewModel.uiState.collectAsStateWithLifecycle()
-    val navbarLabels = listOf(
-        stringResource(id = R.string.UI_NAVIGATIONBARITEM_TEXT_HOME),
-        stringResource(id = R.string.UI_NAVIGATIONBARITEM_TEXT_RESERVATION),
-        stringResource(id = R.string.UI_NAVIGATIONBARITEM_TEXT_SETTINGS)
-    )
-    val navbarIcons = listOf(
-        Icons.Default.Home,
-        Icons.AutoMirrored.Filled.List,
-        Icons.Default.Settings
-    )
+    val navbarLabels =
+        listOf(
+            stringResource(id = R.string.UI_NAVIGATIONBARITEM_TEXT_HOME),
+            stringResource(id = R.string.UI_NAVIGATIONBARITEM_TEXT_RESERVATION),
+            stringResource(id = R.string.UI_NAVIGATIONBARITEM_TEXT_SETTINGS),
+        )
+    val navbarIcons =
+        listOf(
+            Icons.Default.Home,
+            Icons.AutoMirrored.Filled.List,
+            Icons.Default.Settings,
+        )
     val vacancyUpdateInterval =
         integerResource(id = R.integer.VACANCY_UPDATE_INTERVAL_MILLISECOND).toLong()
     val pullToRefreshDelay =
@@ -83,33 +78,36 @@ fun MainScreen(
                         selected = index == currentState.currentNavIndex,
                         onClick = {
                             mainScreenViewModel.onNavItemClick(index)
-                        }
+                        },
                     )
                 }
             }
-        }
+        },
     ) { innerPadding ->
         if (currentState.roomsData != null) {
             when (currentState.currentNavIndex) {
-                0 -> VacancyComponent(
-                    modifier = modifier.padding(innerPadding),
-                    navHostController = navHostController,
-                    onRefreshVacancy = { mainScreenViewModel.onRefreshVacancy(pullToRefreshDelay) },
-                    isRefreshVacancy = currentState.isRefreshVacancy,
-                    lastVacancyRefreshTimeString = mainScreenViewModel.getLastUpdateTimeString(),
-                    roomsData = currentState.roomsData!!
-                )
+                0 ->
+                    VacancyComponent(
+                        modifier = modifier.padding(innerPadding),
+                        navHostController = navHostController,
+                        onRefreshVacancy = { mainScreenViewModel.onRefreshVacancy(pullToRefreshDelay) },
+                        isRefreshVacancy = currentState.isRefreshVacancy,
+                        lastVacancyRefreshTimeString = mainScreenViewModel.getLastUpdateTimeString(),
+                        roomsData = currentState.roomsData!!,
+                    )
 
-                1 -> RoomReservationListComponent(
-                    modifier = modifier.padding(innerPadding),
-                    navHostController = navHostController,
-                    roomsData = currentState.roomsData!!
-                )
+                1 ->
+                    RoomReservationListComponent(
+                        modifier = modifier.padding(innerPadding),
+                        navHostController = navHostController,
+                        roomsData = currentState.roomsData!!,
+                    )
 
-                2 -> SettingsComponent(
-                    modifier = modifier.padding(innerPadding),
-                    navHostController = navHostController
-                )
+                2 ->
+                    SettingsComponent(
+                        modifier = modifier.padding(innerPadding),
+                        navHostController = navHostController,
+                    )
             }
         } else {
             LoadingProgressIndicatorComponent()
@@ -122,14 +120,18 @@ fun MainScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreenAppBar(modifier: Modifier = Modifier, currentNavTitle: String) {
+fun MainScreenAppBar(
+    modifier: Modifier = Modifier,
+    currentNavTitle: String,
+) {
     TopAppBar(
         modifier = modifier,
         title = { Text(text = currentNavTitle) },
-        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
-            titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
-        )
+        colors =
+            TopAppBarDefaults.centerAlignedTopAppBarColors(
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+            ),
     )
 }
 

@@ -8,7 +8,7 @@ import java.security.AccessControlException
 import java.time.Duration
 import kotlin.jvm.Throws
 
-object AuthNetworkDataSource {
+class AuthNetworkDataSource {
     private val retrofit =
         Retrofit
             .Builder()

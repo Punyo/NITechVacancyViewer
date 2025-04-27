@@ -7,9 +7,11 @@ import java.time.LocalDateTime
 class ReservationRoomListComponentViewModel : ViewModel() {
     fun getMinutesUntilNextEvent(room: Room): Int? {
         val now = LocalDateTime.now()
-        val nextEvent = room.eventsInfo.filter { event ->
-            now.isBefore(event.start)
-        }.minByOrNull { it.start }
+        val nextEvent =
+            room.eventsInfo
+                .filter { event ->
+                    now.isBefore(event.start)
+                }.minByOrNull { it.start }
         return if (nextEvent != null) {
             val diff =
                 nextEvent.start.toLocalTime().toSecondOfDay() - now.toLocalTime().toSecondOfDay()
@@ -18,5 +20,4 @@ class ReservationRoomListComponentViewModel : ViewModel() {
             null
         }
     }
-
 }

@@ -6,10 +6,14 @@ import com.punyo.nitechvacancyviewer.data.room.model.Room
 import java.time.LocalDateTime
 
 class RoomVacancyScreenViewModel : ViewModel() {
-    fun getRoomVacancy(room: Room, time: LocalDateTime): RoomVacancyStatus {
-        val isTimeWithinEvent = room.eventsInfo.any { eventTime ->
-            time.isAfter(eventTime.start) && time.isBefore(eventTime.end)
-        }
+    fun getRoomVacancy(
+        room: Room,
+        time: LocalDateTime,
+    ): RoomVacancyStatus {
+        val isTimeWithinEvent =
+            room.eventsInfo.any { eventTime ->
+                time.isAfter(eventTime.start) && time.isBefore(eventTime.end)
+            }
         return if (isTimeWithinEvent) {
             RoomVacancyStatus.OCCUPY
         } else {
@@ -17,9 +21,11 @@ class RoomVacancyScreenViewModel : ViewModel() {
         }
     }
 
-    fun getCurrentEvent(room: Room, time: LocalDateTime): EventInfo? {
-        return room.eventsInfo.find { eventTime ->
+    fun getCurrentEvent(
+        room: Room,
+        time: LocalDateTime,
+    ): EventInfo? =
+        room.eventsInfo.find { eventTime ->
             time.isAfter(eventTime.start) && time.isBefore(eventTime.end)
         }
-    }
 }

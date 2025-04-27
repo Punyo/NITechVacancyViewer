@@ -1,14 +1,13 @@
 package com.punyo.nitechvacancyviewer.ui
 
-import android.app.Application
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -18,7 +17,6 @@ import androidx.navigation.navArgument
 import com.punyo.nitechvacancyviewer.R
 import com.punyo.nitechvacancyviewer.application.GsonInstance
 import com.punyo.nitechvacancyviewer.data.room.model.Room
-import com.punyo.nitechvacancyviewer.data.setting.SettingRepository
 import com.punyo.nitechvacancyviewer.data.setting.model.ThemeSettings
 import com.punyo.nitechvacancyviewer.ui.model.MainNavigationViewModel
 import com.punyo.nitechvacancyviewer.ui.screen.InitializeScreen
@@ -31,17 +29,7 @@ import com.punyo.nitechvacancyviewer.ui.theme.AppTheme
 @Composable
 fun MainNavigation(
     navController: NavHostController = rememberNavController(),
-    navigationViewModel: MainNavigationViewModel =
-        viewModel(
-            factory =
-                MainNavigationViewModel.Factory(
-                    context = LocalContext.current.applicationContext as Application,
-                    settingRepository =
-                        SettingRepository(
-                            context = LocalContext.current,
-                        ),
-                ),
-        ),
+    navigationViewModel: MainNavigationViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
     val themeSettings by navigationViewModel.currentTheme.collectAsStateWithLifecycle()

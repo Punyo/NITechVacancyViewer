@@ -1,6 +1,5 @@
 package com.punyo.nitechvacancyviewer.ui.screen
 
-import android.app.Application
 import android.graphics.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -43,23 +42,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.createBitmap
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.punyo.nitechvacancyviewer.R
-import com.punyo.nitechvacancyviewer.data.auth.AuthRepository
+import com.punyo.nitechvacancyviewer.data.auth.AuthRepositoryImpl
 import com.punyo.nitechvacancyviewer.ui.model.SignInScreenViewModel
 import com.punyo.nitechvacancyviewer.ui.theme.AppTheme
 
 @Composable
 fun SignInScreen(
     onSignInSuccess: () -> Unit = {},
-    signInScreenViewModel: SignInScreenViewModel =
-        viewModel(
-            factory =
-                SignInScreenViewModel.Factory(
-                    LocalContext.current.applicationContext as Application,
-                ),
-        ),
+    signInScreenViewModel: SignInScreenViewModel = hiltViewModel(),
 ) {
     val currentState by signInScreenViewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -98,26 +91,26 @@ fun SignInScreen(
             currentState.signInResult?.let {
                 var failReason = context.getString(R.string.ERROR_PREFIX_SIGN_IN_FAILED)
                 when (it) {
-                    AuthRepository.AuthResultStatus.SUCCESS -> {
+                    AuthRepositoryImpl.AuthResultStatus.SUCCESS -> {
                         onSignInSuccess()
                     }
 
-                    AuthRepository.AuthResultStatus.NETWORK_ERROR -> {
+                    AuthRepositoryImpl.AuthResultStatus.NETWORK_ERROR -> {
                         failReason += (context.getString(R.string.ERROR_NOT_CONNECTED_TO_NITECH_NETWORK))
                     }
 
-                    AuthRepository.AuthResultStatus.INVALID_CREDENTIALS -> {
+                    AuthRepositoryImpl.AuthResultStatus.INVALID_CREDENTIALS -> {
                         failReason += (context.getString(R.string.ERROR_SIGN_IN_DENIED_OR_INVALID_CREDENTIALS))
                     }
 
-                    AuthRepository.AuthResultStatus.UNKNOWN_ERROR -> {
+                    AuthRepositoryImpl.AuthResultStatus.UNKNOWN_ERROR -> {
                         failReason += (context.getString(R.string.ERROR_UNKNOWN_ERROR))
                     }
 
-                    AuthRepository.AuthResultStatus.CREDENTIALS_NOT_FOUND -> {
+                    AuthRepositoryImpl.AuthResultStatus.CREDENTIALS_NOT_FOUND -> {
                     }
                 }
-                if (it != AuthRepository.AuthResultStatus.SUCCESS) {
+                if (it != AuthRepositoryImpl.AuthResultStatus.SUCCESS) {
                     snackbarHostState.showSnackbar(failReason)
                 }
                 signInScreenViewModel.setSignInButtonEnabled(true)
@@ -249,7 +242,7 @@ fun SignInScreen(
 @Composable
 fun LoginScreenLightPreview() {
     AppTheme {
-        SignInScreen(signInScreenViewModel = SignInScreenViewModel(Application()))
+        SignInScreen()
     }
 }
 
@@ -257,6 +250,6 @@ fun LoginScreenLightPreview() {
 @Composable
 fun LoginScreenDarkPreview() {
     AppTheme {
-        SignInScreen(signInScreenViewModel = SignInScreenViewModel(Application()))
+        SignInScreen()
     }
 }
