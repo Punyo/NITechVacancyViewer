@@ -63,4 +63,3 @@ jobs:
          track: production
          whatsNewDirectory: whatsnew/
          mappingFile: mapping.txt
-         
