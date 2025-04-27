@@ -1,7 +1,7 @@
 package com.punyo.nitechvacancyviewer.data.auth
 
 import android.content.Context
-import com.punyo.nitechvacancyviewer.data.auth.AuthRepositoryImpl.AuthResultStatus
+import com.punyo.nitechvacancyviewer.application.enums.AuthResultStatus
 
 interface AuthRepository {
     suspend fun signInWithSavedCredentials(context: Context): AuthResultStatus

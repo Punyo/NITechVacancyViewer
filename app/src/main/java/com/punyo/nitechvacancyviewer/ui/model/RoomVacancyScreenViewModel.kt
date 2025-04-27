@@ -1,6 +1,7 @@
 package com.punyo.nitechvacancyviewer.ui.model
 
 import androidx.lifecycle.ViewModel
+import com.punyo.nitechvacancyviewer.application.enums.RoomVacancyStatus
 import com.punyo.nitechvacancyviewer.data.room.model.EventInfo
 import com.punyo.nitechvacancyviewer.data.room.model.Room
 import java.time.LocalDateTime

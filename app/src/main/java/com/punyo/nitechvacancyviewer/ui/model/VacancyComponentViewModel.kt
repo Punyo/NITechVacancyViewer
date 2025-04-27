@@ -42,8 +42,3 @@ class VacancyComponentViewModel
 data class VacancyComponentUiState(
     val buildings: Array<Building>? = null,
 )
-
-enum class RoomVacancyStatus {
-    VACANT,
-    OCCUPY,
-}

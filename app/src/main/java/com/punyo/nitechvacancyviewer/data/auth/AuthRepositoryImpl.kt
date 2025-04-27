@@ -3,6 +3,7 @@ package com.punyo.nitechvacancyviewer.data.auth
 import android.content.Context
 import android.util.Log
 import androidx.datastore.core.IOException
+import com.punyo.nitechvacancyviewer.application.enums.AuthResultStatus
 import com.punyo.nitechvacancyviewer.data.auth.model.UserCredentialsDataModel
 import com.punyo.nitechvacancyviewer.data.auth.source.AuthNetworkDataSource
 import com.punyo.nitechvacancyviewer.data.auth.source.UserCredentialsLocalDataSource
@@ -83,13 +84,5 @@ class AuthRepositoryImpl
                 }
             }
             return AuthResultStatus.UNKNOWN_ERROR
-        }
-
-        enum class AuthResultStatus {
-            SUCCESS,
-            INVALID_CREDENTIALS,
-            NETWORK_ERROR,
-            CREDENTIALS_NOT_FOUND,
-            UNKNOWN_ERROR,
         }
     }

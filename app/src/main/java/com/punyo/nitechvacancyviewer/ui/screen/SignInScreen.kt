@@ -45,7 +45,7 @@ import androidx.core.graphics.createBitmap
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.punyo.nitechvacancyviewer.R
-import com.punyo.nitechvacancyviewer.data.auth.AuthRepositoryImpl
+import com.punyo.nitechvacancyviewer.application.enums.AuthResultStatus
 import com.punyo.nitechvacancyviewer.ui.model.SignInScreenViewModel
 import com.punyo.nitechvacancyviewer.ui.theme.AppTheme
 
@@ -91,26 +91,26 @@ fun SignInScreen(
             currentState.signInResult?.let {
                 var failReason = context.getString(R.string.ERROR_PREFIX_SIGN_IN_FAILED)
                 when (it) {
-                    AuthRepositoryImpl.AuthResultStatus.SUCCESS -> {
+                    AuthResultStatus.SUCCESS -> {
                         onSignInSuccess()
                     }
 
-                    AuthRepositoryImpl.AuthResultStatus.NETWORK_ERROR -> {
+                    AuthResultStatus.NETWORK_ERROR -> {
                         failReason += (context.getString(R.string.ERROR_NOT_CONNECTED_TO_NITECH_NETWORK))
                     }
 
-                    AuthRepositoryImpl.AuthResultStatus.INVALID_CREDENTIALS -> {
+                    AuthResultStatus.INVALID_CREDENTIALS -> {
                         failReason += (context.getString(R.string.ERROR_SIGN_IN_DENIED_OR_INVALID_CREDENTIALS))
                     }
 
-                    AuthRepositoryImpl.AuthResultStatus.UNKNOWN_ERROR -> {
+                    AuthResultStatus.UNKNOWN_ERROR -> {
                         failReason += (context.getString(R.string.ERROR_UNKNOWN_ERROR))
                     }
 
-                    AuthRepositoryImpl.AuthResultStatus.CREDENTIALS_NOT_FOUND -> {
+                    AuthResultStatus.CREDENTIALS_NOT_FOUND -> {
                     }
                 }
-                if (it != AuthRepositoryImpl.AuthResultStatus.SUCCESS) {
+                if (it != AuthResultStatus.SUCCESS) {
                     snackbarHostState.showSnackbar(failReason)
                 }
                 signInScreenViewModel.setSignInButtonEnabled(true)

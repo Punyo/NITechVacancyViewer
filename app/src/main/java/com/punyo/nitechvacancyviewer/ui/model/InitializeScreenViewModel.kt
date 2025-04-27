@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.punyo.nitechvacancyviewer.application.enums.AuthResultStatus
 import com.punyo.nitechvacancyviewer.data.auth.AuthRepositoryImpl
 import com.punyo.nitechvacancyviewer.data.room.RoomRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -52,7 +53,7 @@ class InitializeScreenViewModel
             if (authRepository.currentToken == null) {
                 viewModelScope.launch {
                     val result = authRepository.signInWithSavedCredentials(applicationContext)
-                    if (result == AuthRepositoryImpl.AuthResultStatus.SUCCESS) {
+                    if (result == AuthResultStatus.SUCCESS) {
                         state.value =
                             state.value.copy(signedInWithSavedCredentialsOrAlreadySignedIn = true)
                     } else {
