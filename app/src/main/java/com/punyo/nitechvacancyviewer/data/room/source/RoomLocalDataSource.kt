@@ -19,41 +19,28 @@ class RoomLocalDataSource {
     var loadedRoomsData: RoomsDataModel? = null
         private set
 
-    fun getDemoRoomsData(): RoomsDataModel {
-        val rooms =
-            arrayOf(
-                Room(
-                    "0111",
-                    arrayOf(
-                        EventInfo(
-                            LocalDateTime.now().withHour(9).withMinute(0),
-                            LocalDateTime.now().withHour(10).withMinute(30),
-                            "Demo Event 1",
-                        ),
-                        EventInfo(
-                            LocalDateTime.now().withHour(13).withMinute(0),
-                            LocalDateTime.now().withHour(14).withMinute(30),
-                            "Demo Event 2",
-                        ),
-                    ),
-                ),
-                Room(
-                    "0112",
-                    arrayOf(
-                        EventInfo(
-                            LocalDateTime.now().withHour(9).withMinute(0),
-                            LocalDateTime.now().withHour(10).withMinute(30),
-                            "Demo Event 3",
-                        ),
-                        EventInfo(
-                            LocalDateTime.now().withHour(13).withMinute(0),
-                            LocalDateTime.now().withHour(14).withMinute(30),
-                            "Demo Event 4",
-                        ),
-                    ),
-                ),
-            )
-        return RoomsDataModel(rooms, LocalDate.now())
+    suspend fun getDemoRoomsData(applicationContext: Context): RoomsDataModel {
+        roomDao =
+            androidx.room.Room
+                .databaseBuilder(
+                    applicationContext,
+                    LectureRoomDatabase::class.java,
+                    "lecture_room.db",
+                ).createFromAsset("lecture_room.db")
+                .build()
+                .lectureRoomDao()
+        val acquiredData = roomDao.getAll()
+        val rooms: MutableList<Room> = mutableListOf()
+        for (data in acquiredData) {
+            val roomDisplayName = data.roomDisplayName
+            val eventsInfo =
+                GsonInstance.gson.fromJson(
+                    data.eventsInfoJSON.replace(data.monthDay, LocalDate.now().toString()),
+                    Array<EventInfo>::class.java,
+                )
+            rooms.add(Room(roomDisplayName, eventsInfo))
+        }
+        return RoomsDataModel(rooms.toTypedArray(), LocalDate.now())
     }
 
     suspend fun saveOneWeekRoomsDataToDBFromHTML(
