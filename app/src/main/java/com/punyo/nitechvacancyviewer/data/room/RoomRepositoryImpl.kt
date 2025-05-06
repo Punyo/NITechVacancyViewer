@@ -11,10 +11,12 @@ class RoomRepositoryImpl
     constructor(
         private val roomLocalDatasource: RoomLocalDataSource,
     ) : RoomRepository {
-        private var isDemoMode: Boolean = false
+        companion object {
+            private var isDemoMode: Boolean = false
+        }
 
         override fun setDemoMode(isDemoMode: Boolean) {
-            this.isDemoMode = isDemoMode
+            RoomRepositoryImpl.isDemoMode = isDemoMode
         }
 
         override suspend fun isRoomsDataExist(
@@ -49,7 +51,7 @@ class RoomRepositoryImpl
                 }
                 return roomLocalDatasource.loadedRoomsData
             } else {
-                return roomLocalDatasource.getDemoRoomsData()
+                return roomLocalDatasource.getDemoRoomsData(applicationContext)
             }
         }
 
