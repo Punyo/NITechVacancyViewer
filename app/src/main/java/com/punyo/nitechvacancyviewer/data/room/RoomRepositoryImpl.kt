@@ -51,7 +51,7 @@ class RoomRepositoryImpl
                 }
                 return roomLocalDatasource.loadedRoomsData
             } else {
-                return roomLocalDatasource.getDemoRoomsData()
+                return roomLocalDatasource.getDemoRoomsData(applicationContext)
             }
         }
 

@@ -15,6 +15,9 @@ interface LectureRoomDao {
     @Query("SELECT * FROM lecture_room WHERE date = :date")
     suspend fun getByDate(date: String): Array<LectureRoomEntity>
 
+    @Query("SELECT * FROM lecture_room")
+    suspend fun getAll(): Array<LectureRoomEntity>
+
     @Query("SELECT EXISTS(SELECT * FROM lecture_room WHERE date = :date)")
     suspend fun isDataExistByDate(date: String): Int
 }
