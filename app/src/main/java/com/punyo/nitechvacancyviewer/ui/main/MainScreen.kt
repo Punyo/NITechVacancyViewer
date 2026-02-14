@@ -19,15 +19,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.punyo.nitechvacancyviewer.R
-import com.punyo.nitechvacancyviewer.theme.AppTheme
 import com.punyo.nitechvacancyviewer.ui.buildingvacancy.BuildingVacancyScreen
 import com.punyo.nitechvacancyviewer.ui.component.LoadingProgressIndicatorComponent
 import com.punyo.nitechvacancyviewer.ui.navigation.ScreenDestinations
@@ -132,20 +129,4 @@ fun MainScreenAppBar(
             titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
         ),
     )
-}
-
-@Preview(showBackground = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_NO)
-@Composable
-fun LightModePreview() {
-    AppTheme {
-        MainScreen(navHostController = NavHostController(LocalContext.current))
-    }
-}
-
-@Preview(showBackground = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
-@Composable
-fun DarkModePreview() {
-    AppTheme {
-        MainScreen(navHostController = NavHostController(LocalContext.current))
-    }
 }
