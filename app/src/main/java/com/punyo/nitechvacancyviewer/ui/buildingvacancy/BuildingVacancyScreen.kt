@@ -28,13 +28,17 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.punyo.nitechvacancyviewer.R
 import com.punyo.nitechvacancyviewer.application.GsonInstance
+import com.punyo.nitechvacancyviewer.data.building.model.Building
+import com.punyo.nitechvacancyviewer.data.room.model.EventInfo
 import com.punyo.nitechvacancyviewer.data.room.model.Room
+import com.punyo.nitechvacancyviewer.theme.AppTheme
 import com.punyo.nitechvacancyviewer.ui.component.LastUpdateTimeTextComponent
 import com.punyo.nitechvacancyviewer.ui.component.LoadingProgressIndicatorComponent
 import java.time.LocalDateTime
@@ -58,12 +62,52 @@ fun BuildingVacancyScreen(
         stringResource(id = R.string.UI_NAVHOST_COMPOSABLE_ROOMVACANCYSCREEN_PARAMETER1)
     val navigationRoteParam2 =
         stringResource(id = R.string.UI_NAVHOST_COMPOSABLE_ROOMVACANCYSCREEN_PARAMETER2)
-    val pullToRefreshState = rememberPullToRefreshState()
+
+    // 副作用: buildings読み込み
     LaunchedEffect(key1 = Unit) {
         viewModel.loadBuildings(context.resources.openRawResource(R.raw.buildings))
     }
-    if (currentState.buildings != null) {
-        val buildings = currentState.buildings!!
+
+    BuildingVacancyScreenInternal(
+        modifier = modifier,
+        state = currentState,
+        roomsData = roomsData,
+        isRefreshVacancy = isRefreshVacancy,
+        lastVacancyRefreshTimeString = lastVacancyRefreshTimeString,
+        currentTime = LocalDateTime.now(),
+        onRefreshVacancy = onRefreshVacancy,
+        onBuildingClick = { buildingName, rooms ->
+            navHostController.navigate(
+                navigationRoute
+                    .replace("{$navigationRouteParam1}", buildingName)
+                    .replace("{$navigationRoteParam2}", GsonInstance.gson.toJson(rooms)),
+            )
+        },
+        getNumberOfVacantRoom = { rooms, time ->
+            viewModel.getNumberOfVacantRoom(rooms, time)
+        },
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@SuppressLint("DiscouragedApi")
+@Composable
+private fun BuildingVacancyScreenInternal(
+    modifier: Modifier = Modifier,
+    state: VacancyComponentUiState,
+    roomsData: Array<Room>,
+    isRefreshVacancy: Boolean,
+    lastVacancyRefreshTimeString: String,
+    currentTime: LocalDateTime,
+    onRefreshVacancy: () -> Unit = {},
+    onBuildingClick: (String, Array<Room>) -> Unit = { _, _ -> },
+    getNumberOfVacantRoom: (Array<Room>, LocalDateTime) -> UInt = { _, _ -> 0u },
+) {
+    val context = LocalContext.current
+    val pullToRefreshState = rememberPullToRefreshState()
+
+    if (state.buildings != null) {
+        val buildings = state.buildings
         PullToRefreshBox(
             modifier = modifier.padding(start = 8.dp, end = 8.dp),
             state = pullToRefreshState,
@@ -90,8 +134,7 @@ fun BuildingVacancyScreen(
                             .filter { room ->
                                 buildingData.buildingRoomDisplayNames.contains(room.roomDisplayName)
                             }.toTypedArray()
-                    val numberOfVacantRooms =
-                        viewModel.getNumberOfVacantRoom(registeredRoomsData, LocalDateTime.now())
+                    val numberOfVacantRooms = getNumberOfVacantRoom(registeredRoomsData, currentTime)
                     BuildingsCard(
                         modifier = Modifier.padding(8.dp),
                         buildingName = buildingNameIdentifier,
@@ -104,15 +147,9 @@ fun BuildingVacancyScreen(
                         numberOfVacantRooms = numberOfVacantRooms,
                         numberOfRooms = buildingData.buildingRoomDisplayNames.size.toUInt(),
                         onClick = {
-                            navHostController.navigate(
-                                navigationRoute
-                                    .replace(
-                                        "{$navigationRouteParam1}",
-                                        context.getString(buildingNameIdentifier),
-                                    ).replace(
-                                        "{$navigationRoteParam2}",
-                                        GsonInstance.gson.toJson(registeredRoomsData),
-                                    ),
+                            onBuildingClick(
+                                context.getString(buildingNameIdentifier),
+                                registeredRoomsData,
                             )
                         },
                     )
@@ -163,6 +200,56 @@ fun BuildingsCard(
             ),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+    }
+}
+
+@Preview(showBackground = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_NO)
+@Composable
+private fun BuildingVacancyScreenLightPreview() {
+    val currentTime = LocalDateTime.now()
+    val rooms =
+        arrayOf(
+            Room(
+                "講義室A",
+                arrayOf(
+                    EventInfo(currentTime.minusHours(1), currentTime.plusHours(1), "授業1"),
+                ),
+            ),
+            Room(
+                "講義室B",
+                arrayOf(
+                    EventInfo(currentTime.plusHours(1), currentTime.plusHours(2), "授業2"),
+                ),
+            ),
+        )
+    val building1 = Building(
+        "BUILDING_1",
+        "thumbnail_building1",
+        arrayOf("講義室A", "講義室B"),
+    )
+
+    val buildings =
+        arrayOf(
+            building1,
+            building1,
+        )
+    AppTheme {
+        BuildingVacancyScreenInternal(
+            state = VacancyComponentUiState(buildings = buildings),
+            roomsData = rooms,
+            isRefreshVacancy = false,
+            lastVacancyRefreshTimeString = "2024-01-01 12:00",
+            currentTime = currentTime,
+            getNumberOfVacantRoom = { roomsData, time ->
+                roomsData
+                    .filter { room ->
+                        !room.eventsInfo.any { eventTime ->
+                            time.isAfter(eventTime.start) && time.isBefore(eventTime.end)
+                        }
+                    }.size
+                    .toUInt()
+            },
         )
     }
 }

@@ -59,10 +59,76 @@ fun SettingScreen(
 ) {
     val context = LocalContext.current
     val currentState by settingsComponentViewModel.uiState.collectAsState()
-    val privacyPolicyUrl = stringResource(id = R.string.URL_PRIVACY_POLICY)
-    val tosUrl = stringResource(id = R.string.URL_TOS)
-    val storeUrl = stringResource(id = R.string.URL_STORE_PAGE)
-    val srcUrl = stringResource(id = R.string.URL_SOURCE_CODE)
+    val versionName =
+        context.packageManager.getPackageInfo(context.packageName, 0)?.versionName ?: ""
+
+    SettingScreenInternal(
+        modifier = modifier,
+        state = currentState,
+        versionName = versionName,
+        onOpenOsAppSettings = {
+            val intent =
+                Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                    data = Uri.fromParts("package", context.packageName, null)
+                }
+            context.startActivity(intent)
+        },
+        onShowThemePicker = {
+            settingsComponentViewModel.showThemePickerDialog()
+        },
+        onOpenTos = {
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = context.getString(R.string.URL_TOS).toUri()
+            context.startActivity(intent)
+        },
+        onOpenPrivacyPolicy = {
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = context.getString(R.string.URL_PRIVACY_POLICY).toUri()
+            context.startActivity(intent)
+        },
+        onOpenStorePage = {
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = context.getString(R.string.URL_STORE_PAGE).toUri()
+            context.startActivity(intent)
+        },
+        onOpenSourceCode = {
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = context.getString(R.string.URL_SOURCE_CODE).toUri()
+            context.startActivity(intent)
+        },
+        onOpenLicense = {
+            context.startActivity(Intent(context, OssLicensesMenuActivity::class.java))
+        },
+        onSignOut = {
+            settingsComponentViewModel.signOut()
+            navHostController.navigate(ScreenDestinations.SignIn.name)
+        },
+        onThemeConfirm = { theme ->
+            settingsComponentViewModel.saveThemeSetting(theme)
+            settingsComponentViewModel.hideThemePickerDialog()
+        },
+        onThemeDismiss = {
+            settingsComponentViewModel.hideThemePickerDialog()
+        },
+    )
+}
+
+@Composable
+private fun SettingScreenInternal(
+    modifier: Modifier = Modifier,
+    state: SettingsComponentUiState,
+    versionName: String,
+    onOpenOsAppSettings: () -> Unit = {},
+    onShowThemePicker: () -> Unit = {},
+    onOpenTos: () -> Unit = {},
+    onOpenPrivacyPolicy: () -> Unit = {},
+    onOpenStorePage: () -> Unit = {},
+    onOpenSourceCode: () -> Unit = {},
+    onOpenLicense: () -> Unit = {},
+    onSignOut: () -> Unit = {},
+    onThemeConfirm: (ThemeSettings) -> Unit = {},
+    onThemeDismiss: () -> Unit = {},
+) {
     Column(
         modifier =
         modifier
@@ -81,20 +147,12 @@ fun SettingScreen(
         SettingsListItem(
             title = R.string.UI_TEXT_OPEN_OS_APP_SETTINGS,
             icon = Icons.Outlined.Settings,
-            onClick = {
-                val intent =
-                    Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                        data = Uri.fromParts("package", context.packageName, null)
-                    }
-                context.startActivity(intent)
-            },
+            onClick = onOpenOsAppSettings,
         )
         SettingsListItem(
             title = R.string.UI_TEXT_THEME,
             icon = R.drawable.outline_dark_mode_24,
-            onClick = {
-                settingsComponentViewModel.showThemePickerDialog()
-            },
+            onClick = onShowThemePicker,
         )
         HorizontalDivider()
         ListItem(
@@ -109,72 +167,44 @@ fun SettingScreen(
         SettingsListItem(
             title = R.string.UI_TEXT_TOS,
             icon = R.drawable.outline_launch_24,
-            onClick = {
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.data = tosUrl.toUri()
-                context.startActivity(intent)
-            },
+            onClick = onOpenTos,
         )
         SettingsListItem(
             title = R.string.UI_TEXT_PRIVACY_POLICY,
             icon = R.drawable.outline_launch_24,
-            onClick = {
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.data = privacyPolicyUrl.toUri()
-                context.startActivity(intent)
-            },
+            onClick = onOpenPrivacyPolicy,
         )
         SettingsListItem(
             title = R.string.UI_TEXT_STORE_PAGE,
             icon = R.drawable.outline_launch_24,
-            onClick = {
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.data = storeUrl.toUri()
-                context.startActivity(intent)
-            },
+            onClick = onOpenStorePage,
         )
         SettingsListItem(
             title = R.string.UI_TEXT_SOURCE_CODE,
             icon = R.drawable.outline_launch_24,
-            onClick = {
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.data = srcUrl.toUri()
-                context.startActivity(intent)
-            },
+            onClick = onOpenSourceCode,
         )
         SettingsListItem(
             title = R.string.UI_TEXT_LICENSE,
             icon = R.drawable.outline_launch_24,
-            onClick = {
-                context.startActivity(Intent(context, OssLicensesMenuActivity::class.java))
-            },
+            onClick = onOpenLicense,
         )
         SettingsListItem(
             title = R.string.UI_TEXT_VERSION,
-            subtitle =
-            context.packageManager.getPackageInfo(context.packageName, 0)?.versionName
-                ?: "",
+            subtitle = versionName,
             icon = Icons.Outlined.Info,
         )
         SettingsListItem(
             title = R.string.UI_TEXT_SIGN_OUT,
             icon = Icons.Outlined.Person,
-            onClick = {
-                settingsComponentViewModel.signOut()
-                navHostController.navigate(ScreenDestinations.SignIn.name)
-            },
+            onClick = onSignOut,
         )
     }
-    if (currentState.showThemePickerDialog) {
+    if (state.showThemePickerDialog) {
         ThemePickerDialogComponent(
-            currentTheme = currentState.currentTheme,
-            onConfirm = { theme ->
-                settingsComponentViewModel.saveThemeSetting(theme)
-                settingsComponentViewModel.hideThemePickerDialog()
-            },
-            onDismissRequest = {
-                settingsComponentViewModel.hideThemePickerDialog()
-            },
+            currentTheme = state.currentTheme,
+            onConfirm = onThemeConfirm,
+            onDismissRequest = onThemeDismiss,
         )
     }
 }
@@ -329,12 +359,17 @@ private fun ThemePickerRadioButtonComponent(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_NO)
 @Composable
-fun SettingsComponentPreview() {
+private fun SettingScreenPreview() {
     AppTheme {
-        SettingScreen(
-            navHostController = NavHostController(LocalContext.current),
+        SettingScreenInternal(
+            state =
+            SettingsComponentUiState(
+                currentTheme = ThemeSettings.LIGHT,
+                showThemePickerDialog = false,
+            ),
+            versionName = "1.0.0",
         )
     }
 }
