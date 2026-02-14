@@ -96,11 +96,11 @@ fun BuildingVacancyScreen(
                         modifier = Modifier.padding(8.dp),
                         buildingName = buildingNameIdentifier,
                         buildingImage =
-                            context.resources.getIdentifier(
-                                buildingData.buildingImageResourceName,
-                                "drawable",
-                                context.packageName,
-                            ),
+                        context.resources.getIdentifier(
+                            buildingData.buildingImageResourceName,
+                            "drawable",
+                            context.packageName,
+                        ),
                         numberOfVacantRooms = numberOfVacantRooms,
                         numberOfRooms = buildingData.buildingRoomDisplayNames.size.toUInt(),
                         onClick = {
@@ -139,10 +139,10 @@ fun BuildingsCard(
     ) {
         Image(
             modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .height(100.dp)
-                    .clip(MaterialTheme.shapes.medium),
+            Modifier
+                .fillMaxWidth()
+                .height(100.dp)
+                .clip(MaterialTheme.shapes.medium),
             painter = painterResource(id = buildingImage),
             contentScale = ContentScale.Crop,
             contentDescription = stringResource(id = buildingName),
@@ -157,10 +157,10 @@ fun BuildingsCard(
         Text(
             modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 8.dp),
             text =
-                stringResource(id = R.string.UI_CARD_TEXT_VACANTANDMAXROOMS).format(
-                    numberOfVacantRooms.toInt(),
-                    numberOfRooms.toInt(),
-                ),
+            stringResource(id = R.string.UI_CARD_TEXT_VACANTANDMAXROOMS).format(
+                numberOfVacantRooms.toInt(),
+                numberOfRooms.toInt(),
+            ),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )

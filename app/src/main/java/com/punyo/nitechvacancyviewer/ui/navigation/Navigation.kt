@@ -78,14 +78,14 @@ fun MainNavigation(
             composable(
                 route = context.getString(R.string.UI_NAVHOST_COMPOSABLE_ROOMVACANCYSCREEN),
                 arguments =
-                    listOf(
-                        navArgument(context.getString(R.string.UI_NAVHOST_COMPOSABLE_ROOMVACANCYSCREEN_PARAMETER1)) {
-                            type = NavType.StringType
-                        },
-                        navArgument(context.getString(R.string.UI_NAVHOST_COMPOSABLE_ROOMVACANCYSCREEN_PARAMETER2)) {
-                            type = NavType.StringType
-                        },
-                    ),
+                listOf(
+                    navArgument(context.getString(R.string.UI_NAVHOST_COMPOSABLE_ROOMVACANCYSCREEN_PARAMETER1)) {
+                        type = NavType.StringType
+                    },
+                    navArgument(context.getString(R.string.UI_NAVHOST_COMPOSABLE_ROOMVACANCYSCREEN_PARAMETER2)) {
+                        type = NavType.StringType
+                    },
+                ),
             ) { backStackEntry ->
                 val buildingName =
                     backStackEntry.arguments?.getString(context.getString(R.string.UI_NAVHOST_COMPOSABLE_ROOMVACANCYSCREEN_PARAMETER1))
@@ -103,11 +103,11 @@ fun MainNavigation(
             composable(
                 route = context.getString(R.string.UI_NAVHOST_COMPOSABLE_RESERVATIONTABLESCREEN),
                 arguments =
-                    listOf(
-                        navArgument(context.getString(R.string.UI_NAVHOST_COMPOSABLE_RESERVATIONTABLESCREEN_PARAMETER1)) {
-                            type = NavType.StringType
-                        },
-                    ),
+                listOf(
+                    navArgument(context.getString(R.string.UI_NAVHOST_COMPOSABLE_RESERVATIONTABLESCREEN_PARAMETER1)) {
+                        type = NavType.StringType
+                    },
+                ),
             ) { backStackEntry ->
                 val roomData =
                     backStackEntry.arguments?.getString(context.getString(R.string.UI_NAVHOST_COMPOSABLE_RESERVATIONTABLESCREEN_PARAMETER1))

@@ -14,9 +14,9 @@ fun LastUpdateTimeTextComponent(modifier: Modifier = Modifier, lastUpdateTimeStr
     Text(
         modifier = modifier.padding(8.dp),
         text = stringResource(id = R.string.UI_LAZYVERTICALGRID_TEXT_LASTUPDATETIME).format(
-            lastUpdateTimeString
+            lastUpdateTimeString,
         ),
         style = MaterialTheme.typography.labelMedium,
-        color = MaterialTheme.colorScheme.onSurfaceVariant
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
     )
 }

@@ -10,14 +10,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainNavigationViewModel
-    @Inject
-    constructor(
-        settingRepository: SettingRepository,
-    ) : ViewModel() {
-        val currentTheme =
-            settingRepository.themeSettings.stateIn(
-                viewModelScope,
-                SharingStarted.Eagerly,
-                false,
-            )
-    }
+@Inject
+constructor(
+    settingRepository: SettingRepository,
+) : ViewModel() {
+    val currentTheme =
+        settingRepository.themeSettings.stateIn(
+            viewModelScope,
+            SharingStarted.Eagerly,
+            false,
+        )
+}

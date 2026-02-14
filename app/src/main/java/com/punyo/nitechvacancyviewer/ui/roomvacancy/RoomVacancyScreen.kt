@@ -45,9 +45,9 @@ fun RoomVacancyScreen(
     ) { innerPadding ->
         Column(
             modifier =
-                Modifier
-                    .padding(innerPadding)
-                    .verticalScroll(rememberScrollState()),
+            Modifier
+                .padding(innerPadding)
+                .verticalScroll(rememberScrollState()),
         ) {
             rooms.forEachIndexed { index, room ->
                 val roomVacancyStatus =
@@ -80,17 +80,17 @@ fun RoomVacancyScreen(
                     supportingContent = {
                         Text(
                             text =
-                                when (roomVacancyStatus) {
-                                    RoomVacancyStatus.VACANT -> stringResource(id = R.string.UI_LISTITEM_TEXT_VACANT)
-                                    RoomVacancyStatus.OCCUPY ->
-                                        stringResource(id = R.string.UI_LISTITEM_TEXT_OCCUPY).format(
-                                            roomVacancyScreenViewModel
-                                                .getCurrentEvent(
-                                                    room,
-                                                    LocalDateTime.now(),
-                                                )?.eventDescription ?: "",
-                                        )
-                                },
+                            when (roomVacancyStatus) {
+                                RoomVacancyStatus.VACANT -> stringResource(id = R.string.UI_LISTITEM_TEXT_VACANT)
+                                RoomVacancyStatus.OCCUPY ->
+                                    stringResource(id = R.string.UI_LISTITEM_TEXT_OCCUPY).format(
+                                        roomVacancyScreenViewModel
+                                            .getCurrentEvent(
+                                                room,
+                                                LocalDateTime.now(),
+                                            )?.eventDescription ?: "",
+                                    )
+                            },
                         )
                     },
                 )
@@ -108,28 +108,28 @@ fun RoomVacancyScreenLightModePreview() {
         RoomVacancyScreen(
             "建物の名称",
             rooms =
-                arrayOf(
-                    Room(
-                        "部屋1",
-                        arrayOf(
-                            EventInfo(
-                                LocalDateTime.now().minusHours(1),
-                                LocalDateTime.now().plusHours(1),
-                                "数理情報概論",
-                            ),
-                        ),
-                    ),
-                    Room(
-                        "部屋2",
-                        arrayOf(
-                            EventInfo(
-                                LocalDateTime.now().plusHours(1),
-                                LocalDateTime.now().plusHours(2),
-                                "イベント2",
-                            ),
+            arrayOf(
+                Room(
+                    "部屋1",
+                    arrayOf(
+                        EventInfo(
+                            LocalDateTime.now().minusHours(1),
+                            LocalDateTime.now().plusHours(1),
+                            "数理情報概論",
                         ),
                     ),
                 ),
+                Room(
+                    "部屋2",
+                    arrayOf(
+                        EventInfo(
+                            LocalDateTime.now().plusHours(1),
+                            LocalDateTime.now().plusHours(2),
+                            "イベント2",
+                        ),
+                    ),
+                ),
+            ),
         )
     }
 }

@@ -18,44 +18,44 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainScreenViewModel
-    @Inject
-    constructor(
-        private val applicationContext: Context,
-        private val roomRepository: RoomRepositoryImpl,
-    ) : ViewModel() {
-        private val state = MutableStateFlow(MainScreenUiState())
-        val uiState: StateFlow<MainScreenUiState> = state.asStateFlow()
+@Inject
+constructor(
+    private val applicationContext: Context,
+    private val roomRepository: RoomRepositoryImpl,
+) : ViewModel() {
+    private val state = MutableStateFlow(MainScreenUiState())
+    val uiState: StateFlow<MainScreenUiState> = state.asStateFlow()
 
-        fun onNavItemClick(index: Int) {
-            state.value = state.value.copy(currentNavIndex = index)
-        }
-
-        fun onRefreshVacancy(refreshDelayMillisecond: Long) {
-            state.value = state.value.copy(isRefreshVacancy = true)
-            viewModelScope.launch {
-                updateVacancy()
-                delay(refreshDelayMillisecond)
-                state.value = state.value.copy(isRefreshVacancy = false)
-            }
-        }
-
-        fun updateVacancy() {
-            viewModelScope.launch(Dispatchers.IO) {
-                val roomsData = roomRepository.getTodayRoomsData(applicationContext)
-                if (roomsData != null) {
-                    state.value =
-                        state.value.copy(
-                            roomsData = roomsData.rooms,
-                            lastVacancyUpdateTime = LocalDateTime.now(),
-                        )
-                } else {
-                    state.value = state.value.copy(isTodayRoomsDataNotFoundOnDB = true)
-                }
-            }
-        }
-
-        fun getLastUpdateTimeString(): String = state.value.lastVacancyUpdateTime!!.format(CommonDateTimeFormater.formatter)
+    fun onNavItemClick(index: Int) {
+        state.value = state.value.copy(currentNavIndex = index)
     }
+
+    fun onRefreshVacancy(refreshDelayMillisecond: Long) {
+        state.value = state.value.copy(isRefreshVacancy = true)
+        viewModelScope.launch {
+            updateVacancy()
+            delay(refreshDelayMillisecond)
+            state.value = state.value.copy(isRefreshVacancy = false)
+        }
+    }
+
+    fun updateVacancy() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val roomsData = roomRepository.getTodayRoomsData(applicationContext)
+            if (roomsData != null) {
+                state.value =
+                    state.value.copy(
+                        roomsData = roomsData.rooms,
+                        lastVacancyUpdateTime = LocalDateTime.now(),
+                    )
+            } else {
+                state.value = state.value.copy(isTodayRoomsDataNotFoundOnDB = true)
+            }
+        }
+    }
+
+    fun getLastUpdateTimeString(): String = state.value.lastVacancyUpdateTime!!.format(CommonDateTimeFormater.formatter)
+}
 
 data class MainScreenUiState(
     val currentNavIndex: Int = 0,

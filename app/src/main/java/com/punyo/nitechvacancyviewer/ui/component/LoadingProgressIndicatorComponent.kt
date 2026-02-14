@@ -15,14 +15,14 @@ import androidx.compose.ui.unit.dp
 fun LoadingProgressIndicatorComponent() {
     Box(
         modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         CircularProgressIndicator(
             modifier = Modifier
                 .width(48.dp)
                 .height(48.dp),
             color = MaterialTheme.colorScheme.primary,
-            trackColor = MaterialTheme.colorScheme.secondaryContainer
+            trackColor = MaterialTheme.colorScheme.secondaryContainer,
         )
     }
 }

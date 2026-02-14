@@ -14,30 +14,30 @@ import javax.inject.Inject
 
 @HiltViewModel
 class VacancyComponentViewModel
-    @Inject
-    constructor(
-        private val buildingRepository: BuildingRepository,
-    ) : ViewModel() {
-        private val state = MutableStateFlow(VacancyComponentUiState())
-        val uiState: StateFlow<VacancyComponentUiState> = state.asStateFlow()
+@Inject
+constructor(
+    private val buildingRepository: BuildingRepository,
+) : ViewModel() {
+    private val state = MutableStateFlow(VacancyComponentUiState())
+    val uiState: StateFlow<VacancyComponentUiState> = state.asStateFlow()
 
-        fun getNumberOfVacantRoom(
-            roomsData: Array<Room>,
-            time: LocalDateTime,
-        ): UInt =
-            roomsData
-                .filter { room ->
-                    !room.eventsInfo.any { eventTime ->
-                        time.isAfter(eventTime.start) && time.isBefore(eventTime.end)
-                    }
-                }.size
-                .toUInt()
+    fun getNumberOfVacantRoom(
+        roomsData: Array<Room>,
+        time: LocalDateTime,
+    ): UInt =
+        roomsData
+            .filter { room ->
+                !room.eventsInfo.any { eventTime ->
+                    time.isAfter(eventTime.start) && time.isBefore(eventTime.end)
+                }
+            }.size
+            .toUInt()
 
-        suspend fun loadBuildings(inputStream: InputStream) {
-            val buildings = buildingRepository.getBuildings(inputStream)
-            state.value = state.value.copy(buildings = buildings)
-        }
+    suspend fun loadBuildings(inputStream: InputStream) {
+        val buildings = buildingRepository.getBuildings(inputStream)
+        state.value = state.value.copy(buildings = buildings)
     }
+}
 
 data class VacancyComponentUiState(
     val buildings: Array<Building>? = null,

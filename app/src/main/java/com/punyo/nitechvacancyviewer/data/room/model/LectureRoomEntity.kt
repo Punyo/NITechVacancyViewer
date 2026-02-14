@@ -14,5 +14,5 @@ data class LectureRoomEntity(
     @ColumnInfo(name = "display_name")
     val roomDisplayName: String,
     @ColumnInfo(name = "events_info_json")
-    val eventsInfoJSON: String
+    val eventsInfoJSON: String,
 )

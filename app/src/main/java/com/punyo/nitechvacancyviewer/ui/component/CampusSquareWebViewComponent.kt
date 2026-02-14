@@ -25,7 +25,7 @@ fun CampusSquareWebViewComponent(
     onGetReservationTableHTML: (String) -> Unit,
     onReceivedError: (WebView?, WebResourceError?) -> Unit,
     onReceivedHttpError: (WebView?, WebResourceResponse?) -> Unit,
-    sso4cookie: String
+    sso4cookie: String,
 ) {
     AndroidView(
         factory = { context ->
@@ -33,12 +33,15 @@ fun CampusSquareWebViewComponent(
                 webViewClient = CampusSquareWebViewClient(onReceivedError, onReceivedHttpError)
                 settings.javaScriptEnabled = true
                 visibility = View.GONE
-                addJavascriptInterface(object {
-                    @JavascriptInterface
-                    fun callbackHTML(html: String) {
-                        onGetReservationTableHTML(html)
-                    }
-                }, "callback")
+                addJavascriptInterface(
+                    object {
+                        @JavascriptInterface
+                        fun callbackHTML(html: String) {
+                            onGetReservationTableHTML(html)
+                        }
+                    },
+                    "callback",
+                )
                 addJavascriptInterface(
                     object {
                         @JavascriptInterface
@@ -46,13 +49,13 @@ fun CampusSquareWebViewComponent(
                             val regex = """<a href=["']([^"']+)["']>週表示""".toRegex()
                             val matchResult = regex.find(html)
                             if (matchResult == null) {
-                                //「週表示」のアンカーが見つからない＝もうすでに週表示になっている
-                                //HTMLをコールバック
+                                // 「週表示」のアンカーが見つからない＝もうすでに週表示になっている
+                                // HTMLをコールバック
                                 post {
                                     loadUrl("javascript:window.callback.callbackHTML(document.documentElement.outerHTML);")
                                 }
                             } else {
-                                //「週表示」のアンカーが見つかった＝週表示に変更する
+                                // 「週表示」のアンカーが見つかった＝週表示に変更する
                                 val url = BASE_URL + matchResult.groupValues[1]
                                 post {
                                     loadUrl(Jsoup.parse(url).text())
@@ -60,29 +63,30 @@ fun CampusSquareWebViewComponent(
                             }
                         }
                     },
-                    "Extractor"
+                    "Extractor",
                 )
                 CookieManager.getInstance().setAcceptCookie(true)
                 CookieManager.getInstance().acceptThirdPartyCookies(this)
                 CookieManager.getInstance().setCookie(
                     "https://rpxkyomu.ict.nitech.ac.jp/",
-                    "sso4cookie=${sso4cookie}"
+                    "sso4cookie=$sso4cookie",
                 )
-                //authorizationErrorを回避するためにメインページを開く
+                // authorizationErrorを回避するためにメインページを開く
                 loadUrl(MAIN_MENU_URL)
             }
-        })
+        },
+    )
 }
 
 class CampusSquareWebViewClient(
     private val onReceivedError: (WebView?, WebResourceError?) -> Unit,
-    private val onReceivedHttpError: (WebView?, WebResourceResponse?) -> Unit
+    private val onReceivedHttpError: (WebView?, WebResourceResponse?) -> Unit,
 ) : WebViewClient() {
 
     override fun onPageFinished(view: WebView?, url: String?) {
         super.onPageFinished(view, url)
-        //URLにflowExecutionKeyが含まれている=日表示の「施設利用状況参照」ページが開かれている
-        //週表示の「施設利用状況参照」ページへのURLを抽出する
+        // URLにflowExecutionKeyが含まれている=日表示の「施設利用状況参照」ページが開かれている
+        // 週表示の「施設利用状況参照」ページへのURLを抽出する
         url?.let {
             if (url == MAIN_MENU_URL) {
                 view?.loadUrl(FLOWEXECUTIONKEY_URL)
@@ -95,7 +99,7 @@ class CampusSquareWebViewClient(
 
     override fun shouldInterceptRequest(
         view: WebView?,
-        request: WebResourceRequest?
+        request: WebResourceRequest?,
     ): WebResourceResponse? {
         return super.shouldInterceptRequest(view, request)
     }
@@ -103,7 +107,7 @@ class CampusSquareWebViewClient(
     override fun onReceivedError(
         view: WebView?,
         request: WebResourceRequest?,
-        error: WebResourceError?
+        error: WebResourceError?,
     ) {
         if (request?.url.toString() != MAIN_MENU_URL) {
             onReceivedError(view, error)
@@ -114,7 +118,7 @@ class CampusSquareWebViewClient(
     override fun onReceivedHttpError(
         view: WebView?,
         request: WebResourceRequest?,
-        errorResponse: WebResourceResponse?
+        errorResponse: WebResourceResponse?,
     ) {
         if (request?.url.toString() != MAIN_MENU_URL) {
             onReceivedHttpError(view, errorResponse)

@@ -7,16 +7,16 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class SettingRepositoryImpl
-    @Inject
-    constructor(
-        private val applicationContext: Context,
-        private val settingLocalDataSource: SettingLocalDataSource,
-    ) : SettingRepository {
-        override val themeSettings: Flow<ThemeSettings> by lazy {
-            settingLocalDataSource.loadThemeSetting(applicationContext)
-        }
-
-        override suspend fun saveThemeSetting(themeSettings: ThemeSettings) {
-            settingLocalDataSource.saveThemeSetting(applicationContext, themeSettings)
-        }
+@Inject
+constructor(
+    private val applicationContext: Context,
+    private val settingLocalDataSource: SettingLocalDataSource,
+) : SettingRepository {
+    override val themeSettings: Flow<ThemeSettings> by lazy {
+        settingLocalDataSource.loadThemeSetting(applicationContext)
     }
+
+    override suspend fun saveThemeSetting(themeSettings: ThemeSettings) {
+        settingLocalDataSource.saveThemeSetting(applicationContext, themeSettings)
+    }
+}

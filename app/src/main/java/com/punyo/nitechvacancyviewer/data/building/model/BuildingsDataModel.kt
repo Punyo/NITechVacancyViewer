@@ -1,7 +1,7 @@
 package com.punyo.nitechvacancyviewer.data.building.model
 
 data class BuildingsDataModel(
-    val buildingsData: Array<Building>
+    val buildingsData: Array<Building>,
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -15,7 +15,6 @@ data class BuildingsDataModel(
     override fun hashCode(): Int {
         return buildingsData.contentHashCode()
     }
-
 }
 
 data class Building(
@@ -42,5 +41,4 @@ data class Building(
         result = 31 * result + buildingImageResourceName.hashCode()
         return result
     }
-
 }

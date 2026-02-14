@@ -34,9 +34,9 @@ fun ReservationTableScreen(
     ) { innerPadding ->
         Column(
             modifier =
-                Modifier
-                    .padding(innerPadding)
-                    .verticalScroll(rememberScrollState()),
+            Modifier
+                .padding(innerPadding)
+                .verticalScroll(rememberScrollState()),
         ) {
             val events = roomData.eventsInfo
             events.forEach { event ->
@@ -49,9 +49,9 @@ fun ReservationTableScreen(
             if (events.isEmpty()) {
                 Box(
                     modifier =
-                        Modifier
-                            .fillMaxSize()
-                            .align(Alignment.CenterHorizontally),
+                    Modifier
+                        .fillMaxSize()
+                        .align(Alignment.CenterHorizontally),
                 ) {
                     Text(
                         modifier = Modifier.align(Alignment.Center),

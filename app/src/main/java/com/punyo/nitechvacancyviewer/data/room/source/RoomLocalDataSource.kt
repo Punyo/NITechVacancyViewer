@@ -93,10 +93,10 @@ class RoomLocalDataSource {
                     Room(
                         roomDisplayName = entity.roomDisplayName,
                         eventsInfo =
-                            GsonInstance.gson.fromJson(
-                                entity.eventsInfoJSON,
-                                Array<EventInfo>::class.java,
-                            ),
+                        GsonInstance.gson.fromJson(
+                            entity.eventsInfoJSON,
+                            Array<EventInfo>::class.java,
+                        ),
                     ),
                 )
             }

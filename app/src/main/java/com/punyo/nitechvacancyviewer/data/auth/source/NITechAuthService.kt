@@ -13,6 +13,6 @@ interface NITechAuthService {
         @Header("X-OpenAM-Password") password: String,
         @Header("X-NoSession") noSession: Boolean = true,
         @Query("authIndexType") authIndexType: String = "service",
-        @Query("authIndexValue") authIndexValue: String = "mfaService"
+        @Query("authIndexValue") authIndexValue: String = "mfaService",
     ): Response<AuthDataModel>
 }

@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.google.dagger.hilt.android) apply false
     alias(libs.plugins.google.devtools.ksp) apply false
     alias(libs.plugins.google.android.gms.oss.licenses.plugin) apply false
+    alias(libs.plugins.jlleitschuh.gradle.ktlint) apply false
 }
 buildscript {
     repositories {

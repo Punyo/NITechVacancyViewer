@@ -117,9 +117,9 @@ fun SignInScreen(
         }
         Column(
             modifier =
-                Modifier
-                    .padding(innerPadding)
-                    .fillMaxSize(),
+            Modifier
+                .padding(innerPadding)
+                .fillMaxSize(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
@@ -136,10 +136,10 @@ fun SignInScreen(
                     drawable.draw(canvas)
                     Image(
                         modifier =
-                            Modifier
-                                .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp)
-                                .size(200.dp)
-                                .scale(1.5f),
+                        Modifier
+                            .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp)
+                            .size(200.dp)
+                            .scale(1.5f),
                         bitmap = bitmap.asImageBitmap(),
                         contentDescription = stringResource(id = R.string.APP_NAME_SIGNINSCREEN),
                     )
@@ -153,9 +153,9 @@ fun SignInScreen(
             )
             TextField(
                 modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp),
                 value = currentState.userName,
                 label = { Text(text = stringResource(id = R.string.UI_TEXTFIELD_TEXT_USERNAME)) },
                 singleLine = true,
@@ -166,18 +166,18 @@ fun SignInScreen(
                     }
                 },
                 keyboardOptions =
-                    KeyboardOptions(
-                        keyboardType = KeyboardType.Uri,
-                        imeAction = ImeAction.Next,
-                    ),
+                KeyboardOptions(
+                    keyboardType = KeyboardType.Uri,
+                    imeAction = ImeAction.Next,
+                ),
                 placeholder = { Text(text = stringResource(id = R.string.UI_TEXTFIELD_TEXT_USERNAME_HINT)) },
                 onValueChange = { signInScreenViewModel.setUserName(it) },
             )
             TextField(
                 modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp),
                 value = currentState.password,
                 label = { Text(stringResource(id = R.string.UI_TEXTFIELD_TEXT_PASSWORD)) },
                 singleLine = true,
@@ -189,19 +189,19 @@ fun SignInScreen(
                     }
                 },
                 keyboardOptions =
-                    KeyboardOptions(
-                        keyboardType = KeyboardType.Password,
-                        imeAction = ImeAction.Done,
-                    ),
+                KeyboardOptions(
+                    keyboardType = KeyboardType.Password,
+                    imeAction = ImeAction.Done,
+                ),
                 placeholder = { Text(stringResource(id = R.string.UI_TEXTFIELD_TEXT_PASSWORD_HINT)) },
                 onValueChange = { signInScreenViewModel.setPassword(it) },
             )
             Button(
                 modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp)
-                        .height(40.dp),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp)
+                    .height(40.dp),
                 enabled = currentState.isSignInButtonEnabled,
                 onClick = {
                     signInScreenViewModel.onSignInButtonClicked(
@@ -212,26 +212,26 @@ fun SignInScreen(
             ) {
                 Text(
                     text =
-                        if (currentState.isSignInButtonEnabled) {
-                            stringResource(id = R.string.UI_BUTTON_TEXT_LOGIN)
-                        } else {
-                            stringResource(id = R.string.UI_BUTTON_TEXT_LOGIN_ATTEMPTING)
-                        },
+                    if (currentState.isSignInButtonEnabled) {
+                        stringResource(id = R.string.UI_BUTTON_TEXT_LOGIN)
+                    } else {
+                        stringResource(id = R.string.UI_BUTTON_TEXT_LOGIN_ATTEMPTING)
+                    },
                 )
             }
         }
         Box(
             modifier =
-                Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding),
+            Modifier
+                .fillMaxSize()
+                .padding(innerPadding),
         ) {
             Text(
                 buildAnnotatedString { append(annotatedString) },
                 modifier =
-                    Modifier
-                        .align(Alignment.BottomCenter)
-                        .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp),
+                Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp),
             )
         }
     }

@@ -31,14 +31,14 @@ fun RoomReservationScreen(
             val eventsInfo = room.eventsInfo
             ListItem(
                 modifier =
-                    Modifier.clickable {
-                        navHostController.navigate(
-                            navigationRoute.replace(
-                                "{$navigationParam1}",
-                                GsonInstance.gson.toJson(room),
-                            ),
-                        )
-                    },
+                Modifier.clickable {
+                    navHostController.navigate(
+                        navigationRoute.replace(
+                            "{$navigationParam1}",
+                            GsonInstance.gson.toJson(room),
+                        ),
+                    )
+                },
                 headlineContent = { Text(text = room.roomDisplayName) },
                 supportingContent = {
                     if (eventsInfo.isNotEmpty()) {

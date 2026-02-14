@@ -65,9 +65,9 @@ fun SettingScreen(
     val srcUrl = stringResource(id = R.string.URL_SOURCE_CODE)
     Column(
         modifier =
-            modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState()),
+        modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState()),
     ) {
         ListItem(
             headlineContent = {
@@ -152,8 +152,8 @@ fun SettingScreen(
         SettingsListItem(
             title = R.string.UI_TEXT_VERSION,
             subtitle =
-                context.packageManager.getPackageInfo(context.packageName, 0)?.versionName
-                    ?: "",
+            context.packageManager.getPackageInfo(context.packageName, 0)?.versionName
+                ?: "",
             icon = Icons.Outlined.Info,
         )
         SettingsListItem(

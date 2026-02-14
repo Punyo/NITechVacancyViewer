@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.google.dagger.hilt.android)
     alias(libs.plugins.google.devtools.ksp)
     alias(libs.plugins.google.android.gms.oss.licenses.plugin)
+    alias(libs.plugins.jlleitschuh.gradle.ktlint)
 }
 
 android {

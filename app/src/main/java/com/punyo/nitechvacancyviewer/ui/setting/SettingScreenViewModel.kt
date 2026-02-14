@@ -16,45 +16,45 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SettingsComponentViewModel
-    @Inject
-    constructor(
-        private val applicationContext: Context,
-        private val authRepository: AuthRepository,
-        private val roomRepository: RoomRepositoryImpl,
-        private val settingRepository: SettingRepository,
-    ) : ViewModel() {
-        private val state = MutableStateFlow(SettingsComponentUiState())
-        val uiState = state.asStateFlow()
+@Inject
+constructor(
+    private val applicationContext: Context,
+    private val authRepository: AuthRepository,
+    private val roomRepository: RoomRepositoryImpl,
+    private val settingRepository: SettingRepository,
+) : ViewModel() {
+    private val state = MutableStateFlow(SettingsComponentUiState())
+    val uiState = state.asStateFlow()
 
-        fun signOut() {
-            viewModelScope.launch {
-                authRepository.signOutAndClearSavedCredentials(applicationContext)
-                roomRepository.clearDB(applicationContext)
-            }
-        }
-
-        fun saveThemeSetting(themeSettings: ThemeSettings) {
-            viewModelScope.launch {
-                settingRepository.saveThemeSetting(themeSettings)
-            }
-        }
-
-        fun showThemePickerDialog() {
-            viewModelScope.launch {
-                state.value =
-                    state.value.copy(
-                        showThemePickerDialog = true,
-                        currentTheme = settingRepository.themeSettings.first(),
-                    )
-            }
-        }
-
-        fun hideThemePickerDialog() {
-            viewModelScope.launch {
-                state.value = state.value.copy(showThemePickerDialog = false)
-            }
+    fun signOut() {
+        viewModelScope.launch {
+            authRepository.signOutAndClearSavedCredentials(applicationContext)
+            roomRepository.clearDB(applicationContext)
         }
     }
+
+    fun saveThemeSetting(themeSettings: ThemeSettings) {
+        viewModelScope.launch {
+            settingRepository.saveThemeSetting(themeSettings)
+        }
+    }
+
+    fun showThemePickerDialog() {
+        viewModelScope.launch {
+            state.value =
+                state.value.copy(
+                    showThemePickerDialog = true,
+                    currentTheme = settingRepository.themeSettings.first(),
+                )
+        }
+    }
+
+    fun hideThemePickerDialog() {
+        viewModelScope.launch {
+            state.value = state.value.copy(showThemePickerDialog = false)
+        }
+    }
+}
 
 data class SettingsComponentUiState(
     val currentTheme: ThemeSettings = ThemeSettings.LIGHT,

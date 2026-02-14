@@ -170,9 +170,9 @@ fun InitializeScreen(
     }) { contentPadding ->
         Box(
             modifier =
-                Modifier
-                    .fillMaxSize()
-                    .padding(contentPadding),
+            Modifier
+                .fillMaxSize()
+                .padding(contentPadding),
             contentAlignment = Alignment.Center,
         ) {
             LoadingProgressIndicatorComponent()
@@ -184,16 +184,16 @@ fun InitializeScreen(
 private fun LongerActionSnackbarComponent(snackbarData: SnackbarData) {
     Card(
         modifier =
-            Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
+        Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
     ) {
         Row {
             Column(
                 modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.Start,
             ) {

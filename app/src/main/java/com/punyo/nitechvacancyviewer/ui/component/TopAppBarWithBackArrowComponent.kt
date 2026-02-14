@@ -17,7 +17,7 @@ import androidx.compose.ui.Modifier
 fun TopAppBarWithBackArrowComponent(
     modifier: Modifier = Modifier,
     headerText: String,
-    onBackPressed: () -> Unit = {}
+    onBackPressed: () -> Unit = {},
 ) {
     TopAppBar(
         modifier = modifier,
@@ -29,7 +29,7 @@ fun TopAppBarWithBackArrowComponent(
         },
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
-            titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
-        )
+            titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+        ),
     )
 }
