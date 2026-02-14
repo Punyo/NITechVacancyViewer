@@ -34,6 +34,31 @@ fun RoomVacancyScreen(
     rooms: Array<Room>,
     roomVacancyScreenViewModel: RoomVacancyScreenViewModel = viewModel(),
 ) {
+    val currentTime = LocalDateTime.now()
+
+    RoomVacancyScreenInternal(
+        buildingName = buildingName,
+        rooms = rooms,
+        currentTime = currentTime,
+        onBackPressed = onBackPressed,
+        getRoomVacancy = { room, time ->
+            roomVacancyScreenViewModel.getRoomVacancy(room, time)
+        },
+        getCurrentEvent = { room, time ->
+            roomVacancyScreenViewModel.getCurrentEvent(room, time)
+        },
+    )
+}
+
+@Composable
+private fun RoomVacancyScreenInternal(
+    buildingName: String,
+    rooms: Array<Room>,
+    currentTime: LocalDateTime,
+    onBackPressed: () -> Unit = {},
+    getRoomVacancy: (Room, LocalDateTime) -> RoomVacancyStatus = { _, _ -> RoomVacancyStatus.VACANT },
+    getCurrentEvent: (Room, LocalDateTime) -> EventInfo? = { _, _ -> null },
+) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -50,8 +75,7 @@ fun RoomVacancyScreen(
                 .verticalScroll(rememberScrollState()),
         ) {
             rooms.forEachIndexed { index, room ->
-                val roomVacancyStatus =
-                    roomVacancyScreenViewModel.getRoomVacancy(room, LocalDateTime.now())
+                val roomVacancyStatus = getRoomVacancy(room, currentTime)
                 ListItem(
                     headlineContent = {
                         Text(
@@ -84,11 +108,7 @@ fun RoomVacancyScreen(
                                 RoomVacancyStatus.VACANT -> stringResource(id = R.string.UI_LISTITEM_TEXT_VACANT)
                                 RoomVacancyStatus.OCCUPY ->
                                     stringResource(id = R.string.UI_LISTITEM_TEXT_OCCUPY).format(
-                                        roomVacancyScreenViewModel
-                                            .getCurrentEvent(
-                                                room,
-                                                LocalDateTime.now(),
-                                            )?.eventDescription ?: "",
+                                        getCurrentEvent(room, currentTime)?.eventDescription ?: "",
                                     )
                             },
                         )
@@ -103,33 +123,48 @@ fun RoomVacancyScreen(
 
 @Preview(showBackground = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_NO)
 @Composable
-fun RoomVacancyScreenLightModePreview() {
-    AppTheme {
-        RoomVacancyScreen(
-            "建物の名称",
-            rooms =
-            arrayOf(
-                Room(
-                    "部屋1",
-                    arrayOf(
-                        EventInfo(
-                            LocalDateTime.now().minusHours(1),
-                            LocalDateTime.now().plusHours(1),
-                            "数理情報概論",
-                        ),
-                    ),
-                ),
-                Room(
-                    "部屋2",
-                    arrayOf(
-                        EventInfo(
-                            LocalDateTime.now().plusHours(1),
-                            LocalDateTime.now().plusHours(2),
-                            "イベント2",
-                        ),
+private fun RoomVacancyScreen() {
+    val currentTime = LocalDateTime.now()
+    val rooms =
+        arrayOf(
+            Room(
+                "部屋1",
+                arrayOf(
+                    EventInfo(
+                        currentTime.minusHours(1),
+                        currentTime.plusHours(1),
+                        "数理情報概論",
                     ),
                 ),
             ),
+            Room(
+                "部屋2",
+                arrayOf(
+                    EventInfo(
+                        currentTime.plusHours(1),
+                        currentTime.plusHours(2),
+                        "イベント2",
+                    ),
+                ),
+            ),
+        )
+    AppTheme {
+        RoomVacancyScreenInternal(
+            buildingName = "建物の名称",
+            rooms = rooms,
+            currentTime = currentTime,
+            getRoomVacancy = { room, time ->
+                val isTimeWithinEvent =
+                    room.eventsInfo.any { eventTime ->
+                        time.isAfter(eventTime.start) && time.isBefore(eventTime.end)
+                    }
+                if (isTimeWithinEvent) RoomVacancyStatus.OCCUPY else RoomVacancyStatus.VACANT
+            },
+            getCurrentEvent = { room, time ->
+                room.eventsInfo.find { eventTime ->
+                    time.isAfter(eventTime.start) && time.isBefore(eventTime.end)
+                }
+            },
         )
     }
 }

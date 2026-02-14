@@ -27,12 +27,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.punyo.nitechvacancyviewer.R
-import com.punyo.nitechvacancyviewer.theme.AppTheme
 import com.punyo.nitechvacancyviewer.ui.component.CampusSquareWebViewComponent
 import com.punyo.nitechvacancyviewer.ui.component.LoadingProgressIndicatorComponent
 
@@ -248,26 +246,4 @@ fun AskForSignInDialogComponent(
             }
         },
     )
-}
-
-@Preview(showBackground = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_NO)
-@Composable
-fun InitializeScreenLightPreview() {
-    AppTheme {
-        InitializeScreen(
-            onLoadedRoomsData = {},
-            onFailedSignInWithSavedCredentials = {},
-        )
-    }
-}
-
-@Preview(showBackground = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
-@Composable
-fun InitializeScreenDarkPreview() {
-    AppTheme {
-        InitializeScreen(
-            onLoadedRoomsData = {},
-            onFailedSignInWithSavedCredentials = {},
-        )
-    }
 }

@@ -56,14 +56,59 @@ fun SignInScreen(
     val currentState by signInScreenViewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
+    LaunchedEffect(key1 = currentState.signInResult) {
+        currentState.signInResult?.let {
+            if (it == AuthResultStatus.SUCCESS) {
+                onSignInSuccess()
+            } else {
+                var failReason = context.getString(R.string.ERROR_PREFIX_SIGN_IN_FAILED)
+                when (it) {
+                    AuthResultStatus.NETWORK_ERROR -> {
+                        failReason += context.getString(R.string.ERROR_NOT_CONNECTED_TO_NITECH_NETWORK)
+                    }
+                    AuthResultStatus.INVALID_CREDENTIALS -> {
+                        failReason += context.getString(R.string.ERROR_SIGN_IN_DENIED_OR_INVALID_CREDENTIALS)
+                    }
+                    AuthResultStatus.UNKNOWN_ERROR -> {
+                        failReason += context.getString(R.string.ERROR_UNKNOWN_ERROR)
+                    }
+                    AuthResultStatus.CREDENTIALS_NOT_FOUND -> {}
+                    else -> {}
+                }
+                snackbarHostState.showSnackbar(failReason)
+            }
+            signInScreenViewModel.setSignInButtonEnabled(true)
+        }
+    }
+
+    SignInScreenInternal(
+        state = currentState,
+        snackbarHostState = snackbarHostState,
+        demoTrigger = context.getString(R.string.APP_DEMO_TRIGGER_USERNAME_AND_PASSWORD),
+        onUserNameChange = { signInScreenViewModel.setUserName(it) },
+        onPasswordChange = { signInScreenViewModel.setPassword(it) },
+        onSignInClick = { demoTrigger ->
+            signInScreenViewModel.onSignInButtonClicked(onSignInSuccess, demoTrigger)
+        },
+    )
+}
+
+@Composable
+private fun SignInScreenInternal(
+    state: SignInScreenUiState,
+    snackbarHostState: SnackbarHostState,
+    demoTrigger: String,
+    onUserNameChange: (String) -> Unit = {},
+    onPasswordChange: (String) -> Unit = {},
+    onSignInClick: (String) -> Unit = {},
+) {
+    val context = LocalContext.current
     val annotatedString =
         buildAnnotatedString {
             append(
                 stringResource(id = R.string.UI_TEXT_CONSENT_TOS_AND_PRIVACY_POLICY)
-                    .replaceAfter(
-                        "%s",
-                        "",
-                    ).replace("%s", ""),
+                    .replaceAfter("%s", "")
+                    .replace("%s", ""),
             )
             withLink(
                 LinkAnnotation.Url(
@@ -75,46 +120,16 @@ fun SignInScreen(
             }
             append(
                 stringResource(id = R.string.UI_TEXT_CONSENT_TOS_AND_PRIVACY_POLICY)
-                    .replaceBefore(
-                        "%s",
-                        "",
-                    ).replace("%s", ""),
+                    .replaceBefore("%s", "")
+                    .replace("%s", ""),
             )
         }
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         containerColor = MaterialTheme.colorScheme.primaryContainer,
         snackbarHost = { SnackbarHost(snackbarHostState) },
     ) { innerPadding ->
-        LaunchedEffect(key1 = currentState.signInResult) {
-            currentState.signInResult?.let {
-                var failReason = context.getString(R.string.ERROR_PREFIX_SIGN_IN_FAILED)
-                when (it) {
-                    AuthResultStatus.SUCCESS -> {
-                        onSignInSuccess()
-                    }
-
-                    AuthResultStatus.NETWORK_ERROR -> {
-                        failReason += (context.getString(R.string.ERROR_NOT_CONNECTED_TO_NITECH_NETWORK))
-                    }
-
-                    AuthResultStatus.INVALID_CREDENTIALS -> {
-                        failReason += (context.getString(R.string.ERROR_SIGN_IN_DENIED_OR_INVALID_CREDENTIALS))
-                    }
-
-                    AuthResultStatus.UNKNOWN_ERROR -> {
-                        failReason += (context.getString(R.string.ERROR_UNKNOWN_ERROR))
-                    }
-
-                    AuthResultStatus.CREDENTIALS_NOT_FOUND -> {
-                    }
-                }
-                if (it != AuthResultStatus.SUCCESS) {
-                    snackbarHostState.showSnackbar(failReason)
-                }
-                signInScreenViewModel.setSignInButtonEnabled(true)
-            }
-        }
         Column(
             modifier =
             Modifier
@@ -125,9 +140,9 @@ fun SignInScreen(
         ) {
             ResourcesCompat
                 .getDrawable(
-                    LocalContext.current.resources,
+                    context.resources,
                     R.mipmap.ic_launcher_foreground,
-                    LocalContext.current.theme,
+                    context.theme,
                 )?.let { drawable ->
                     val bitmap =
                         createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight)
@@ -156,12 +171,12 @@ fun SignInScreen(
                 Modifier
                     .fillMaxWidth()
                     .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp),
-                value = currentState.userName,
+                value = state.userName,
                 label = { Text(text = stringResource(id = R.string.UI_TEXTFIELD_TEXT_USERNAME)) },
                 singleLine = true,
-                isError = currentState.isErrorUserName,
+                isError = state.isErrorUserName,
                 supportingText = {
-                    if (currentState.isErrorUserName) {
+                    if (state.isErrorUserName) {
                         Text(stringResource(id = R.string.UI_TEXTFIELD_SUPPORTINGTEXT_EMPTY))
                     }
                 },
@@ -171,20 +186,20 @@ fun SignInScreen(
                     imeAction = ImeAction.Next,
                 ),
                 placeholder = { Text(text = stringResource(id = R.string.UI_TEXTFIELD_TEXT_USERNAME_HINT)) },
-                onValueChange = { signInScreenViewModel.setUserName(it) },
+                onValueChange = onUserNameChange,
             )
             TextField(
                 modifier =
                 Modifier
                     .fillMaxWidth()
                     .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp),
-                value = currentState.password,
+                value = state.password,
                 label = { Text(stringResource(id = R.string.UI_TEXTFIELD_TEXT_PASSWORD)) },
                 singleLine = true,
                 visualTransformation = PasswordVisualTransformation(),
-                isError = currentState.isErrorPassword,
+                isError = state.isErrorPassword,
                 supportingText = {
-                    if (currentState.isErrorPassword) {
+                    if (state.isErrorPassword) {
                         Text(stringResource(id = R.string.UI_TEXTFIELD_SUPPORTINGTEXT_EMPTY))
                     }
                 },
@@ -194,7 +209,7 @@ fun SignInScreen(
                     imeAction = ImeAction.Done,
                 ),
                 placeholder = { Text(stringResource(id = R.string.UI_TEXTFIELD_TEXT_PASSWORD_HINT)) },
-                onValueChange = { signInScreenViewModel.setPassword(it) },
+                onValueChange = onPasswordChange,
             )
             Button(
                 modifier =
@@ -202,17 +217,12 @@ fun SignInScreen(
                     .fillMaxWidth()
                     .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp)
                     .height(40.dp),
-                enabled = currentState.isSignInButtonEnabled,
-                onClick = {
-                    signInScreenViewModel.onSignInButtonClicked(
-                        onSignInSuccess,
-                        context.getString(R.string.APP_DEMO_TRIGGER_USERNAME_AND_PASSWORD),
-                    )
-                },
+                enabled = state.isSignInButtonEnabled,
+                onClick = { onSignInClick(demoTrigger) },
             ) {
                 Text(
                     text =
-                    if (currentState.isSignInButtonEnabled) {
+                    if (state.isSignInButtonEnabled) {
                         stringResource(id = R.string.UI_BUTTON_TEXT_LOGIN)
                     } else {
                         stringResource(id = R.string.UI_BUTTON_TEXT_LOGIN_ATTEMPTING)
@@ -239,16 +249,17 @@ fun SignInScreen(
 
 @Preview(showBackground = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_NO)
 @Composable
-fun LoginScreenLightPreview() {
+private fun SignInScreenPreview() {
     AppTheme {
-        SignInScreen()
-    }
-}
-
-@Preview(showBackground = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
-@Composable
-fun LoginScreenDarkPreview() {
-    AppTheme {
-        SignInScreen()
+        SignInScreenInternal(
+            state =
+            SignInScreenUiState(
+                userName = "cxx12345",
+                password = "",
+                isSignInButtonEnabled = true,
+            ),
+            snackbarHostState = remember { SnackbarHostState() },
+            demoTrigger = "demo",
+        )
     }
 }
