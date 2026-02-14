@@ -1,0 +1,32 @@
+name: Build
+
+on:
+  pull_request:
+    branches:
+      - master
+    types: [ opened,synchronize,reopened ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'zulu'
+          cache: gradle
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Decode Keystore
+        run: echo ${{ secrets.B64_ENCORDED_KEYSTORE }} | base64 --decode > ./app/release.keystore
+
+      - name: Build
+        run: ./gradlew assembleRelease
+        env:
+          RELEASE_KEYSTORE_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
+          RELEASE_KEYSTORE_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          RELEASE_KEYSTORE_ALIAS: ${{ secrets.KEY_ALIAS }}
