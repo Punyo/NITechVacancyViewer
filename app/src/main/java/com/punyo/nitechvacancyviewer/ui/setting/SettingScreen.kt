@@ -37,6 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -58,6 +59,7 @@ fun SettingScreen(
     settingsComponentViewModel: SettingsComponentViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
+    val resources= LocalResources.current
     val currentState by settingsComponentViewModel.uiState.collectAsState()
     val versionName =
         context.packageManager.getPackageInfo(context.packageName, 0)?.versionName ?: ""
@@ -78,22 +80,22 @@ fun SettingScreen(
         },
         onOpenTos = {
             val intent = Intent(Intent.ACTION_VIEW)
-            intent.data = context.getString(R.string.URL_TOS).toUri()
+            intent.data = resources.getString(R.string.URL_TOS).toUri()
             context.startActivity(intent)
         },
         onOpenPrivacyPolicy = {
             val intent = Intent(Intent.ACTION_VIEW)
-            intent.data = context.getString(R.string.URL_PRIVACY_POLICY).toUri()
+            intent.data = resources.getString(R.string.URL_PRIVACY_POLICY).toUri()
             context.startActivity(intent)
         },
         onOpenStorePage = {
             val intent = Intent(Intent.ACTION_VIEW)
-            intent.data = context.getString(R.string.URL_STORE_PAGE).toUri()
+            intent.data = resources.getString(R.string.URL_STORE_PAGE).toUri()
             context.startActivity(intent)
         },
         onOpenSourceCode = {
             val intent = Intent(Intent.ACTION_VIEW)
-            intent.data = context.getString(R.string.URL_SOURCE_CODE).toUri()
+            intent.data = resources.getString(R.string.URL_SOURCE_CODE).toUri()
             context.startActivity(intent)
         },
         onOpenLicense = {

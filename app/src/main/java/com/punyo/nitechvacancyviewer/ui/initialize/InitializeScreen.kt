@@ -26,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -41,6 +42,7 @@ fun InitializeScreen(
     initializeScreenViewModel: InitializeScreenViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
+    val resources= LocalResources.current
     val currentState by initializeScreenViewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
     LaunchedEffect(key1 = Unit) {
@@ -72,11 +74,11 @@ fun InitializeScreen(
                 onLoadedRoomsData()
             } else {
                 initializeScreenViewModel.setErrorMessage(
-                    context.getString(R.string.ERROR_PREFIX_FETCH_FAILED) +
-                        context.getString(
+                    resources.getString(R.string.ERROR_PREFIX_FETCH_FAILED) +
+                        resources.getString(
                             R.string.ERROR_VACANCY_TABLE_LAYOUT_CHANGED,
                         ),
-                    context.getString(R.string.UI_SNACKBAR_ACTIONLABEL_QUITAPP),
+                    resources.getString(R.string.UI_SNACKBAR_ACTIONLABEL_QUITAPP),
                 ) {
                     (context as Activity).finish()
                 }
@@ -119,11 +121,11 @@ fun InitializeScreen(
             },
             onReceivedError = { webView, _ ->
                 initializeScreenViewModel.setErrorMessage(
-                    context.getString(R.string.ERROR_PREFIX_FETCH_FAILED) +
-                        context.getString(
+                    resources.getString(R.string.ERROR_PREFIX_FETCH_FAILED) +
+                        resources.getString(
                             R.string.ERROR_NOT_CONNECTED_TO_NITECH_NETWORK,
                         ),
-                    context.getString(R.string.UI_SNACKBAR_ACTIONLABEL_RETRY),
+                    resources.getString(R.string.UI_SNACKBAR_ACTIONLABEL_RETRY),
                 ) {
                     webView?.reload()
                 }
@@ -133,22 +135,21 @@ fun InitializeScreen(
                 statusCode?.let {
                     if (it == 503) {
                         initializeScreenViewModel.setErrorMessage(
-                            context.getString(R.string.ERROR_PREFIX_FETCH_FAILED) +
-                                context.getString(
+                            resources.getString(R.string.ERROR_PREFIX_FETCH_FAILED) +
+                                resources.getString(
                                     R.string.ERROR_HTTP_503,
                                 ),
-                            context.getString(R.string.UI_SNACKBAR_ACTIONLABEL_QUITAPP),
+                            resources.getString(R.string.UI_SNACKBAR_ACTIONLABEL_QUITAPP),
                         ) {
                             (context as Activity).finish()
                         }
                     } else {
                         initializeScreenViewModel.setErrorMessage(
-                            context.getString(R.string.ERROR_PREFIX_FETCH_FAILED) +
-                                context
-                                    .getString(
+                            resources.getString(R.string.ERROR_PREFIX_FETCH_FAILED) +
+                                resources.getString(
                                         R.string.ERROR_HTTP_OTHERS,
                                     ).format(statusCode),
-                            context.getString(R.string.UI_SNACKBAR_ACTIONLABEL_QUITAPP),
+                            resources.getString(R.string.UI_SNACKBAR_ACTIONLABEL_QUITAPP),
                         ) {
                             (context as Activity).finish()
                         }

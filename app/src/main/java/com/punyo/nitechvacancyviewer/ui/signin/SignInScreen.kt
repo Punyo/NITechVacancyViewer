@@ -28,6 +28,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
@@ -55,25 +56,27 @@ fun SignInScreen(
 ) {
     val currentState by signInScreenViewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
-    val context = LocalContext.current
+    val resources = LocalResources.current
     LaunchedEffect(key1 = currentState.signInResult) {
         currentState.signInResult?.let {
             if (it == AuthResultStatus.SUCCESS) {
                 onSignInSuccess()
             } else {
-                var failReason = context.getString(R.string.ERROR_PREFIX_SIGN_IN_FAILED)
+                var failReason = resources.getString(R.string.ERROR_PREFIX_SIGN_IN_FAILED)
                 when (it) {
                     AuthResultStatus.NETWORK_ERROR -> {
-                        failReason += context.getString(R.string.ERROR_NOT_CONNECTED_TO_NITECH_NETWORK)
+                        failReason += resources.getString(R.string.ERROR_NOT_CONNECTED_TO_NITECH_NETWORK)
                     }
+
                     AuthResultStatus.INVALID_CREDENTIALS -> {
-                        failReason += context.getString(R.string.ERROR_SIGN_IN_DENIED_OR_INVALID_CREDENTIALS)
+                        failReason += resources.getString(R.string.ERROR_SIGN_IN_DENIED_OR_INVALID_CREDENTIALS)
                     }
+
                     AuthResultStatus.UNKNOWN_ERROR -> {
-                        failReason += context.getString(R.string.ERROR_UNKNOWN_ERROR)
+                        failReason += resources.getString(R.string.ERROR_UNKNOWN_ERROR)
                     }
+
                     AuthResultStatus.CREDENTIALS_NOT_FOUND -> {}
-                    else -> {}
                 }
                 snackbarHostState.showSnackbar(failReason)
             }
@@ -84,7 +87,7 @@ fun SignInScreen(
     SignInScreenInternal(
         state = currentState,
         snackbarHostState = snackbarHostState,
-        demoTrigger = context.getString(R.string.APP_DEMO_TRIGGER_USERNAME_AND_PASSWORD),
+        demoTrigger = resources.getString(R.string.APP_DEMO_TRIGGER_USERNAME_AND_PASSWORD),
         onUserNameChange = { signInScreenViewModel.setUserName(it) },
         onPasswordChange = { signInScreenViewModel.setPassword(it) },
         onSignInClick = { demoTrigger ->
@@ -103,6 +106,7 @@ private fun SignInScreenInternal(
     onSignInClick: (String) -> Unit = {},
 ) {
     val context = LocalContext.current
+    val resources = LocalResources.current
     val annotatedString =
         buildAnnotatedString {
             append(
@@ -132,15 +136,15 @@ private fun SignInScreenInternal(
     ) { innerPadding ->
         Column(
             modifier =
-            Modifier
-                .padding(innerPadding)
-                .fillMaxSize(),
+                Modifier
+                    .padding(innerPadding)
+                    .fillMaxSize(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             ResourcesCompat
                 .getDrawable(
-                    context.resources,
+                    resources,
                     R.mipmap.ic_launcher_foreground,
                     context.theme,
                 )?.let { drawable ->
@@ -151,10 +155,10 @@ private fun SignInScreenInternal(
                     drawable.draw(canvas)
                     Image(
                         modifier =
-                        Modifier
-                            .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp)
-                            .size(200.dp)
-                            .scale(1.5f),
+                            Modifier
+                                .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp)
+                                .size(200.dp)
+                                .scale(1.5f),
                         bitmap = bitmap.asImageBitmap(),
                         contentDescription = stringResource(id = R.string.APP_NAME_SIGNINSCREEN),
                     )
@@ -168,9 +172,9 @@ private fun SignInScreenInternal(
             )
             TextField(
                 modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp),
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp),
                 value = state.userName,
                 label = { Text(text = stringResource(id = R.string.UI_TEXTFIELD_TEXT_USERNAME)) },
                 singleLine = true,
@@ -181,18 +185,18 @@ private fun SignInScreenInternal(
                     }
                 },
                 keyboardOptions =
-                KeyboardOptions(
-                    keyboardType = KeyboardType.Uri,
-                    imeAction = ImeAction.Next,
-                ),
+                    KeyboardOptions(
+                        keyboardType = KeyboardType.Uri,
+                        imeAction = ImeAction.Next,
+                    ),
                 placeholder = { Text(text = stringResource(id = R.string.UI_TEXTFIELD_TEXT_USERNAME_HINT)) },
                 onValueChange = onUserNameChange,
             )
             TextField(
                 modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp),
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp),
                 value = state.password,
                 label = { Text(stringResource(id = R.string.UI_TEXTFIELD_TEXT_PASSWORD)) },
                 singleLine = true,
@@ -204,44 +208,44 @@ private fun SignInScreenInternal(
                     }
                 },
                 keyboardOptions =
-                KeyboardOptions(
-                    keyboardType = KeyboardType.Password,
-                    imeAction = ImeAction.Done,
-                ),
+                    KeyboardOptions(
+                        keyboardType = KeyboardType.Password,
+                        imeAction = ImeAction.Done,
+                    ),
                 placeholder = { Text(stringResource(id = R.string.UI_TEXTFIELD_TEXT_PASSWORD_HINT)) },
                 onValueChange = onPasswordChange,
             )
             Button(
                 modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp)
-                    .height(40.dp),
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp)
+                        .height(40.dp),
                 enabled = state.isSignInButtonEnabled,
                 onClick = { onSignInClick(demoTrigger) },
             ) {
                 Text(
                     text =
-                    if (state.isSignInButtonEnabled) {
-                        stringResource(id = R.string.UI_BUTTON_TEXT_LOGIN)
-                    } else {
-                        stringResource(id = R.string.UI_BUTTON_TEXT_LOGIN_ATTEMPTING)
-                    },
+                        if (state.isSignInButtonEnabled) {
+                            stringResource(id = R.string.UI_BUTTON_TEXT_LOGIN)
+                        } else {
+                            stringResource(id = R.string.UI_BUTTON_TEXT_LOGIN_ATTEMPTING)
+                        },
                 )
             }
         }
         Box(
             modifier =
-            Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
+                Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
         ) {
             Text(
                 buildAnnotatedString { append(annotatedString) },
                 modifier =
-                Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp),
+                    Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 8.dp),
             )
         }
     }
@@ -253,11 +257,11 @@ private fun SignInScreenPreview() {
     AppTheme {
         SignInScreenInternal(
             state =
-            SignInScreenUiState(
-                userName = "cxx12345",
-                password = "",
-                isSignInButtonEnabled = true,
-            ),
+                SignInScreenUiState(
+                    userName = "cxx12345",
+                    password = "",
+                    isSignInButtonEnabled = true,
+                ),
             snackbarHostState = remember { SnackbarHostState() },
             demoTrigger = "demo",
         )
