@@ -5,8 +5,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.compose.ui.platform.LocalResources
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -30,7 +30,7 @@ fun MainNavigation(
     navController: NavHostController = rememberNavController(),
     navigationViewModel: MainNavigationViewModel = hiltViewModel(),
 ) {
-    val context = LocalContext.current
+    val resources = LocalResources.current
     val themeSettings by navigationViewModel.currentTheme.collectAsStateWithLifecycle()
     val isDarkTheme =
         when (themeSettings) {
@@ -76,22 +76,22 @@ fun MainNavigation(
                 MainScreen(navHostController = navController)
             }
             composable(
-                route = context.getString(R.string.UI_NAVHOST_COMPOSABLE_ROOMVACANCYSCREEN),
+                route = resources.getString(R.string.UI_NAVHOST_COMPOSABLE_ROOMVACANCYSCREEN),
                 arguments =
                 listOf(
-                    navArgument(context.getString(R.string.UI_NAVHOST_COMPOSABLE_ROOMVACANCYSCREEN_PARAMETER1)) {
+                    navArgument(resources.getString(R.string.UI_NAVHOST_COMPOSABLE_ROOMVACANCYSCREEN_PARAMETER1)) {
                         type = NavType.StringType
                     },
-                    navArgument(context.getString(R.string.UI_NAVHOST_COMPOSABLE_ROOMVACANCYSCREEN_PARAMETER2)) {
+                    navArgument(resources.getString(R.string.UI_NAVHOST_COMPOSABLE_ROOMVACANCYSCREEN_PARAMETER2)) {
                         type = NavType.StringType
                     },
                 ),
             ) { backStackEntry ->
                 val buildingName =
-                    backStackEntry.arguments?.getString(context.getString(R.string.UI_NAVHOST_COMPOSABLE_ROOMVACANCYSCREEN_PARAMETER1))
+                    backStackEntry.arguments?.getString(resources.getString(R.string.UI_NAVHOST_COMPOSABLE_ROOMVACANCYSCREEN_PARAMETER1))
                         ?: ""
                 val roomVacancy =
-                    backStackEntry.arguments?.getString(context.getString(R.string.UI_NAVHOST_COMPOSABLE_ROOMVACANCYSCREEN_PARAMETER2))
+                    backStackEntry.arguments?.getString(resources.getString(R.string.UI_NAVHOST_COMPOSABLE_ROOMVACANCYSCREEN_PARAMETER2))
                         ?: ""
 
                 RoomVacancyScreen(
@@ -101,16 +101,16 @@ fun MainNavigation(
                 )
             }
             composable(
-                route = context.getString(R.string.UI_NAVHOST_COMPOSABLE_RESERVATIONTABLESCREEN),
+                route = resources.getString(R.string.UI_NAVHOST_COMPOSABLE_RESERVATIONTABLESCREEN),
                 arguments =
                 listOf(
-                    navArgument(context.getString(R.string.UI_NAVHOST_COMPOSABLE_RESERVATIONTABLESCREEN_PARAMETER1)) {
+                    navArgument(resources.getString(R.string.UI_NAVHOST_COMPOSABLE_RESERVATIONTABLESCREEN_PARAMETER1)) {
                         type = NavType.StringType
                     },
                 ),
             ) { backStackEntry ->
                 val roomData =
-                    backStackEntry.arguments?.getString(context.getString(R.string.UI_NAVHOST_COMPOSABLE_RESERVATIONTABLESCREEN_PARAMETER1))
+                    backStackEntry.arguments?.getString(resources.getString(R.string.UI_NAVHOST_COMPOSABLE_RESERVATIONTABLESCREEN_PARAMETER1))
 
                 ReservationTableScreen(
                     roomData = GsonInstance.gson.fromJson(roomData, Room::class.java),

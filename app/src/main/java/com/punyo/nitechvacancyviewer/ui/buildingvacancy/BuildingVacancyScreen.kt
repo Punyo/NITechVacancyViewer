@@ -26,11 +26,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.punyo.nitechvacancyviewer.R
@@ -55,7 +56,7 @@ fun BuildingVacancyScreen(
     roomsData: Array<Room>,
     viewModel: VacancyComponentViewModel = hiltViewModel(),
 ) {
-    val context = LocalContext.current
+    val resources = LocalResources.current
     val currentState by viewModel.uiState.collectAsStateWithLifecycle()
     val navigationRoute = stringResource(id = R.string.UI_NAVHOST_COMPOSABLE_ROOMVACANCYSCREEN)
     val navigationRouteParam1 =
@@ -65,7 +66,7 @@ fun BuildingVacancyScreen(
 
     // 副作用: buildings読み込み
     LaunchedEffect(key1 = Unit) {
-        viewModel.loadBuildings(context.resources.openRawResource(R.raw.buildings))
+        viewModel.loadBuildings(resources.openRawResource(R.raw.buildings))
     }
 
     BuildingVacancyScreenInternal(
@@ -104,6 +105,7 @@ private fun BuildingVacancyScreenInternal(
     getNumberOfVacantRoom: (Array<Room>, LocalDateTime) -> UInt = { _, _ -> 0u },
 ) {
     val context = LocalContext.current
+    val resources = LocalResources.current
     val pullToRefreshState = rememberPullToRefreshState()
 
     if (state.buildings != null) {
@@ -124,7 +126,7 @@ private fun BuildingVacancyScreenInternal(
                 items(buildings.size) { index ->
                     val buildingData = buildings[index]
                     val buildingNameIdentifier =
-                        context.resources.getIdentifier(
+                        resources.getIdentifier(
                             buildingData.buildingNameResourceName,
                             "string",
                             context.packageName,
@@ -134,21 +136,22 @@ private fun BuildingVacancyScreenInternal(
                             .filter { room ->
                                 buildingData.buildingRoomDisplayNames.contains(room.roomDisplayName)
                             }.toTypedArray()
-                    val numberOfVacantRooms = getNumberOfVacantRoom(registeredRoomsData, currentTime)
+                    val numberOfVacantRooms =
+                        getNumberOfVacantRoom(registeredRoomsData, currentTime)
                     BuildingsCard(
                         modifier = Modifier.padding(8.dp),
                         buildingName = buildingNameIdentifier,
                         buildingImage =
-                        context.resources.getIdentifier(
-                            buildingData.buildingImageResourceName,
-                            "drawable",
-                            context.packageName,
-                        ),
+                            resources.getIdentifier(
+                                buildingData.buildingImageResourceName,
+                                "drawable",
+                                context.packageName,
+                            ),
                         numberOfVacantRooms = numberOfVacantRooms,
                         numberOfRooms = buildingData.buildingRoomDisplayNames.size.toUInt(),
                         onClick = {
                             onBuildingClick(
-                                context.getString(buildingNameIdentifier),
+                                resources.getString(buildingNameIdentifier),
                                 registeredRoomsData,
                             )
                         },
@@ -176,10 +179,10 @@ fun BuildingsCard(
     ) {
         Image(
             modifier =
-            Modifier
-                .fillMaxWidth()
-                .height(100.dp)
-                .clip(MaterialTheme.shapes.medium),
+                Modifier
+                    .fillMaxWidth()
+                    .height(100.dp)
+                    .clip(MaterialTheme.shapes.medium),
             painter = painterResource(id = buildingImage),
             contentScale = ContentScale.Crop,
             contentDescription = stringResource(id = buildingName),
@@ -194,10 +197,10 @@ fun BuildingsCard(
         Text(
             modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 8.dp),
             text =
-            stringResource(id = R.string.UI_CARD_TEXT_VACANTANDMAXROOMS).format(
-                numberOfVacantRooms.toInt(),
-                numberOfRooms.toInt(),
-            ),
+                stringResource(id = R.string.UI_CARD_TEXT_VACANTANDMAXROOMS).format(
+                    numberOfVacantRooms.toInt(),
+                    numberOfRooms.toInt(),
+                ),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
