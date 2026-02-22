@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.util.Log
+import com.punyo.nitechvacancyviewer.application.service.StampAccessibilityService
 import com.punyo.nitechvacancyviewer.data.widget.model.LaunchError
 import com.punyo.nitechvacancyviewer.data.widget.model.LaunchException
 import com.punyo.nitechvacancyviewer.data.widget.source.AccessibilityChecker
@@ -49,10 +50,12 @@ class WidgetRepositoryImpl
                         setPackage(STAMP_APP_PACKAGE)
                         flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
                     }
+                StampAccessibilityService.pendingAutoClick = true
                 context.startActivity(intent)
                 Log.i(TAG, "$STAMP_APP_PACKAGE launched successfully")
                 Result.success(Unit)
             } catch (e: Exception) {
+                StampAccessibilityService.pendingAutoClick = false
                 Log.e(TAG, "Failed to launch stamp app", e)
                 Result.failure(LaunchException(LaunchError.LaunchFailed(e)))
             }

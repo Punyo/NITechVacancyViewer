@@ -70,4 +70,6 @@
     <string name="URL_PRIVACY_POLICY">https://punyo.github.io/legal/privacypolicy.html</string>
     <string name="URL_STORE_PAGE">https://play.google.com/store/apps/details?id=com.punyo.nitechvacancyviewer</string>
     <string name="URL_SOURCE_CODE">https://github.com/Punyo/NITechVacancyViewer</string>
+    <string name="WIDGET_TOAST_STAMP_SUCCESS">打刻成功</string>
+    <string name="WIDGET_TOAST_STAMP_BUTTON_NOT_FOUND">打刻ボタンが見つかりませんでした</string>
 </resources>
