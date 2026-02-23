@@ -37,7 +37,7 @@
             android:theme="@style/Theme.AppCompat" />
 
         <receiver
-            android:name=".ui.widget.StampWidgetReceiver"
+            android:name="com.punyo.nitechvacancyviewer.widget.stamp.StampWidgetReceiver"
             android:exported="true"
             android:label="@string/WIDGET_STAMP_LABEL">
             <intent-filter>

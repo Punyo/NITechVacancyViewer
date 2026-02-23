@@ -1,4 +1,4 @@
-package com.punyo.nitechvacancyviewer.ui.widget
+package com.punyo.nitechvacancyviewer.widget.stamp
 
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetReceiver

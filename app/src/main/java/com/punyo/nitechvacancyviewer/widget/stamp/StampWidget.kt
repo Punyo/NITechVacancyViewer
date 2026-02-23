@@ -1,4 +1,4 @@
-package com.punyo.nitechvacancyviewer.ui.widget
+package com.punyo.nitechvacancyviewer.widget.stamp
 
 import android.content.Context
 import androidx.compose.runtime.Composable

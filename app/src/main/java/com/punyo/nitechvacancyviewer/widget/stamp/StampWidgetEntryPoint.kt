@@ -1,4 +1,4 @@
-package com.punyo.nitechvacancyviewer.ui.widget
+package com.punyo.nitechvacancyviewer.widget.stamp
 
 import com.punyo.nitechvacancyviewer.data.widget.WidgetRepository
 import dagger.hilt.EntryPoint
