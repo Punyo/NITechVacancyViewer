@@ -16,7 +16,6 @@ import com.punyo.nitechvacancyviewer.R
  * 3段階のフォールバック戦略でボタンを検出する:
  * 1. View ID による検索（最優先）
  * 2. テキスト「打刻」による検索（フォールバック）
- * 3. クラス名 LinearLayoutCompat + isClickable による検索（最終手段）
  */
 class StampAccessibilityService : AccessibilityService() {
     companion object {
@@ -83,7 +82,7 @@ class StampAccessibilityService : AccessibilityService() {
 
                 when {
                     found -> {
-                        showToast(getString(R.string.WIDGET_TOAST_STAMP_SUCCESS))
+                        showToast(getString(R.string.WIDGET_STAMP_TOAST_SUCCESS))
                         cleanupDetection()
                     }
                     retryCount < MAX_RETRIES -> {
@@ -149,7 +148,7 @@ class StampAccessibilityService : AccessibilityService() {
      */
     private fun onDetectionTimeout() {
         Log.w(TAG, "Button detection timeout after ${TIMEOUT_MS}ms")
-        showToast(getString(R.string.WIDGET_TOAST_STAMP_BUTTON_NOT_FOUND))
+        showToast(getString(R.string.WIDGET_STAMP_TOAST_BUTTON_NOT_FOUND))
         cleanupDetection()
     }
 

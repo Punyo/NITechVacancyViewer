@@ -17,6 +17,9 @@
     <string name="ERROR_HTTP_503">サーバーが現在利用できません。時間をおいてまたお試しください。</string>
     <string name="ERROR_HTTP_OTHERS">エラーが頻発する場合は管理者に連絡してください。(Response：%d)</string>
     <string name="ERROR_VACANCY_TABLE_LAYOUT_CHANGED">管理者による修正までお待ちください。</string>
+    <string name="ERROR_WIDGET_STAMP_APP_NOT_INSTALLED">打刻アプリがインストールされていません</string>
+    <string name="ERROR_WIDGET_STAMP_LAUNCH_FAILED">打刻アプリの起動に失敗しました</string>
+    <string name="ERROR_WIDGET_ACCESSIBILITY_DISABLED">ユーザー補助サービスを有効化してください</string>
     <string name="UI_NAVIGATIONBARITEM_TEXT_RESERVATION">今日の予約状況</string>
     <string name="UI_NAVIGATIONBARITEM_TEXT_HOME">ホーム</string>
     <string name="UI_NAVIGATIONBARITEM_TEXT_SETTINGS">設定</string>
@@ -70,6 +73,9 @@
     <string name="URL_PRIVACY_POLICY">https://punyo.github.io/legal/privacypolicy.html</string>
     <string name="URL_STORE_PAGE">https://play.google.com/store/apps/details?id=com.punyo.nitechvacancyviewer</string>
     <string name="URL_SOURCE_CODE">https://github.com/Punyo/NITechVacancyViewer</string>
-    <string name="WIDGET_TOAST_STAMP_SUCCESS">打刻成功</string>
-    <string name="WIDGET_TOAST_STAMP_BUTTON_NOT_FOUND">打刻ボタンが見つかりませんでした</string>
+    <string name="WIDGET_STAMP_TOAST_SUCCESS">打刻成功</string>
+    <string name="WIDGET_STAMP_TOAST_BUTTON_NOT_FOUND">打刻ボタンが見つかりませんでした</string>
+    <string name="WIDGET_STAMP_LABEL">打刻ボタン</string>
+    <string name="WIDGET_STAMP_DESCRIPTION">ワンタップで打刻できるウィジェット</string>
+    <string name="WIDGET_STAMP_TEXT">打刻</string>
 </resources>

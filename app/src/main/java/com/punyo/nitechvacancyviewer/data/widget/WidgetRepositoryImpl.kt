@@ -46,9 +46,11 @@ class WidgetRepositoryImpl
 
             return try {
                 val intent =
-                    Intent(Intent.ACTION_MAIN).apply {
-                        setPackage(STAMP_APP_PACKAGE)
+                    context.packageManager.getLaunchIntentForPackage(STAMP_APP_PACKAGE)?.apply {
                         flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
+                    } ?: run {
+                        Log.e(TAG, "No launch intent found for $STAMP_APP_PACKAGE")
+                        return Result.failure(LaunchException(LaunchError.AppNotInstalled))
                     }
                 StampAccessibilityService.pendingAutoClick = true
                 context.startActivity(intent)
