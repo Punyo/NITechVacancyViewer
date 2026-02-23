@@ -30,6 +30,10 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".AccessibilityConsentActivity"
+            android:exported="false"
+            android:theme="@style/Theme.NITechRoomVacancyViewer" />
+        <activity
             android:name="com.google.android.gms.oss.licenses.OssLicensesMenuActivity"
             android:theme="@style/Theme.AppCompat" />
         <activity
@@ -38,7 +42,7 @@
 
         <receiver
             android:name="com.punyo.nitechvacancyviewer.widget.stamp.StampWidgetReceiver"
-            android:exported="true"
+            android:exported="false"
             android:label="@string/WIDGET_STAMP_LABEL">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -51,7 +55,7 @@
 
         <service
             android:name=".application.service.StampAccessibilityService"
-            android:exported="true"
+            android:exported="false"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService" />

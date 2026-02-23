@@ -78,4 +78,8 @@
     <string name="WIDGET_STAMP_LABEL">打刻ボタン</string>
     <string name="WIDGET_STAMP_DESCRIPTION">ワンタップで打刻できるウィジェット</string>
     <string name="WIDGET_STAMP_TEXT">打刻</string>
+    <string name="UI_DIALOG_ACCESSIBILITY_CONSENT_TITLE">ユーザー補助サービスの使用について</string>
+    <string name="UI_DIALOG_ACCESSIBILITY_CONSENT_TEXT">打刻ウィジェットは、Androidのユーザー補助サービスを使用して打刻アプリの画面内容を読み取り、打刻ボタンを自動的にタップします。\n\n読み取った画面情報は外部に送信・保存されず、打刻ボタンの検出にのみ使用されます。\n\n続行するには、次の画面でこのアプリのユーザー補助サービスを有効化してください。</string>
+    <string name="UI_DIALOG_ACCESSIBILITY_CONSENT_BUTTON_CONFIRM">同意して設定を開く</string>
+    <string name="ACCESSIBILITY_SERVICE_DESCRIPTION">打刻ウィジェットからのタップ操作時に、打刻アプリの画面を読み取って打刻ボタンを自動的にタップします。</string>
 </resources>

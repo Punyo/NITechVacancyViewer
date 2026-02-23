@@ -1,6 +1,7 @@
 package com.punyo.nitechvacancyviewer.widget.stamp
 
 import android.content.Context
+import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
@@ -10,6 +11,7 @@ import androidx.glance.action.ActionParameters
 import androidx.glance.appwidget.action.ActionCallback
 import androidx.glance.appwidget.state.updateAppWidgetState
 import androidx.glance.state.PreferencesGlanceStateDefinition
+import com.punyo.nitechvacancyviewer.AccessibilityConsentActivity
 import com.punyo.nitechvacancyviewer.R
 import com.punyo.nitechvacancyviewer.data.widget.model.LaunchError
 import com.punyo.nitechvacancyviewer.data.widget.model.LaunchException
@@ -36,14 +38,25 @@ class OnWidgetTapCallback : ActionCallback {
         glanceId: GlanceId,
         parameters: ActionParameters,
     ) {
-        setLaunchingState(context, glanceId, isLaunching = true)
-
         val entryPoint =
             EntryPointAccessors.fromApplication(
                 context.applicationContext,
                 StampWidgetEntryPoint::class.java,
             )
-        val result = entryPoint.widgetRepository().launchStampApp(context)
+
+        val repository = entryPoint.widgetRepository()
+        if (!repository.isAccessibilityServiceEnabled(context)) {
+            context.startActivity(
+                Intent(context, AccessibilityConsentActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                },
+            )
+            return
+        }
+
+        setLaunchingState(context, glanceId, isLaunching = true)
+
+        val result = repository.launchStampApp(context)
 
         setLaunchingState(context, glanceId, isLaunching = false)
 
