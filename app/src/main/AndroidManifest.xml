@@ -3,6 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+
+    <queries>
+        <package android:name="jp.ac.nitech.pyrroline.nativeapp" />
+    </queries>
+
     <application
         android:name=".application.NITechVacancyViewerApplication"
         android:allowBackup="true"
@@ -30,5 +35,31 @@
         <activity
             android:name="com.google.android.gms.oss.licenses.OssLicensesActivity"
             android:theme="@style/Theme.AppCompat" />
+
+        <receiver
+            android:name=".ui.widget.StampWidgetReceiver"
+            android:exported="true"
+            android:label="@string/WIDGET_STAMP_LABEL">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/stamp_widget_info" />
+        </receiver>
+
+        <service
+            android:name=".application.service.StampAccessibilityService"
+            android:exported="true"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/accessibility_service_config" />
+        </service>
     </application>
 </manifest>
