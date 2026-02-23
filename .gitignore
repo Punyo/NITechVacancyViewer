@@ -44,3 +44,4 @@ site
 
 #TFLite
 *.tflite
+/.kiro/specs/

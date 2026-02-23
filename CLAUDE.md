@@ -42,6 +42,7 @@ app/src/main/java/com/punyo/nitechvacancyviewer/
 ├── application/        # アプリケーション層
 │   ├── di/            # Hilt DIモジュール (RepositoryModule, SourceModule)
 │   ├── enums/         # 共通列挙型
+│   ├── service/       # Accessibility Service (StampAccessibilityService)
 │   ├── NITechVacancyViewerApplication.kt  # アプリケーションクラス
 │   ├── GsonInstance.kt                     # Gson共通インスタンス
 │   └── CommonDateTimeFormater.kt           # 日時フォーマッター
@@ -58,10 +59,14 @@ app/src/main/java/com/punyo/nitechvacancyviewer/
 │   │   ├── AuthRepository.kt / AuthRepositoryImpl.kt
 │   │   ├── model/     # 認証関連モデル
 │   │   └── source/    # AuthNetworkDataSource (Retrofit), UserCredentialsLocalDataSource (DataStore)
-│   └── setting/       # 設定データ
-│       ├── SettingRepository.kt / SettingRepositoryImpl.kt
-│       ├── model/     # 設定モデル (ThemeSettings等)
-│       └── source/    # SettingLocalDataSource (DataStore)
+│   ├── setting/       # 設定データ
+│   │   ├── SettingRepository.kt / SettingRepositoryImpl.kt
+│   │   ├── model/     # 設定モデル (ThemeSettings等)
+│   │   └── source/    # SettingLocalDataSource (DataStore)
+│   └── widget/        # ウィジェットデータ
+│       ├── WidgetRepository.kt / WidgetRepositoryImpl.kt
+│       ├── model/     # LaunchError (sealed class + LaunchException)
+│       └── source/    # AccessibilityDataSource (AccessibilityChecker実装), WidgetLocalDataSource (同意状態DataStore)
 ├── ui/                # UI層 (Jetpack Compose)
 │   ├── navigation/    # Navigation.kt (NavHost定義), MainNavigationViewModel
 │   ├── main/          # メイン画面
@@ -71,8 +76,16 @@ app/src/main/java/com/punyo/nitechvacancyviewer/
 │   ├── roomvacancy/       # 教室空き状況画面
 │   ├── roomreservation/   # 教室予約画面
 │   ├── setting/           # 設定画面
+│   ├── accessibility/     # アクセシビリティ同意画面 (AccessibilityConsentScreen + ViewModel)
 │   └── component/         # 共通コンポーネント
+├── widget/            # Glance ウィジェット層
+│   └── stamp/         # 打刻ウィジェット
+│       ├── StampWidget.kt         # GlanceAppWidget本体
+│       ├── StampWidgetReceiver.kt # GlanceAppWidgetReceiver
+│       ├── StampWidgetEntryPoint.kt  # Hilt EntryPoint (ウィジェット用DI)
+│       └── OnWidgetTapCallback.kt    # ActionCallback (タップ処理)
 ├── theme/             # Composeテーマ定義
+├── AccessibilityConsentActivity.kt  # 同意用 Activity (@AndroidEntryPoint)
 └── MainActivity.kt    # エントリーポイント (@AndroidEntryPoint)
 ```
 
@@ -83,7 +96,7 @@ app/src/main/java/com/punyo/nitechvacancyviewer/
 - **共通ユーティリティ**: Gson、DateTimeFormatter等の共通インスタンス
 
 ## 2. Data層 (`data/`)
-各ドメイン（building, room, auth, setting）ごとに以下の構造を持つ：
+各ドメイン（building, room, auth, setting, widget）ごとに以下の構造を持つ：
 - **Repository**: データの取得・保存ロジックを抽象化（インターフェース + 実装）
 - **DataSource**:
   - `LocalDataSource`: Room Database / DataStore からのデータ読み書き
@@ -94,6 +107,7 @@ app/src/main/java/com/punyo/nitechvacancyviewer/
 - RoomLocalDataSourceは、HTMLをパースして教室データをRoom DBに保存
 - 認証情報はDataStoreに暗号化（Tink使用）して保存
 - Repository層でLocal/Networkの切り替えを制御
+- `AccessibilityManager`はfinalクラスのためJVMテストで直接モック不可 → `AccessibilityChecker`インターフェースで抽象化
 
 ## 3. UI層 (`ui/`)
 - **画面構成**: 各画面は `Screen.kt` + `ViewModel.kt` のペアで構成
@@ -102,6 +116,14 @@ app/src/main/java/com/punyo/nitechvacancyviewer/
   - サインイン失敗時: `SignInScreen`
   - メイン画面: `MainScreen` (BottomNavigation等)
 - **テーマ**: `MainNavigationViewModel`でDataStoreから設定を読み込み、ダークモード切り替え
+- **スタンドアロンActivity**: `AccessibilityConsentActivity` はNavHostの外側に存在し、ウィジェットタップ時の初回同意フローを担当
+
+## 4. Glance ウィジェット層 (`widget/`)
+- **DIパターン**: ウィジェットはApplicationコンテキストからEntryPointで依存を取得する (`EntryPointAccessors.fromApplication`)
+- **状態管理**: `PreferencesGlanceStateDefinition` + `booleanPreferencesKey` でウィジェット状態をDataStoreに保持
+- **状態更新**: `updateAppWidgetState()` でPreferencesを更新後、`StampWidget().update()` で再描画
+- **ActionCallback**: `OnWidgetTapCallback` がタップを受け取り、同意確認 → アプリ起動 → エラー通知を行う
+- **Accessibility Service**: `StampAccessibilityService` が打刻アプリの画面変化を監視し、打刻ボタンを自動クリックする（`pendingAutoClick` フラグでウィジェット起動時のみ動作）
 
 ## データフロー
 
@@ -136,6 +158,11 @@ DataSource (Local: Room/DataStore, Network: Retrofit)
 - 状態管理は`collectAsStateWithLifecycle()`を使用
 - ナビゲーションの引数はGsonでシリアライズして文字列として渡す（`GsonInstance.gson`を使用）
 - 画面間の一方向遷移は`navigateOneSide()`パターンを使用（backstack削除）
+
+## Glance ウィジェット
+- WidgetRepository / Serviceは通常のHilt Componentからではなく、`@EntryPoint`経由でApplicationコンポーネントから注入する
+- `Toast`をActionCallbackから表示する場合は `Handler(Looper.getMainLooper()).post { ... }` でメインスレッドに投稿する
+- ウィジェット情報は `res/xml/stamp_widget_info.xml` に定義、`res/xml/accessibility_service_config.xml` でServiceを設定する
 
 # リリースビルド
 
