@@ -9,7 +9,7 @@ import com.punyo.nitechvacancyviewer.data.room.RoomRepositoryImpl
 import com.punyo.nitechvacancyviewer.data.setting.SettingRepository
 import com.punyo.nitechvacancyviewer.data.setting.SettingRepositoryImpl
 import com.punyo.nitechvacancyviewer.data.widget.source.AccessibilityChecker
-import com.punyo.nitechvacancyviewer.data.widget.source.AndroidAccessibilityChecker
+import com.punyo.nitechvacancyviewer.data.widget.source.AccessibilityDataSource
 import com.punyo.nitechvacancyviewer.data.widget.WidgetRepository
 import com.punyo.nitechvacancyviewer.data.widget.WidgetRepositoryImpl
 import dagger.Binds
@@ -43,5 +43,5 @@ abstract class RepositoryModule {
 
     @Binds
     @Singleton
-    abstract fun bindAccessibilityChecker(androidAccessibilityChecker: AndroidAccessibilityChecker): AccessibilityChecker
+    abstract fun bindAccessibilityChecker(accessibilityDataSource: AccessibilityDataSource): AccessibilityChecker
 }
