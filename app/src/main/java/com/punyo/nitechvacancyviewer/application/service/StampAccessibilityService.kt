@@ -6,8 +6,6 @@ import android.os.Looper
 import android.util.Log
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
-import android.widget.Toast
-import com.punyo.nitechvacancyviewer.R
 
 /**
  * 打刻アプリのボタン自動操作を提供する Accessibility Service。
@@ -82,7 +80,6 @@ class StampAccessibilityService : AccessibilityService() {
 
                 when {
                     found -> {
-                        showToast(getString(R.string.WIDGET_STAMP_TOAST_SUCCESS))
                         cleanupDetection()
                     }
                     retryCount < MAX_RETRIES -> {
@@ -148,7 +145,6 @@ class StampAccessibilityService : AccessibilityService() {
      */
     private fun onDetectionTimeout() {
         Log.w(TAG, "Button detection timeout after ${TIMEOUT_MS}ms")
-        showToast(getString(R.string.WIDGET_STAMP_TOAST_BUTTON_NOT_FOUND))
         cleanupDetection()
     }
 
@@ -160,9 +156,5 @@ class StampAccessibilityService : AccessibilityService() {
         handler.removeCallbacksAndMessages(null)
         isDetectionInProgress = false
         retryCount = 0
-    }
-
-    private fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }
