@@ -99,6 +99,8 @@ dependencies {
     implementation(libs.hilt.android.navigation.compose)
     implementation(libs.androidx.glance.appwidget)
     implementation(libs.androidx.glance.material3)
+    implementation(libs.play.review.ktx)
+    implementation(libs.kotlinx.coroutines.play.services)
 
     ksp(libs.androidx.room.compiler)
     ksp(libs.hilt.android.compiler)
