@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.punyo.nitechvacancyviewer.application.CommonDateTimeFormater
 import com.punyo.nitechvacancyviewer.data.room.RoomRepositoryImpl
 import com.punyo.nitechvacancyviewer.data.room.model.Room
+import com.punyo.nitechvacancyviewer.data.setting.SettingRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -13,6 +14,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import java.time.LocalDateTime
 import javax.inject.Inject
 
@@ -22,9 +24,12 @@ class MainScreenViewModel
 constructor(
     private val applicationContext: Context,
     private val roomRepository: RoomRepositoryImpl,
+    private val settingRepository: SettingRepository,
 ) : ViewModel() {
     private val state = MutableStateFlow(MainScreenUiState())
     val uiState: StateFlow<MainScreenUiState> = state.asStateFlow()
+
+    private var hasIncrementedLaunchCountThisSession = false
 
     fun onNavItemClick(index: Int) {
         state.value = state.value.copy(currentNavIndex = index)
@@ -54,6 +59,29 @@ constructor(
         }
     }
 
+     suspend fun checkAndRequestReview() {
+        if (hasIncrementedLaunchCountThisSession) return
+        hasIncrementedLaunchCountThisSession = true
+
+        val launchCount = settingRepository.getAndIncrementLaunchCount()
+        if (launchCount < 5) return
+
+        val lastReviewEpochDay = settingRepository.getLastReviewRequestEpochDay()
+        val todayEpochDay = LocalDate.now().toEpochDay()
+        val daysSinceLastReview = todayEpochDay - lastReviewEpochDay
+
+        if (lastReviewEpochDay == -1L || daysSinceLastReview >= 25) {
+            state.value = state.value.copy(shouldRequestReview = true)
+        }
+    }
+
+    fun onReviewFlowLaunched() {
+        viewModelScope.launch(Dispatchers.IO) {
+            settingRepository.saveLastReviewRequestEpochDay(LocalDate.now().toEpochDay())
+            state.value = state.value.copy(shouldRequestReview = false)
+        }
+    }
+
     fun getLastUpdateTimeString(): String = state.value.lastVacancyUpdateTime!!.format(CommonDateTimeFormater.formatter)
 }
 
@@ -63,4 +91,5 @@ data class MainScreenUiState(
     val isTodayRoomsDataNotFoundOnDB: Boolean = false,
     val lastVacancyUpdateTime: LocalDateTime? = null,
     val roomsData: Array<Room>? = null,
+    val shouldRequestReview: Boolean = false,
 )

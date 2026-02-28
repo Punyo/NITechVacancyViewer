@@ -19,4 +19,14 @@ constructor(
     override suspend fun saveThemeSetting(themeSettings: ThemeSettings) {
         settingLocalDataSource.saveThemeSetting(applicationContext, themeSettings)
     }
+
+    override suspend fun getAndIncrementLaunchCount(): Int =
+        settingLocalDataSource.getAndIncrementLaunchCount(applicationContext)
+
+    override suspend fun getLastReviewRequestEpochDay(): Long =
+        settingLocalDataSource.getLastReviewRequestEpochDay(applicationContext)
+
+    override suspend fun saveLastReviewRequestEpochDay(epochDay: Long) {
+        settingLocalDataSource.saveLastReviewRequestEpochDay(applicationContext, epochDay)
+    }
 }

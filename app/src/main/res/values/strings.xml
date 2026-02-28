@@ -61,6 +61,12 @@
     ※MAINS-X、またはVPN接続による学内ネットワークへの接続が必須です</string>
     <string name="UI_DIALOG_SIGN_IN_BUTTON_CONFIRM">続行</string>
     <string name="UI_DIALOG_SIGN_IN_BUTTON_DISMISS">キャンセル</string>
+    <string name="UI_DIALOG_REVIEW_REQUEST_TITLE">レビューのお願い</string>
+    <string name="UI_DIALOG_REVIEW_REQUEST_TEXT">アプリを気に入っていただけましたか？よろしければ、Google Playでレビューをお願いします。</string>
+    <string name="UI_DIALOG_REVIEW_REQUEST_BUTTON_CONFIRM">レビューする</string>
+    <string name="UI_DIALOG_ACCESSIBILITY_CONSENT_TITLE">ユーザー補助サービスの使用について</string>
+    <string name="UI_DIALOG_ACCESSIBILITY_CONSENT_TEXT">打刻ウィジェットは、Androidのユーザー補助サービスを使用して打刻アプリの画面内容を読み取り、打刻ボタンを自動的にタップします。\n\n読み取った画面情報は外部に送信・保存されず、打刻ボタンの検出にのみ使用されます。\n\n続行するには、次の画面でこのアプリのユーザー補助サービスを有効化してください。</string>
+    <string name="UI_DIALOG_ACCESSIBILITY_CONSENT_BUTTON_CONFIRM">同意して設定を開く</string>
     <string name="UI_SNACKBAR_ACTIONLABEL_QUITAPP">アプリを終了する</string>
     <string name="UI_SNACKBAR_ACTIONLABEL_RETRY">再試行</string>
     <string name="UI_NAVHOST_COMPOSABLE_ROOMVACANCYSCREEN">RoomVacancyScreen/{buildingName}/{roomsData}</string>
@@ -78,8 +84,5 @@
     <string name="WIDGET_STAMP_LABEL">打刻ボタン</string>
     <string name="WIDGET_STAMP_DESCRIPTION">ワンタップで打刻できるウィジェット</string>
     <string name="WIDGET_STAMP_TEXT">打刻</string>
-    <string name="UI_DIALOG_ACCESSIBILITY_CONSENT_TITLE">ユーザー補助サービスの使用について</string>
-    <string name="UI_DIALOG_ACCESSIBILITY_CONSENT_TEXT">打刻ウィジェットは、Androidのユーザー補助サービスを使用して打刻アプリの画面内容を読み取り、打刻ボタンを自動的にタップします。\n\n読み取った画面情報は外部に送信・保存されず、打刻ボタンの検出にのみ使用されます。\n\n続行するには、次の画面でこのアプリのユーザー補助サービスを有効化してください。</string>
-    <string name="UI_DIALOG_ACCESSIBILITY_CONSENT_BUTTON_CONFIRM">同意して設定を開く</string>
     <string name="ACCESSIBILITY_SERVICE_DESCRIPTION">打刻ウィジェットからのタップ操作時に、打刻アプリの画面を読み取って打刻ボタンを自動的にタップします。</string>
 </resources>

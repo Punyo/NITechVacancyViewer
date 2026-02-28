@@ -26,6 +26,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.punyo.nitechvacancyviewer.R
 import com.punyo.nitechvacancyviewer.ui.buildingvacancy.BuildingVacancyScreen
+import com.punyo.nitechvacancyviewer.ui.component.AskReviewDialog
 import com.punyo.nitechvacancyviewer.ui.component.LoadingProgressIndicatorComponent
 import com.punyo.nitechvacancyviewer.ui.navigation.ScreenDestinations
 import com.punyo.nitechvacancyviewer.ui.roomreservation.RoomReservationScreen
@@ -55,13 +56,18 @@ fun MainScreen(
         integerResource(id = R.integer.VACANCY_UPDATE_INTERVAL_MILLISECOND).toLong()
     val pullToRefreshDelay =
         integerResource(id = R.integer.PULL_TO_REFRESH_DELAY_MILLISECOND).toLong()
-
     LaunchedEffect(key1 = Unit) {
+        mainScreenViewModel.checkAndRequestReview()
         while (true) {
             mainScreenViewModel.updateVacancy()
             delay(vacancyUpdateInterval)
         }
     }
+
+    if (currentState.shouldRequestReview) {
+        AskReviewDialog(onReviewFlowLaunched = { mainScreenViewModel.onReviewFlowLaunched() })
+    }
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = { MainScreenAppBar(currentNavTitle = navbarLabels[currentState.currentNavIndex]) },
@@ -124,9 +130,10 @@ fun MainScreenAppBar(
         modifier = modifier,
         title = { Text(text = currentNavTitle) },
         colors =
-        TopAppBarDefaults.centerAlignedTopAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
-            titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-        ),
+            TopAppBarDefaults.centerAlignedTopAppBarColors(
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+            ),
     )
 }
+
