@@ -12,6 +12,7 @@ import java.time.LocalDateTime
 object GsonInstance {
     val gson: Gson =
         GsonBuilder()
+            .serializeNulls()
             .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeSerializer())
             .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeDeserializer())
             .create()
