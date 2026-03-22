@@ -156,17 +156,17 @@ class RoomLocalDataSource {
 
     private fun parseTime(time: String): LocalDateTime? =
         try {
-             when(time) {
-                "<<" ->  LocalDateTime.now().withHour(0).withMinute(0).withSecond(0)
-                ">>" ->  LocalDateTime.now().withHour(23).withMinute(59).withSecond(0)
-                 else ->{
-                     val timeArray = time.split(":")
-                     LocalDateTime
-                         .now()
-                         .withHour(timeArray[0].toInt())
-                         .withMinute(timeArray[1].toInt())
-                         .withSecond(0)
-                 }
+            when (time) {
+                "<<" -> LocalDateTime.now().withHour(0).withMinute(0).withSecond(0)
+                ">>" -> LocalDateTime.now().withHour(23).withMinute(59).withSecond(0)
+                else -> {
+                    val timeArray = time.split(":")
+                    LocalDateTime
+                        .now()
+                        .withHour(timeArray[0].toInt())
+                        .withMinute(timeArray[1].toInt())
+                        .withSecond(0)
+                }
             }
         } catch (_: NumberFormatException) {
             null
