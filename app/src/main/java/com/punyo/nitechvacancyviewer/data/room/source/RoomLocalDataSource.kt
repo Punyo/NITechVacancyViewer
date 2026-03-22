@@ -10,6 +10,7 @@ import com.punyo.nitechvacancyviewer.data.room.model.Room
 import com.punyo.nitechvacancyviewer.data.room.model.RoomsDataModel
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
+import java.time.DateTimeException
 import java.time.LocalDate
 import java.time.LocalDateTime
 
@@ -142,8 +143,8 @@ class RoomLocalDataSource {
                 val eventTimes = eventStrings[0].split("-")
                 events.add(
                     EventInfo(
-                        start = parseTime(eventTimes[0]).plusDays(row.toLong()),
-                        end = parseTime(eventTimes[1]).plusDays(row.toLong()),
+                        start = parseTime(eventTimes[0])?.plusDays(row.toLong()),
+                        end = parseTime(eventTimes[1])?.plusDays(row.toLong()),
                         eventDescription = eventStrings[1],
                     ),
                 )
@@ -153,12 +154,17 @@ class RoomLocalDataSource {
         return RoomsDataModel(rooms.toTypedArray(), earliestDayOfData.plusDays(row.toLong()))
     }
 
-    private fun parseTime(time: String): LocalDateTime {
-        val timeArray = time.split(":")
-        return LocalDateTime
-            .now()
-            .withHour(timeArray[0].toInt())
-            .withMinute(timeArray[1].toInt())
-            .withSecond(0)
-    }
+    private fun parseTime(time: String): LocalDateTime? =
+        try {
+            val timeArray = time.split(":")
+            LocalDateTime
+                .now()
+                .withHour(timeArray[0].toInt())
+                .withMinute(timeArray[1].toInt())
+                .withSecond(0)
+        } catch (e: NumberFormatException) {
+            null
+        } catch (e: DateTimeException) {
+            null
+        }
 }

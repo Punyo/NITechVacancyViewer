@@ -156,14 +156,16 @@ private fun RoomVacancyScreen() {
             getRoomVacancy = { room, time ->
                 val isTimeWithinEvent =
                     room.eventsInfo.any { eventTime ->
+                        if (eventTime.start == null || eventTime.end == null) return@any true
                         time.isAfter(eventTime.start) && time.isBefore(eventTime.end)
                     }
                 if (isTimeWithinEvent) RoomVacancyStatus.OCCUPY else RoomVacancyStatus.VACANT
             },
             getCurrentEvent = { room, time ->
-                room.eventsInfo.find { eventTime ->
-                    time.isAfter(eventTime.start) && time.isBefore(eventTime.end)
-                }
+                room.eventsInfo.find {
+                    it.start != null && it.end != null &&
+                        time.isAfter(it.start) && time.isBefore(it.end)
+                } ?: room.eventsInfo.find { it.start == null || it.end == null }
             },
         )
     }

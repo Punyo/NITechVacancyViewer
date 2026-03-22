@@ -13,6 +13,7 @@ class RoomVacancyScreenViewModel : ViewModel() {
     ): RoomVacancyStatus {
         val isTimeWithinEvent =
             room.eventsInfo.any { eventTime ->
+                if (eventTime.start == null || eventTime.end == null) return@any true
                 time.isAfter(eventTime.start) && time.isBefore(eventTime.end)
             }
         return if (isTimeWithinEvent) {
@@ -26,7 +27,8 @@ class RoomVacancyScreenViewModel : ViewModel() {
         room: Room,
         time: LocalDateTime,
     ): EventInfo? =
-        room.eventsInfo.find { eventTime ->
-            time.isAfter(eventTime.start) && time.isBefore(eventTime.end)
-        }
+        room.eventsInfo.find {
+            it.start != null && it.end != null &&
+                time.isAfter(it.start) && time.isBefore(it.end)
+        } ?: room.eventsInfo.find { it.start == null || it.end == null }
 }
