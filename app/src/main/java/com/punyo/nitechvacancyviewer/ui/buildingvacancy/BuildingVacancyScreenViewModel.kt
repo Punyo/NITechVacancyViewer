@@ -28,6 +28,7 @@ constructor(
         roomsData
             .filter { room ->
                 !room.eventsInfo.any { eventTime ->
+                    if (eventTime.start == null || eventTime.end == null) return@any true
                     time.isAfter(eventTime.start) && time.isBefore(eventTime.end)
                 }
             }.size

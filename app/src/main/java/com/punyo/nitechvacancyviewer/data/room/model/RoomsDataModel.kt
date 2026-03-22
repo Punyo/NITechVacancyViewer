@@ -26,12 +26,14 @@ data class Room(
 )
 
 data class EventInfo(
-    val start: LocalDateTime,
-    val end: LocalDateTime,
+    val start: LocalDateTime?,
+    val end: LocalDateTime?,
     val eventDescription: String = "",
 ) {
     fun getStartAndEndString(): String {
         val formatter = CommonDateTimeFormater.formatter
-        return "${start.format(formatter)} ～ ${end.format(formatter)}"
+        val startStr = start?.format(formatter) ?: "不明"
+        val endStr = end?.format(formatter) ?: "不明"
+        return "$startStr ～ $endStr"
     }
 }
