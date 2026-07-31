@@ -11,13 +11,14 @@ plugins {
 
 android {
     namespace = "com.punyo.nitechvacancyviewer"
-    compileSdk = 35
+    compileSdk = 36
     defaultConfig {
         applicationId = "com.punyo.nitechvacancyviewer"
         minSdk = 26
-        targetSdk = 35
-        versionCode = 13
-        versionName = "1.6.2"
+        // TODO: 大画面対応
+        targetSdk = 36
+        versionCode = 14
+        versionName = "1.6.3"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
