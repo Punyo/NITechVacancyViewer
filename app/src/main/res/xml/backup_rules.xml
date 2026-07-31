@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-   Sample backup rules file; uncomment and customize as necessary.
-   See https://developer.android.com/guide/topics/data/autobackup
-   for details.
-   Note: This file is ignored for devices older that API 31
-   See https://developer.android.com/about/versions/12/backup-restore
+   Android 11 (API level 30) 以下向けの除外ルール。minSdk が 26 のため必要となる。
+   Android 12 以降は data_extraction_rules.xml が使用される。
+
+   除外の理由と path の対応関係は data_extraction_rules.xml のコメントを参照すること。
 -->
 <full-backup-content>
-    <!--
-   <include domain="sharedpref" path="."/>
-   <exclude domain="sharedpref" path="device.xml"/>
--->
+    <exclude
+        domain="sharedpref"
+        path="credentials_preference.xml" />
+    <exclude
+        domain="sharedpref"
+        path="credentials_preference.xml.bak" />
+    <exclude
+        domain="file"
+        path="datastore/credentials.preferences_pb" />
 </full-backup-content>
