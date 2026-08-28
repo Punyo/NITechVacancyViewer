@@ -1,65 +1,124 @@
 name: Deploy
 
 on:
- pull_request:
-   branches:
-     - master
-   types: [closed]
-   
+  pull_request:
+    branches:
+      - master
+    types: [closed]
+
+permissions:
+  contents: read
+
 jobs:
   build:
-    if: github.event.pull_request.merged == true
+    if: >-
+      github.event.pull_request.merged == true &&
+      startsWith(github.event.pull_request.head.ref, 'release/') &&
+      github.event.pull_request.user.login == 'github-actions[bot]'
     runs-on: ubuntu-latest
-
+    outputs:
+      version_name: ${{ steps.version.outputs.version_name }}
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up JDK 
-      uses: actions/setup-java@v4
-      with:
-        java-version: '17'
-        distribution: 'zulu'
-        cache: gradle
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
 
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
-      
-    - name: Decode Keystore
-      run: echo ${{ secrets.B64_ENCORDED_KEYSTORE }} | base64 --decode > ./app/release.keystore
+      - id: version
+        name: Read version name
+        run: |
+          version=$(grep '^APP_VERSION_NAME=' gradle.properties | cut -d= -f2)
+          echo "version_name=$version" >> "$GITHUB_OUTPUT"
 
-    - name: Generate AAB
-      run: ./gradlew :app:bundleRelease
-      env:
-       RELEASE_KEYSTORE_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
-       RELEASE_KEYSTORE_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-       RELEASE_KEYSTORE_ALIAS: ${{ secrets.KEY_ALIAS }}
+      - uses: ./.github/actions/setup-gradle-jdk
 
-    - name: Upload AAB and mapping.txt
-      uses: actions/upload-artifact@v4
-      with:
-        name: latest-build-result
-        path: |
+      - name: Decode Keystore
+        run: echo ${{ secrets.B64_ENCORDED_KEYSTORE }} | base64 --decode > ./app/release.keystore
+
+      - name: Generate AAB
+        run: ./gradlew :app:bundleRelease
+        env:
+          RELEASE_KEYSTORE_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
+          RELEASE_KEYSTORE_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          RELEASE_KEYSTORE_ALIAS: ${{ secrets.KEY_ALIAS }}
+
+      - name: Upload AAB and mapping.txt
+        uses: actions/upload-artifact@v7
+        with:
+          name: latest-build-result
+          path: |
             app/build/outputs/bundle/release/app-release.aab
             app/build/outputs/mapping/release/mapping.txt
 
-  
   deploy:
     needs: build
     runs-on: ubuntu-latest
     steps:
-     - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
 
-     - name: Download AAB and mapping.txt
-       uses: actions/download-artifact@v4
-       with:
+      - name: Download AAB and mapping.txt
+        uses: actions/download-artifact@v8
+        with:
           name: latest-build-result
-          
-     - name: Upload AAB
-       uses: r0adkll/upload-google-play@v1.0.15
-       id: uploadAAB
-       with:
-         serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
-         packageName: com.punyo.nitechvacancyviewer
-         releaseFile: bundle/release/app-release.aab
-         track: production
-         whatsNewDirectory: whatsnew/
-         mappingFile: mapping/release/mapping.txt
+
+      - name: Upload AAB
+        uses: r0adkll/upload-google-play@v1.1.5
+        id: uploadAAB
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+          packageName: com.punyo.nitechvacancyviewer
+          releaseFiles: bundle/release/app-release.aab
+          tracks: production
+          whatsNewDirectory: whatsnew/
+          mappingFile: mapping/release/mapping.txt
+
+  tag:
+    needs: [build, deploy]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      VERSION_NAME: ${{ needs.build.outputs.version_name }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
+
+      - name: Create tag
+        run: |
+          git tag "v$VERSION_NAME"
+          git push origin "v$VERSION_NAME"
+
+  sync-pr:
+    needs: [build, deploy]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    env:
+      VERSION_NAME: ${{ needs.build.outputs.version_name }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
+
+      - name: Configure git user
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Create sync branch
+        run: |
+          git checkout -b "sync/master-to-dev-v$VERSION_NAME"
+          git push origin "sync/master-to-dev-v$VERSION_NAME"
+
+      - name: Create sync PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh pr create \
+            --base dev \
+            --head "sync/master-to-dev-v$VERSION_NAME" \
+            --title "Sync master to dev (v$VERSION_NAME)" \
+            --body ""

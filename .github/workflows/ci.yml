@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - dev
+      - master
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check PR route
+        env:
+          BASE_REF: ${{ github.event.pull_request.base.ref }}
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+        run: |
+          if [ "$BASE_REF" = "master" ]; then
+            if [ "$PR_AUTHOR" != "github-actions[bot]" ] || [[ "$HEAD_REF" != release/* ]]; then
+              echo "::error::PRs into master are only allowed from release/* created by github-actions[bot]"
+              exit 1
+            fi
+          elif [ "$BASE_REF" = "dev" ]; then
+            if [[ "$HEAD_REF" == sync/* ]]; then
+              if [ "$PR_AUTHOR" != "github-actions[bot]" ]; then
+                echo "::error::PRs from sync/* are only allowed when created by github-actions[bot]"
+                exit 1
+              fi
+            elif [ "$HEAD_REF" = "master" ]; then
+              echo "::error::Direct PRs from master into dev are not allowed"
+              exit 1
+            fi
+          fi
+
+      - uses: actions/checkout@v7
+
+      - uses: ./.github/actions/setup-gradle-jdk
+
+      - name: Run verification tasks
+        run: ./gradlew ktlintCheck testDebugUnitTest lintDebug assembleDebug

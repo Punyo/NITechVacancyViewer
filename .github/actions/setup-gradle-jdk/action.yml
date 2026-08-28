@@ -1,0 +1,14 @@
+name: Set up JDK for Gradle
+description: Set up JDK 17 (zulu) with Gradle cache and grant execute permission to gradlew
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-java@v5
+      with:
+        java-version: '17'
+        distribution: 'zulu'
+        cache: gradle
+
+    - run: chmod +x gradlew
+      shell: bash

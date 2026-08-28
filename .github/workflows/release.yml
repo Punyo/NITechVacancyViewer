@@ -1,0 +1,85 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version_name:
+        description: 'versionName'
+        required: true
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  create-release-pr:
+    runs-on: ubuntu-latest
+    env:
+      SOURCE_BRANCH: ${{ github.ref_name }}
+      VERSION_NAME: ${{ inputs.version_name }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Configure git user
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Fetch source branch and master
+        run: |
+          git fetch origin "+refs/heads/master:refs/remotes/origin/master" "+refs/heads/$SOURCE_BRANCH:refs/remotes/origin/$SOURCE_BRANCH"
+
+      - name: Compute next versionCode
+        run: |
+          old_code=$(git show origin/master:gradle.properties | grep '^APP_VERSION_CODE=' | cut -d= -f2)
+          if [ -z "$old_code" ]; then
+            echo "::error::no APP_VERSION_CODE in gradle.properties on master"
+            exit 1
+          fi
+          echo "NEW_VERSION_CODE=$((old_code + 1))" >> "$GITHUB_ENV"
+
+      - name: Collect merged PR URLs
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          base=$(git merge-base origin/master "origin/$SOURCE_BRANCH")
+          > pr-urls.txt
+          git log "$base..origin/$SOURCE_BRANCH" --first-parent --merges --format='%H' | while read -r sha; do
+            gh api "repos/{owner}/{repo}/commits/$sha/pulls" \
+              --jq '.[] | select(.head.ref | startswith("sync/") | not) | .html_url' \
+              >> pr-urls.txt
+          done
+
+      - name: Create release branch
+        run: |
+          git checkout -b "release/v$VERSION_NAME" "origin/$SOURCE_BRANCH"
+          sed -i \
+            -e "s/^APP_VERSION_CODE=.*/APP_VERSION_CODE=$NEW_VERSION_CODE/" \
+            -e "s/^APP_VERSION_NAME=.*/APP_VERSION_NAME=$VERSION_NAME/" \
+            gradle.properties
+          git add gradle.properties
+          git commit -m "chore: versionCode/versionNameを更新"
+          git push origin "release/v$VERSION_NAME"
+
+      - name: Build release PR body
+        run: |
+          {
+            echo "## 投入内容"
+            cat pr-urls.txt
+            echo ""
+            echo "## whatsnew"
+            cat whatsnew/whatsnew-ja-JP
+          } > release-pr-body.md
+
+      - name: Create release PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh pr create \
+            --base master \
+            --head "release/v$VERSION_NAME" \
+            --title "Release v$VERSION_NAME" \
+            --body-file release-pr-body.md
