@@ -17,8 +17,8 @@ android {
         minSdk = 26
         // TODO: 大画面対応
         targetSdk = 36
-        versionCode = 14
-        versionName = "1.6.3"
+        versionCode = providers.gradleProperty("APP_VERSION_CODE").get().toInt()
+        versionName = providers.gradleProperty("APP_VERSION_NAME").get()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
