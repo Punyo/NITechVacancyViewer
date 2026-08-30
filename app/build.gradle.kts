@@ -52,6 +52,17 @@ android {
         debug {
             versionNameSuffix = "-debug"
         }
+        create("staging") {
+            optimization {
+                enable = true
+            }
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro",
+            )
+            versionNameSuffix = "-staging"
+            signingConfig = signingConfigs.getByName("debug")
+        }
     }
 
     compileOptions {
