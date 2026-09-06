@@ -51,13 +51,11 @@ class RoomLocalDataSource {
         overwriteOldRoomsData: Boolean = true,
     ) {
         initializeDB(applicationContext)
-        if (overwriteOldRoomsData) {
-            roomDao.deleteAll()
-        }
+        val lectureRooms = mutableListOf<LectureRoomEntity>()
         for (i in 0..6) {
             val roomsData = extractRoomsDataModelFromHTML(html, i, date)
             roomsData.rooms.forEach { room: Room ->
-                roomDao.insert(
+                lectureRooms.add(
                     LectureRoomEntity(
                         monthDay = roomsData.date.toString(),
                         roomDisplayName = room.roomDisplayName,
@@ -65,6 +63,11 @@ class RoomLocalDataSource {
                     ),
                 )
             }
+        }
+        if (overwriteOldRoomsData) {
+            roomDao.replaceAll(lectureRooms)
+        } else {
+            roomDao.insertAll(lectureRooms)
         }
     }
 
