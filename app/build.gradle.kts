@@ -10,12 +10,12 @@ plugins {
 
 android {
     namespace = "com.punyo.nitechvacancyviewer"
-    compileSdk = 36
+    compileSdk = 37
     defaultConfig {
         applicationId = "com.punyo.nitechvacancyviewer"
         minSdk = 26
         // TODO: 大画面対応
-        targetSdk = 36
+        targetSdk = 37
         versionCode = providers.gradleProperty("APP_VERSION_CODE").get().toInt()
         versionName = providers.gradleProperty("APP_VERSION_NAME").get()
 
