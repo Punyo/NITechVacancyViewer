@@ -109,7 +109,7 @@ class CampusSquareWebViewClient(
         request: WebResourceRequest?,
         error: WebResourceError?,
     ) {
-        if (request?.url.toString() != MAIN_MENU_URL) {
+        if (request?.let { shouldNotifyWebViewError(it.isForMainFrame, it.url.toString()) } == true) {
             onReceivedError(view, error)
         }
         super.onReceivedError(view, request, error)
@@ -120,9 +120,14 @@ class CampusSquareWebViewClient(
         request: WebResourceRequest?,
         errorResponse: WebResourceResponse?,
     ) {
-        if (request?.url.toString() != MAIN_MENU_URL) {
+        if (request?.let { shouldNotifyWebViewError(it.isForMainFrame, it.url.toString()) } == true) {
             onReceivedHttpError(view, errorResponse)
         }
         super.onReceivedHttpError(view, request, errorResponse)
     }
 }
+
+internal fun shouldNotifyWebViewError(
+    isForMainFrame: Boolean,
+    url: String,
+): Boolean = isForMainFrame && url != MAIN_MENU_URL
