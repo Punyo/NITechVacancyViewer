@@ -66,7 +66,6 @@ fun CampusSquareWebViewComponent(
                     "Extractor",
                 )
                 CookieManager.getInstance().setAcceptCookie(true)
-                CookieManager.getInstance().acceptThirdPartyCookies(this)
                 CookieManager.getInstance().setCookie(
                     "https://rpxkyomu.ict.nitech.ac.jp/",
                     "sso4cookie=$sso4cookie",
