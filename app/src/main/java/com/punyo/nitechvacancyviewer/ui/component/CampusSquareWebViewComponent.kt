@@ -3,7 +3,6 @@ package com.punyo.nitechvacancyviewer.ui.component
 import android.annotation.SuppressLint
 import android.view.View
 import android.webkit.CookieManager
-import android.webkit.JavascriptInterface
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
@@ -11,9 +10,14 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.webkit.WebViewCompat
+import androidx.webkit.WebViewFeature
 import org.jsoup.Jsoup
 
 private const val BASE_URL = "https://rpxkyomu.ict.nitech.ac.jp"
+private const val TRUSTED_SCHEME = "https"
+private const val TRUSTED_HOST = "rpxkyomu.ict.nitech.ac.jp"
+private val TRUSTED_ORIGIN_RULES = setOf(BASE_URL)
 private const val MAIN_MENU_URL =
     "https://rpxkyomu.ict.nitech.ac.jp/campusweb/campussmart.do?page=main"
 private const val FLOWEXECUTIONKEY_URL =
@@ -33,38 +37,7 @@ fun CampusSquareWebViewComponent(
                 webViewClient = CampusSquareWebViewClient(onReceivedError, onReceivedHttpError)
                 settings.javaScriptEnabled = true
                 visibility = View.GONE
-                addJavascriptInterface(
-                    object {
-                        @JavascriptInterface
-                        fun callbackHTML(html: String) {
-                            onGetReservationTableHTML(html)
-                        }
-                    },
-                    "callback",
-                )
-                addJavascriptInterface(
-                    object {
-                        @JavascriptInterface
-                        fun reservationTableDayURLExtractor(html: String) {
-                            val regex = """<a href=["']([^"']+)["']>週表示""".toRegex()
-                            val matchResult = regex.find(html)
-                            if (matchResult == null) {
-                                // 「週表示」のアンカーが見つからない＝もうすでに週表示になっている
-                                // HTMLをコールバック
-                                post {
-                                    loadUrl("javascript:window.callback.callbackHTML(document.documentElement.outerHTML);")
-                                }
-                            } else {
-                                // 「週表示」のアンカーが見つかった＝週表示に変更する
-                                val url = BASE_URL + matchResult.groupValues[1]
-                                post {
-                                    loadUrl(Jsoup.parse(url).text())
-                                }
-                            }
-                        }
-                    },
-                    "Extractor",
-                )
+                installCampusSquareMessageListeners(onGetReservationTableHTML)
                 CookieManager.getInstance().setAcceptCookie(true)
                 CookieManager.getInstance().acceptThirdPartyCookies(this)
                 CookieManager.getInstance().setCookie(
@@ -77,6 +50,50 @@ fun CampusSquareWebViewComponent(
         },
     )
 }
+
+private fun WebView.installCampusSquareMessageListeners(onGetReservationTableHTML: (String) -> Unit) {
+    // Origin-scoped messagingが利用できない場合も、安全でないinterfaceへはフォールバックしない。
+    if (!WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_LISTENER)) return
+
+    // この完全一致HTTPS originにだけJavaScriptオブジェクトを公開する。
+    WebViewCompat.addWebMessageListener(this, "callback", TRUSTED_ORIGIN_RULES) {
+            _, message, sourceOrigin, isMainFrame, _ ->
+        if (!isTrustedCampusSquareMessage(sourceOrigin.scheme, sourceOrigin.host, sourceOrigin.port, isMainFrame)) {
+            // 許可originでもsubframeからのメッセージは何も実行せず拒否する。
+            return@addWebMessageListener
+        }
+        message.data?.let(onGetReservationTableHTML)
+    }
+    WebViewCompat.addWebMessageListener(this, "Extractor", TRUSTED_ORIGIN_RULES) {
+            view, message, sourceOrigin, isMainFrame, _ ->
+        if (!isTrustedCampusSquareMessage(sourceOrigin.scheme, sourceOrigin.host, sourceOrigin.port, isMainFrame)) {
+            return@addWebMessageListener
+        }
+
+        val html = message.data ?: return@addWebMessageListener
+        val regex = """<a href=["']([^"']+)["']>週表示""".toRegex()
+        val matchResult = regex.find(html)
+        if (matchResult == null) {
+            // 「週表示」のアンカーが見つからない＝もうすでに週表示になっている
+            view.loadUrl("javascript:window.callback.postMessage(document.documentElement.outerHTML);")
+        } else {
+            // 「週表示」のアンカーが見つかった＝週表示に変更する
+            val url = BASE_URL + matchResult.groupValues[1]
+            view.loadUrl(Jsoup.parse(url).text())
+        }
+    }
+}
+
+internal fun isTrustedCampusSquareMessage(
+    scheme: String?,
+    host: String?,
+    port: Int,
+    isMainFrame: Boolean,
+): Boolean =
+    isMainFrame &&
+        scheme == TRUSTED_SCHEME &&
+        host == TRUSTED_HOST &&
+        (port == -1 || port == 443)
 
 class CampusSquareWebViewClient(
     private val onReceivedError: (WebView?, WebResourceError?) -> Unit,
@@ -92,7 +109,7 @@ class CampusSquareWebViewClient(
                 view?.loadUrl(FLOWEXECUTIONKEY_URL)
             }
             if (url.contains("flowExecutionKey")) {
-                view?.loadUrl("javascript:window.Extractor.reservationTableDayURLExtractor(document.getElementsByTagName('html')[0].outerHTML);")
+                view?.loadUrl("javascript:window.Extractor.postMessage(document.getElementsByTagName('html')[0].outerHTML);")
             }
         }
     }
