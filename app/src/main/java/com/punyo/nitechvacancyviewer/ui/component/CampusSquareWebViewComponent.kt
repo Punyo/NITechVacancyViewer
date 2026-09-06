@@ -16,8 +16,8 @@ import org.jsoup.Jsoup
 
 private const val BASE_URL = "https://rpxkyomu.ict.nitech.ac.jp"
 private const val TRUSTED_SCHEME = "https"
-private const val TRUSTED_HOST = "rpxkyomu.ict.nitech.ac.jp"
-private val TRUSTED_ORIGIN_RULES = setOf(BASE_URL)
+private const val TRUSTED_DOMAIN = "nitech.ac.jp"
+private val TRUSTED_ORIGIN_RULES = setOf("https://*.nitech.ac.jp")
 private const val MAIN_MENU_URL =
     "https://rpxkyomu.ict.nitech.ac.jp/campusweb/campussmart.do?page=main"
 private const val FLOWEXECUTIONKEY_URL =
@@ -55,7 +55,7 @@ private fun WebView.installCampusSquareMessageListeners(onGetReservationTableHTM
     // Origin-scoped messagingが利用できない場合も、安全でないinterfaceへはフォールバックしない。
     if (!WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_LISTENER)) return
 
-    // この完全一致HTTPS originにだけJavaScriptオブジェクトを公開する。
+    // nitech.ac.jp配下のHTTPS subdomainにだけJavaScriptオブジェクトを公開する。
     WebViewCompat.addWebMessageListener(this, "callback", TRUSTED_ORIGIN_RULES) {
             _, message, sourceOrigin, isMainFrame, _ ->
         if (!isTrustedCampusSquareMessage(sourceOrigin.scheme, sourceOrigin.host, sourceOrigin.port, isMainFrame)) {
@@ -92,7 +92,7 @@ internal fun isTrustedCampusSquareMessage(
 ): Boolean =
     isMainFrame &&
         scheme == TRUSTED_SCHEME &&
-        host == TRUSTED_HOST &&
+        host?.endsWith(".$TRUSTED_DOMAIN", ignoreCase = true) == true &&
         (port == -1 || port == 443)
 
 class CampusSquareWebViewClient(
