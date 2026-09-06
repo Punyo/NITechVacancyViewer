@@ -1,27 +1,28 @@
 [versions]
-agp = "8.9.2"
+agp = "9.3.2"
 coilCompose = "2.7.0"
 converterGson = "2.11.0"
 datastorePreferences = "1.1.4"
 jsoup = "1.18.1"
-daggerHilt = "2.51.1"
-ksp = "2.0.21-1.0.27"
-kotlin = "2.0.21"
+daggerHilt = "2.59.2"
+ksp = "2.3.6"
+kotlin = "2.2.10"
 coreKtx = "1.16.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 lifecycleRuntimeKtx = "2.8.7"
-hiltAndroid = "2.51.1"
-hiltAndroidCompiler = "2.51.1"
+hiltAndroid = "2.59.2"
+hiltAndroidCompiler = "2.59.2"
 hiltNavigationCompose = "1.2.0"
 activityCompose = "1.10.1"
 composeBom = "2025.04.01"
+composeUi = "1.8.0"
 lifecycleRuntimeComposeAndroid = "2.8.7"
 navigationCompose = "2.8.9"
-ossLicensesPlugin = "0.10.6"
+ossLicensesPlugin = "0.13.0"
 retrofit = "2.11.0"
-room = "2.7.1"
+room = "2.7.2"
 play-services-licenses = "17.1.0"
 tinkAndroid = "1.15.0"
 ktlint = "12.1.2"
@@ -48,8 +49,8 @@ androidx-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
-androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
-androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest", version.ref = "composeUi" }
+androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4", version.ref = "composeUi" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-lifecycle-runtime-compose-android = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose-android", version.ref = "lifecycleRuntimeComposeAndroid" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
@@ -64,7 +65,6 @@ hilt-android-navigation-compose = { module = "androidx.hilt:hilt-navigation-comp
 [plugins]
 
 android-application = { id = "com.android.application", version.ref = "agp" }
-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 jetbrains-kotlin-plugin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 androidx-room = { id = "androidx.room", version.ref = "room" }
 google-dagger-hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "daggerHilt" }
