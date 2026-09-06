@@ -3,7 +3,6 @@ package com.punyo.nitechvacancyviewer.ui.component
 import android.annotation.SuppressLint
 import android.view.View
 import android.webkit.CookieManager
-import android.webkit.JavascriptInterface
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
@@ -11,6 +10,8 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.webkit.WebViewCompat
+import java.net.URI
 import org.jsoup.Jsoup
 
 private const val BASE_URL = "https://rpxkyomu.ict.nitech.ac.jp"
@@ -18,6 +19,24 @@ private const val MAIN_MENU_URL =
     "https://rpxkyomu.ict.nitech.ac.jp/campusweb/campussmart.do?page=main"
 private const val FLOWEXECUTIONKEY_URL =
     "https://rpxkyomu.ict.nitech.ac.jp/campusweb/campussquare.do?_flowId=KHW0001300-flow"
+private const val CALLBACK_BRIDGE = "callback"
+private const val EXTRACTOR_BRIDGE = "Extractor"
+
+internal object CampusSquareOriginPolicy {
+    private const val TRUSTED_SCHEME = "https"
+    private const val TRUSTED_HOST = "rpxkyomu.ict.nitech.ac.jp"
+    private const val TRUSTED_PORT = 443
+
+    val allowedOriginRules: Set<String> = setOf("$TRUSTED_SCHEME://$TRUSTED_HOST")
+
+    fun isTrusted(url: String?): Boolean {
+        val uri = runCatching { URI(url ?: return false) }.getOrNull() ?: return false
+        val effectivePort = if (uri.port == -1) TRUSTED_PORT else uri.port
+        return uri.scheme.equals(TRUSTED_SCHEME, ignoreCase = true) &&
+            uri.host.equals(TRUSTED_HOST, ignoreCase = true) &&
+            effectivePort == TRUSTED_PORT
+    }
+}
 
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
@@ -33,42 +52,48 @@ fun CampusSquareWebViewComponent(
                 webViewClient = CampusSquareWebViewClient(onReceivedError, onReceivedHttpError)
                 settings.javaScriptEnabled = true
                 visibility = View.GONE
-                addJavascriptInterface(
-                    object {
-                        @JavascriptInterface
-                        fun callbackHTML(html: String) {
-                            onGetReservationTableHTML(html)
+                WebViewCompat.addWebMessageListener(
+                    this,
+                    CALLBACK_BRIDGE,
+                    CampusSquareOriginPolicy.allowedOriginRules,
+                ) { _, message, sourceOrigin, isMainFrame, _ ->
+                    if (isMainFrame && CampusSquareOriginPolicy.isTrusted(sourceOrigin.toString())) {
+                        message.data?.let(onGetReservationTableHTML)
+                    }
+                }
+                WebViewCompat.addWebMessageListener(
+                    this,
+                    EXTRACTOR_BRIDGE,
+                    CampusSquareOriginPolicy.allowedOriginRules,
+                ) { _, message, sourceOrigin, isMainFrame, _ ->
+                    if (!isMainFrame || !CampusSquareOriginPolicy.isTrusted(sourceOrigin.toString())) {
+                        return@addWebMessageListener
+                    }
+
+                    val html = message.data ?: return@addWebMessageListener
+                    val regex = """<a href=["']([^"']+)["']>週表示""".toRegex()
+                    val matchResult = regex.find(html)
+                    if (matchResult == null) {
+                        // 「週表示」のアンカーが見つからない＝もうすでに週表示になっている
+                        // HTMLをコールバック
+                        post {
+                            evaluateJavascript(
+                                "window.callback.postMessage(document.documentElement.outerHTML);",
+                                null,
+                            )
                         }
-                    },
-                    "callback",
-                )
-                addJavascriptInterface(
-                    object {
-                        @JavascriptInterface
-                        fun reservationTableDayURLExtractor(html: String) {
-                            val regex = """<a href=["']([^"']+)["']>週表示""".toRegex()
-                            val matchResult = regex.find(html)
-                            if (matchResult == null) {
-                                // 「週表示」のアンカーが見つからない＝もうすでに週表示になっている
-                                // HTMLをコールバック
-                                post {
-                                    loadUrl("javascript:window.callback.callbackHTML(document.documentElement.outerHTML);")
-                                }
-                            } else {
-                                // 「週表示」のアンカーが見つかった＝週表示に変更する
-                                val url = BASE_URL + matchResult.groupValues[1]
-                                post {
-                                    loadUrl(Jsoup.parse(url).text())
-                                }
-                            }
+                    } else {
+                        // 「週表示」のアンカーが見つかった＝週表示に変更する
+                        val url = BASE_URL + matchResult.groupValues[1]
+                        post {
+                            loadUrl(Jsoup.parse(url).text())
                         }
-                    },
-                    "Extractor",
-                )
+                    }
+                }
                 CookieManager.getInstance().setAcceptCookie(true)
                 CookieManager.getInstance().acceptThirdPartyCookies(this)
                 CookieManager.getInstance().setCookie(
-                    "https://rpxkyomu.ict.nitech.ac.jp/",
+                    "$BASE_URL/",
                     "sso4cookie=$sso4cookie",
                 )
                 // authorizationErrorを回避するためにメインページを開く
@@ -88,11 +113,15 @@ class CampusSquareWebViewClient(
         // URLにflowExecutionKeyが含まれている=日表示の「施設利用状況参照」ページが開かれている
         // 週表示の「施設利用状況参照」ページへのURLを抽出する
         url?.let {
+            if (!CampusSquareOriginPolicy.isTrusted(url)) return
             if (url == MAIN_MENU_URL) {
                 view?.loadUrl(FLOWEXECUTIONKEY_URL)
             }
             if (url.contains("flowExecutionKey")) {
-                view?.loadUrl("javascript:window.Extractor.reservationTableDayURLExtractor(document.getElementsByTagName('html')[0].outerHTML);")
+                view?.evaluateJavascript(
+                    "window.Extractor.postMessage(document.documentElement.outerHTML);",
+                    null,
+                )
             }
         }
     }
