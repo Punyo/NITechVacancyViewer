@@ -3,11 +3,21 @@ package com.punyo.nitechvacancyviewer.data.room.model
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Transaction
 
 @Dao
 interface LectureRoomDao {
     @Insert
     suspend fun insert(lectureRoomEntity: LectureRoomEntity)
+
+    @Insert
+    suspend fun insertAll(lectureRoomEntities: List<LectureRoomEntity>)
+
+    @Transaction
+    suspend fun replaceAll(lectureRoomEntities: List<LectureRoomEntity>) {
+        deleteAll()
+        insertAll(lectureRoomEntities)
+    }
 
     @Query("DELETE FROM lecture_room")
     suspend fun deleteAll()
