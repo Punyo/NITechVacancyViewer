@@ -119,7 +119,7 @@ fun InitializeScreen(
             onGetReservationTableHTML = { html ->
                 initializeScreenViewModel.tryToLoadRoomsDataFromHTML(html)
             },
-            onReceivedError = { webView, _ ->
+            onReceivedError = { retry, _ ->
                 initializeScreenViewModel.setErrorMessage(
                     context.getString(R.string.ERROR_PREFIX_FETCH_FAILED) +
                         context.getString(
@@ -127,8 +127,16 @@ fun InitializeScreen(
                         ),
                     context.getString(R.string.UI_SNACKBAR_ACTIONLABEL_RETRY),
                 ) {
-                    webView?.reload()
+                    retry()
                 }
+            },
+            onLoadTimeout = { retry ->
+                initializeScreenViewModel.setErrorMessage(
+                    context.getString(R.string.ERROR_PREFIX_FETCH_FAILED) +
+                        context.getString(R.string.ERROR_WEBVIEW_LOAD_TIMEOUT),
+                    context.getString(R.string.UI_SNACKBAR_ACTIONLABEL_RETRY),
+                    retry,
+                )
             },
             onReceivedHttpError = { _, error ->
                 val statusCode = error?.statusCode

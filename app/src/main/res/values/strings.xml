@@ -16,6 +16,7 @@
     <string name="ERROR_PREFIX_FETCH_FAILED">データの取得に失敗しました。\n</string>
     <string name="ERROR_HTTP_503">サーバーが現在利用できません。時間をおいてまたお試しください。</string>
     <string name="ERROR_HTTP_OTHERS">エラーが頻発する場合は管理者に連絡してください。(Response：%d)</string>
+    <string name="ERROR_WEBVIEW_LOAD_TIMEOUT">CampusSquareからの応答がタイムアウトしました。</string>
     <string name="ERROR_VACANCY_TABLE_LAYOUT_CHANGED">管理者による修正までお待ちください。</string>
     <string name="UI_NAVIGATIONBARITEM_TEXT_RESERVATION">今日の予約状況</string>
     <string name="UI_NAVIGATIONBARITEM_TEXT_HOME">ホーム</string>
